@@ -5,8 +5,8 @@ import Foundation
 public struct AppVersion: Hashable, Sendable {
     public static let current = AppVersion(
         major: 2,
-        minor: 1,
-        patch: 4,
+        minor: 2,
+        patch: 0,
         build: buildNumber
     )
     
@@ -46,6 +46,16 @@ public struct AppVersion: Hashable, Sendable {
 
 public struct VersionHistory {
     public static let releaseNotes: [AppVersion: [String]] = [
+        AppVersion(major: 2, minor: 2, patch: 0, build: "202507302200"): [
+            "🚀 MAJOR: Created complete RRT Protocol Service with 10 critical protocols",
+            "🏥 Added Sepsis Recognition, Respiratory Distress, Cardiac Monitoring protocols",
+            "⚡ Implemented Neurological Assessment, Hypotension, AKI management",
+            "🧪 Added Electrolyte Imbalance, Oxygenation Crisis, Pain Crisis protocols",
+            "📈 Added Rapid Deterioration Response with MEWS scoring",
+            "🔬 Comprehensive Anaphylaxis Protocol with epinephrine dosing",
+            "🎯 All protocols include medical flowcharts and evidence-based treatments",
+            "🐝 Swarm-coordinated implementation with specialized medical agents"
+        ],
         AppVersion(major: 2, minor: 1, patch: 4, build: "202507302100"): [
             "🔧 Fixed right side cutoff in protocol detail view",
             "📐 Removed horizontal edge ignore for proper safe area handling",

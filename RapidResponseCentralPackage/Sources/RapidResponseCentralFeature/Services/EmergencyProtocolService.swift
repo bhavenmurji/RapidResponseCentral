@@ -25,7 +25,8 @@ public class EmergencyProtocolService: ObservableObject {
             createCodeStrokeProtocol(),
             createCodeSTEMIProtocol(),
             createRSIProtocol(),
-            createShockProtocol()
+            createShockProtocol(),
+            createAnaphylaxisProtocol()
         ]
     }
     
@@ -158,7 +159,7 @@ public class EmergencyProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "code_blue",
             title: "Code Blue - ACLS",
-            icon: "bx-pulse",
+            icon: "bx-heart-pulse",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -398,7 +399,7 @@ public class EmergencyProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "code_stemi",
             title: "Code STEMI",
-            icon: "bx-heart",
+            icon: "bx-heart-attack",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -508,7 +509,7 @@ public class EmergencyProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "rsi_protocol",
             title: "RSI & Advanced Airway",
-            icon: "bx-ambulance",
+            icon: "bx-lungs",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -609,8 +610,191 @@ public class EmergencyProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "shock_protocol",
             title: "Shock & ECMO Protocols",
-            icon: "bx-pulse",
+            icon: "bx-droplet",
             category: .cardiac,
+            algorithm: algorithm,
+            cards: cards
+        )
+    }
+    
+    // MARK: - Anaphylaxis Protocol
+    
+    private func createAnaphylaxisProtocol() -> EmergencyProtocol {
+        let algorithm = ProtocolAlgorithm(nodes: [
+            AlgorithmNode(
+                id: "initial_recognition",
+                title: "Anaphylaxis Recognition",
+                nodeType: .assessment,
+                critical: true,
+                content: "Sudden onset involving ≥2 organ systems OR hypotension after known allergen",
+                connections: ["severity_assessment"]
+            ),
+            AlgorithmNode(
+                id: "severity_assessment",
+                title: "Severity Assessment",
+                nodeType: .decision,
+                critical: true,
+                content: "Mild/Moderate vs Severe: Check airway, breathing, circulation",
+                connections: ["mild_moderate", "severe_anaphylaxis"]
+            ),
+            AlgorithmNode(
+                id: "mild_moderate",
+                title: "Mild-Moderate Anaphylaxis",
+                nodeType: .intervention,
+                critical: false,
+                content: "Remove trigger, position patient, high-flow O2",
+                connections: ["epinephrine_im"]
+            ),
+            AlgorithmNode(
+                id: "severe_anaphylaxis",
+                title: "Severe Anaphylaxis",
+                nodeType: .intervention,
+                critical: true,
+                content: "ABCs, 100% O2, IV access, continuous monitoring",
+                connections: ["epinephrine_im", "fluid_resuscitation"]
+            ),
+            AlgorithmNode(
+                id: "epinephrine_im",
+                title: "Epinephrine IM",
+                nodeType: .medication,
+                critical: true,
+                content: "Adult: 0.5mg (0.5mL of 1:1000) IM anterolateral thigh. Repeat q5-15min PRN",
+                connections: ["h1_h2_blockers"]
+            ),
+            AlgorithmNode(
+                id: "fluid_resuscitation",
+                title: "Fluid Resuscitation",
+                nodeType: .intervention,
+                critical: true,
+                content: "1-2L NS bolus for hypotension, reassess frequently",
+                connections: ["epinephrine_infusion"]
+            ),
+            AlgorithmNode(
+                id: "h1_h2_blockers",
+                title: "Antihistamines",
+                nodeType: .medication,
+                critical: false,
+                content: "Diphenhydramine 25-50mg IV + Famotidine 20mg IV",
+                connections: ["steroids"]
+            ),
+            AlgorithmNode(
+                id: "steroids",
+                title: "Corticosteroids",
+                nodeType: .medication,
+                critical: false,
+                content: "Methylprednisolone 125mg IV or Hydrocortisone 200mg IV",
+                connections: ["bronchodilators"]
+            ),
+            AlgorithmNode(
+                id: "bronchodilators",
+                title: "Bronchodilators",
+                nodeType: .medication,
+                critical: false,
+                content: "Albuterol nebulizer 2.5-5mg if bronchospasm present",
+                connections: ["reassessment"]
+            ),
+            AlgorithmNode(
+                id: "epinephrine_infusion",
+                title: "Epinephrine Infusion",
+                nodeType: .medication,
+                critical: true,
+                content: "0.1-1 mcg/kg/min IV if refractory to IM doses",
+                connections: ["advanced_interventions"]
+            ),
+            AlgorithmNode(
+                id: "advanced_interventions",
+                title: "Advanced Interventions",
+                nodeType: .intervention,
+                critical: true,
+                content: "Consider glucagon, vasopressin, methylene blue for refractory cases",
+                connections: ["reassessment"]
+            ),
+            AlgorithmNode(
+                id: "reassessment",
+                title: "Continuous Reassessment",
+                nodeType: .endpoint,
+                critical: false,
+                content: "Monitor for 4-6 hours minimum. Watch for biphasic reactions",
+                connections: []
+            )
+        ])
+        
+        let cards = [
+            ProtocolCard(
+                id: "dynamic_card",
+                type: .dynamic,
+                title: "Anaphylaxis Status",
+                sections: [
+                    CardSection(title: "Life-Threatening Priority", items: [
+                        "Epinephrine IM is FIRST-LINE treatment",
+                        "Do NOT delay for IV access or other medications",
+                        "Repeat epinephrine q5-15min as needed"
+                    ])
+                ]
+            ),
+            ProtocolCard(
+                id: "assessment_card",
+                type: .assessment,
+                title: "Recognition & Grading",
+                sections: [
+                    CardSection(title: "Anaphylaxis Criteria", items: [
+                        "Acute onset (minutes to hours)",
+                        "≥2 organ systems involved OR",
+                        "Hypotension after known allergen OR",
+                        "Respiratory compromise after allergen"
+                    ]),
+                    CardSection(title: "Severity Grading", items: [
+                        "Mild: Skin/GI symptoms only",
+                        "Moderate: Respiratory OR cardiovascular",
+                        "Severe: Life-threatening airway/circulatory",
+                        "Refractory: No response to standard treatment"
+                    ]),
+                    CardSection(title: "Common Triggers", items: [
+                        "Foods: Nuts, shellfish, eggs, dairy",
+                        "Medications: Antibiotics, NSAIDs, contrast",
+                        "Insect stings: Bees, wasps, fire ants",
+                        "Environmental: Latex, exercise, cold"
+                    ])
+                ]
+            ),
+            ProtocolCard(
+                id: "actions_card",
+                type: .actions,
+                title: "Medications & Dosing",
+                sections: [
+                    CardSection(title: "Epinephrine (First-Line)", items: [
+                        "IM: 0.5mg (0.5mL of 1:1000) anterolateral thigh",
+                        "Pediatric: 0.01mg/kg (max 0.5mg)",
+                        "Repeat q5-15min PRN",
+                        "IV infusion: 0.1-1 mcg/kg/min if refractory"
+                    ]),
+                    CardSection(title: "Adjunct Medications", items: [
+                        "H1 blocker: Diphenhydramine 25-50mg IV",
+                        "H2 blocker: Famotidine 20mg IV",
+                        "Steroid: Methylprednisolone 125mg IV",
+                        "Bronchodilator: Albuterol 2.5-5mg nebulizer"
+                    ]),
+                    CardSection(title: "Refractory Treatment", items: [
+                        "Glucagon: 1-5mg IV (if on beta-blockers)",
+                        "Vasopressin: 0.01-0.04 units/min",
+                        "Methylene blue: 1-2mg/kg IV",
+                        "Consider extracorporeal support"
+                    ]),
+                    CardSection(title: "Observation Period", items: [
+                        "Minimum 4-6 hours observation",
+                        "Biphasic reactions occur in 1-20%",
+                        "Peak time: 8-10 hours after initial",
+                        "Discharge with EpiPen prescription"
+                    ])
+                ]
+            )
+        ]
+        
+        return EmergencyProtocol(
+            id: "anaphylaxis_protocol",
+            title: "Anaphylaxis Management",
+            icon: "bx-shield-x",
+            category: .allergic,
             algorithm: algorithm,
             cards: cards
         )
