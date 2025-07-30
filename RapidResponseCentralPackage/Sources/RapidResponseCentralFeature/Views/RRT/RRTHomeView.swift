@@ -3,16 +3,12 @@ import SwiftUI
 struct RRTHomeView: View {
     @State private var searchText = ""
     @State private var selectedProtocol: EmergencyProtocol?
-    @StateObject private var protocolService: ProtocolService
+    @StateObject private var protocolService = ProtocolService()
     
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
-    init() {
-        _protocolService = StateObject(wrappedValue: ProtocolService())
-    }
     
     var body: some View {
         NavigationStack {
@@ -53,16 +49,29 @@ struct RRTHomeView: View {
     }
     
     private var protocolGrid: some View {
-        LazyVGrid(columns: columns, spacing: 16) {
-            ForEach(filteredProtocols) { proto in
-                NavigationLink(value: proto) {
-                    RRTCard(
-                        title: proto.title,
-                        icon: proto.icon,
-                        color: proto.category.color
-                    )
+        Group {
+            if protocolService.isLoading {
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                    Text("Loading RRT Protocols...")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
-                .buttonStyle(.plain)
+                .frame(height: 200)
+            } else {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(filteredProtocols) { proto in
+                        NavigationLink(value: proto) {
+                            RRTCard(
+                                title: proto.title,
+                                icon: proto.icon,
+                                color: proto.category.color
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
             }
         }
         .padding(.horizontal)

@@ -10,7 +10,10 @@ final class ProtocolService: ObservableObject {
     
     init() {
         loadSampleProtocols()
-        loadRRTProtocols()
+        // Load RRT protocols lazily to avoid blocking main thread
+        Task {
+            await loadRRTProtocolsAsync()
+        }
     }
     
     private func loadSampleProtocols() {
@@ -1649,6 +1652,27 @@ final class ProtocolService: ObservableObject {
     }
     
     // MARK: - RRT Protocols
+    
+    @MainActor
+    private func loadRRTProtocolsAsync() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        // Create protocols directly - they're just data structures
+        rrtProtocols = createAllRRTProtocols()
+    }
+    
+    private func createAllRRTProtocols() -> [EmergencyProtocol] {
+        return [
+            createChestPainRRTProtocol(),
+            createShortnesOfBreathRRTProtocol(),
+            createAlteredMentalStatusRRTProtocol(),
+            createTachycardiaRRTProtocol(),
+            createBradycardiaRRTProtocol(),
+            createHypotensionRRTProtocol(),
+            createFallsRRTProtocol()
+        ]
+    }
     
     private func loadRRTProtocols() {
         rrtProtocols = [
