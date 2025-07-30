@@ -32,7 +32,7 @@ struct ProtocolDetailView: View {
                             ForEach(Array(proto.cards.enumerated()), id: \.offset) { index, card in
                                 ScrollView {
                                     ProtocolCardView(card: card)
-                                        .padding(.horizontal, outerGeometry.safeAreaInsets.leading > 0 ? 0 : 16)
+                                        .padding(.horizontal, 16)
                                         .padding(.vertical, 16)
                                 }
                                 .tag(index)
@@ -56,7 +56,7 @@ struct ProtocolDetailView: View {
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                             }
-                            .padding(.horizontal, outerGeometry.safeAreaInsets.leading > 0 ? 16 : 20)
+                            .padding(.horizontal, 16)
                             .padding(.top, 8)
                             
                             FlowchartView(
@@ -66,14 +66,13 @@ struct ProtocolDetailView: View {
                                     handleNodeSelection(nodeId)
                                 }
                             )
-                            .padding(.horizontal, outerGeometry.safeAreaInsets.leading > 0 ? 0 : 4)
+                            .padding(.horizontal, 4)
                         }
                         .frame(height: max(200, geometry.size.height * 0.45))
                         .background(Color(.systemGroupedBackground))
                     }
                 }
             }
-            .edgesIgnoringSafeArea(.horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

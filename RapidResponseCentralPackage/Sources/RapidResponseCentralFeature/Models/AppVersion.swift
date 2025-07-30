@@ -6,7 +6,7 @@ public struct AppVersion: Hashable, Sendable {
     public static let current = AppVersion(
         major: 2,
         minor: 1,
-        patch: 3,
+        patch: 4,
         build: buildNumber
     )
     
@@ -46,6 +46,12 @@ public struct AppVersion: Hashable, Sendable {
 
 public struct VersionHistory {
     public static let releaseNotes: [AppVersion: [String]] = [
+        AppVersion(major: 2, minor: 1, patch: 4, build: "202507302100"): [
+            "🔧 Fixed right side cutoff in protocol detail view",
+            "📐 Removed horizontal edge ignore for proper safe area handling",
+            "✨ Improved layout consistency across all protocol screens",
+            "🎨 Unified padding for better visual alignment"
+        ],
         AppVersion(major: 2, minor: 1, patch: 3, build: "202507302030"): [
             "📐 Improved flowchart visualization with cleaner Mermaid-style diagrams",
             "🎨 Better screen fitting and responsive layout for decision trees",
