@@ -3,7 +3,7 @@ import SwiftUI
 struct EmergencyHomeView: View {
     @State private var searchText = ""
     @State private var selectedProtocol: EmergencyProtocol?
-    @StateObject private var protocolService = ProtocolService()
+    @StateObject private var protocolService = EmergencyProtocolService()
     
     private let columns = [
         GridItem(.flexible()),
@@ -76,17 +76,8 @@ struct EmergencyCard: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            // Icon or Emoji
-            if icon.count == 1 {
-                // It's an emoji
-                Text(icon)
-                    .font(.system(size: 50))
-            } else {
-                // It's a system icon
-                Image(systemName: icon)
-                    .font(.system(size: 40))
-                    .foregroundColor(color)
-            }
+            // Boxicon Display
+            BoxiconView(iconName: icon, size: 40, color: color)
             
             // Title
             Text(title)
@@ -111,20 +102,140 @@ struct EmergencyCard: View {
 // RRTHomeView has been moved to Views/RRT/RRTHomeView.swift
 
 struct CallsHomeView: View {
+    @State private var searchText = ""
+    @State private var selectedProtocol: EmergencyProtocol?
+    @StateObject private var protocolService = CallsProtocolService()
+    
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         NavigationStack {
-            ComingSoonView(title: "Calls")
-                .navigationTitle("CALLS")
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Search Bar
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.secondary)
+                        TextField("Search call protocols...", text: $searchText)
+                            .textFieldStyle(.plain)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    
+                    // Calls Cards Grid
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(filteredCallsProtocolList) { proto in
+                            NavigationLink(destination: ProtocolDetailView(proto: proto)) {
+                                EmergencyCard(
+                                    title: proto.title,
+                                    icon: proto.icon,
+                                    color: colorForCategory(proto.category)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.vertical)
+            }
+            .navigationTitle("CALLS")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {}) {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
         }
+    }
+    
+    private var filteredCallsProtocolList: [EmergencyProtocol] {
+        if searchText.isEmpty {
+            return protocolService.protocols
+        }
+        return protocolService.protocols.filter { 
+            $0.title.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
+    private func colorForCategory(_ category: ProtocolCategory) -> Color {
+        category.color
     }
 }
 
 struct LabsHomeView: View {
+    @State private var searchText = ""
+    @State private var selectedProtocol: EmergencyProtocol?
+    @StateObject private var protocolService = LabsProtocolService()
+    
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         NavigationStack {
-            ComingSoonView(title: "Labs")
-                .navigationTitle("LABS")
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Search Bar
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.secondary)
+                        TextField("Search lab protocols...", text: $searchText)
+                            .textFieldStyle(.plain)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    
+                    // Labs Cards Grid
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(filteredLabsProtocolList) { proto in
+                            NavigationLink(destination: ProtocolDetailView(proto: proto)) {
+                                EmergencyCard(
+                                    title: proto.title,
+                                    icon: proto.icon,
+                                    color: colorForCategory(proto.category)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.vertical)
+            }
+            .navigationTitle("LABS")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {}) {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
         }
+    }
+    
+    private var filteredLabsProtocolList: [EmergencyProtocol] {
+        if searchText.isEmpty {
+            return protocolService.protocols
+        }
+        return protocolService.protocols.filter { 
+            $0.title.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
+    private func colorForCategory(_ category: ProtocolCategory) -> Color {
+        category.color
     }
 }
 
@@ -297,7 +408,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Version")
                         Spacer()
-                        Text("2.0.1")
+                        Text(AppVersion.current.displayString)
                             .foregroundColor(.secondary)
                     }
                     

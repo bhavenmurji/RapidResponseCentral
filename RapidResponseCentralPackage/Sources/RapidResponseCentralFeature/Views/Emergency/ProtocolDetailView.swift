@@ -37,23 +37,35 @@ struct ProtocolDetailView: View {
                         }
                     }
                     .tabViewStyle(.page(indexDisplayMode: .automatic))
-                    .frame(height: geometry.size.height / 2)
+                    .frame(height: max(200, geometry.size.height * 0.45))
                     .background(Color(.systemBackground))
                     
                     Divider()
                     
-                    // Bottom Panel: Interactive Algorithm (50%)
-                    ScrollView([.horizontal, .vertical], showsIndicators: true) {
-                        AlgorithmFlowView(
+                    // Bottom Panel: Interactive Algorithm Flowchart (50%)
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Decision Tree Flowchart")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text("Tap nodes to navigate")
+                                .font(.caption2)
+                                .foregroundColor(.tertiary)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 8)
+                        
+                        FlowchartView(
                             algorithm: proto.algorithm,
                             selectedNodeId: $selectedNodeId,
                             onNodeSelect: { nodeId in
                                 handleNodeSelection(nodeId)
                             }
                         )
-                        .padding()
                     }
-                    .frame(height: geometry.size.height / 2)
+                    .frame(height: max(200, geometry.size.height * 0.45))
                     .background(Color(.systemGroupedBackground))
                 }
             }
@@ -211,45 +223,56 @@ struct AlgorithmNodeView: View {
     
     var body: some View {
         Button(action: onTap) {
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 // Node Icon
                 Image(systemName: iconForNodeType(node.nodeType))
-                    .font(.footnote)
+                    .font(.caption)
                     .foregroundColor(.white)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 28, height: 28)
                     .background(backgroundColorForNode(node))
-                    .clipShape(RoundedRectangle(cornerRadius: node.nodeType == .endpoint ? 16 : 6))
+                    .clipShape(RoundedRectangle(cornerRadius: node.nodeType == .endpoint ? 14 : 6))
                 
                 // Node Content
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(node.title)
-                        .font(.footnote)
+                        .font(.caption)
                         .fontWeight(.semibold)
                         .foregroundColor(node.critical ? .red : .primary)
+                        .lineLimit(1)
                     
                     Text(node.content)
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     if !node.connections.isEmpty {
-                        Text("Next: \(node.connections.joined(separator: ", "))")
+                        Text("→ Next options available")
                             .font(.caption2)
-                            .foregroundColor(Color(.tertiaryLabel))
+                            .foregroundColor(.blue)
+                            .italic()
                     }
                 }
                 
-                Spacer()
+                Spacer(minLength: 8)
+                
+                // Selection indicator
+                if isSelected {
+                    Image(systemName: "chevron.right.circle.fill")
+                        .font(.caption)
+                        .foregroundColor(.blue)
+                }
             }
-            .padding()
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.blue.opacity(0.1) : Color(.tertiarySystemBackground))
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(isSelected ? Color.blue.opacity(0.1) : Color(.systemBackground))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.blue : Color.clear, lineWidth: 2)
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(isSelected ? Color.blue : Color(.separator), lineWidth: isSelected ? 2 : 0.5)
             )
         }
         .buttonStyle(.plain)

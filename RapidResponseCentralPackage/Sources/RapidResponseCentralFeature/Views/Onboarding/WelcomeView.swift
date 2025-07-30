@@ -119,6 +119,10 @@ struct WelcomePageView: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
+                
+                Text(AppVersion.current.displayString)
+                    .font(.headline)
+                    .foregroundColor(.secondary)
             }
             
             Text(subtitle)

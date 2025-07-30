@@ -19,7 +19,7 @@ public struct ContentView: View {
                 
                 RRTHomeView()
                     .tabItem {
-                        Label("RRT", systemImage: "circle.fill")
+                        Label("RRT", systemImage: "waveform.path.ecg")
                     }
                     .tag(AppTab.rrt)
                 
@@ -31,7 +31,7 @@ public struct ContentView: View {
                 
                 LabsHomeView()
                     .tabItem {
-                        Label("Labs", systemImage: "flask.fill")
+                        Label("Labs", systemImage: "testtube.2")
                     }
                     .tag(AppTab.labs)
                 
