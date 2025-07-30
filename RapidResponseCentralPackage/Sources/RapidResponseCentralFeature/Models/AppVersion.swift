@@ -6,7 +6,7 @@ public struct AppVersion: Hashable, Sendable {
     public static let current = AppVersion(
         major: 2,
         minor: 1,
-        patch: 0,
+        patch: 3,
         build: buildNumber
     )
     
@@ -46,6 +46,23 @@ public struct AppVersion: Hashable, Sendable {
 
 public struct VersionHistory {
     public static let releaseNotes: [AppVersion: [String]] = [
+        AppVersion(major: 2, minor: 1, patch: 3, build: "202507302030"): [
+            "📐 Improved flowchart visualization with cleaner Mermaid-style diagrams",
+            "🎨 Better screen fitting and responsive layout for decision trees",
+            "✨ Simplified node design with professional medical diagram styling",
+            "🔧 Optimized arrow rendering and Yes/No decision labels"
+        ],
+        AppVersion(major: 2, minor: 1, patch: 2, build: "202507302000"): [
+            "🎨 Fixed RRT protocol icons to display actual Boxicons instead of text",
+            "✨ Improved icon rendering consistency across all protocol views",
+            "🐛 Fixed visual issues with icon display in RRT menu"
+        ],
+        AppVersion(major: 2, minor: 1, patch: 1, build: "202507301900"): [
+            "🎨 Replaced RRT emoji icons with professional Boxicons",
+            "🔧 Fixed duplicate test tube icons in Calls protocols", 
+            "📐 Fixed UI panel cutoff issues with safe area handling",
+            "🎯 Enhanced medical flowcharts with proper arrows and decision labels"
+        ],
         AppVersion(major: 2, minor: 1, patch: 0, build: "202507301833"): [
             "🎯 Complete protocol implementation with all Emergency, RRT, Calls, and Labs protocols",
             "🎨 Replaced emoji icons with professional Boxicons for better visual consistency",

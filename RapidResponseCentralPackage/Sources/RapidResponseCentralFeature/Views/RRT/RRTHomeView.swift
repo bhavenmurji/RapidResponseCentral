@@ -119,8 +119,7 @@ struct RRTCard: View {
     var body: some View {
         VStack(spacing: 12) {
             // Icon
-            Text(icon)
-                .font(.system(size: 44))
+            BoxiconView(iconName: icon, size: 44, color: color)
             
             // Title
             Text(title)

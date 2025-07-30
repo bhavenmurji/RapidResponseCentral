@@ -17,58 +17,63 @@ struct ProtocolDetailView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Timer Banner
-            ProtocolTimerBanner(session: session)
-                .background(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 2, y: 2)
-            
-            // 50/50 Split Layout
-            GeometryReader { geometry in
-                VStack(spacing: 0) {
-                    // Top Panel: Dynamic Information Cards (50%)
-                    TabView(selection: $currentCardIndex) {
-                        ForEach(Array(proto.cards.enumerated()), id: \.offset) { index, card in
-                            ScrollView {
-                                ProtocolCardView(card: card)
-                                    .padding()
-                            }
-                            .tag(index)
-                        }
-                    }
-                    .tabViewStyle(.page(indexDisplayMode: .automatic))
-                    .frame(height: max(200, geometry.size.height * 0.45))
+        GeometryReader { outerGeometry in
+            VStack(spacing: 0) {
+                // Timer Banner
+                ProtocolTimerBanner(session: session)
                     .background(Color(.systemBackground))
-                    
-                    Divider()
-                    
-                    // Bottom Panel: Interactive Algorithm Flowchart (50%)
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Decision Tree Flowchart")
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.secondary)
-                            Spacer()
-                            Text("Tap nodes to navigate")
-                                .font(.caption2)
-                                .foregroundColor(.tertiary)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.top, 8)
-                        
-                        FlowchartView(
-                            algorithm: proto.algorithm,
-                            selectedNodeId: $selectedNodeId,
-                            onNodeSelect: { nodeId in
-                                handleNodeSelection(nodeId)
+                    .shadow(color: Color.black.opacity(0.1), radius: 2, y: 2)
+                
+                // 50/50 Split Layout
+                GeometryReader { geometry in
+                    VStack(spacing: 0) {
+                        // Top Panel: Dynamic Information Cards (50%)
+                        TabView(selection: $currentCardIndex) {
+                            ForEach(Array(proto.cards.enumerated()), id: \.offset) { index, card in
+                                ScrollView {
+                                    ProtocolCardView(card: card)
+                                        .padding(.horizontal, outerGeometry.safeAreaInsets.leading > 0 ? 0 : 16)
+                                        .padding(.vertical, 16)
+                                }
+                                .tag(index)
                             }
-                        )
+                        }
+                        .tabViewStyle(.page(indexDisplayMode: .automatic))
+                        .frame(height: max(200, geometry.size.height * 0.45))
+                        .background(Color(.systemBackground))
+                        
+                        Divider()
+                        
+                        // Bottom Panel: Interactive Algorithm Flowchart (50%)
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Decision Tree Flowchart")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("Tap nodes to navigate")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal, outerGeometry.safeAreaInsets.leading > 0 ? 16 : 20)
+                            .padding(.top, 8)
+                            
+                            FlowchartView(
+                                algorithm: proto.algorithm,
+                                selectedNodeId: $selectedNodeId,
+                                onNodeSelect: { nodeId in
+                                    handleNodeSelection(nodeId)
+                                }
+                            )
+                            .padding(.horizontal, outerGeometry.safeAreaInsets.leading > 0 ? 0 : 4)
+                        }
+                        .frame(height: max(200, geometry.size.height * 0.45))
+                        .background(Color(.systemGroupedBackground))
                     }
-                    .frame(height: max(200, geometry.size.height * 0.45))
-                    .background(Color(.systemGroupedBackground))
                 }
             }
+            .edgesIgnoringSafeArea(.horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

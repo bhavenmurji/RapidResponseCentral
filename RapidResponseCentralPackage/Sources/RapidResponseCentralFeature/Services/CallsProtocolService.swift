@@ -282,7 +282,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "dka_protocol",
             title: "DKA/HHS Management",
-            icon: "bx-test-tube",
+            icon: "bx-water-drop",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -319,7 +319,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "hypoglycemia",
             title: "Hypoglycemia",
-            icon: "bx-test-tube",
+            icon: "bx-battery-low",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -356,7 +356,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "adrenal_crisis",
             title: "Adrenal Crisis",
-            icon: "bx-test-tube",
+            icon: "bx-shield-plus",
             category: .infectious,
             algorithm: algorithm,
             cards: cards

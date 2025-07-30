@@ -39,7 +39,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "code-blue",
             title: "Code Blue – ACLS",
-            icon: "🫀",
+            icon: "bx-heart",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -277,7 +277,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "code-stroke",
             title: "Code Stroke – Acute Ischemic Stroke",
-            icon: "🧠",
+            icon: "bx-brain",
             category: .neurological,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -573,7 +573,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "code-stemi",
             title: "Code STEMI – ST-Elevation MI",
-            icon: "💔",
+            icon: "bx-heart-break",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -905,7 +905,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rsi",
             title: "RSI & Advanced Airway",
-            icon: "🫁",
+            icon: "bx-pulse",
             category: .respiratory,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -1273,7 +1273,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "shock",
             title: "Shock & ECMO",
-            icon: "⚡",
+            icon: "bx-bolt",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -1690,7 +1690,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-chest-pain",
             title: "Chest Pain Evaluation",
-            icon: "💔",
+            icon: "bx-heart-break",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -1928,7 +1928,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-shortness-of-breath",
             title: "Shortness of Breath",
-            icon: "🫁",
+            icon: "bx-pulse",
             category: .respiratory,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -2178,7 +2178,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-altered-mental-status",
             title: "Altered Mental Status",
-            icon: "🧠",
+            icon: "bx-brain",
             category: .neurological,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -2471,7 +2471,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-tachycardia",
             title: "Tachycardia",
-            icon: "⚡",
+            icon: "bx-bolt",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -2729,7 +2729,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-bradycardia",
             title: "Bradycardia",
-            icon: "🐢",
+            icon: "bx-timer",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -3041,7 +3041,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-hypotension",
             title: "Hypotension & Hemorrhage",
-            icon: "🩸",
+            icon: "bx-donate-blood",
             category: .cardiac,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
@@ -3319,7 +3319,7 @@ final class ProtocolService: ObservableObject {
         EmergencyProtocol(
             id: "rrt-falls",
             title: "Falls Assessment",
-            icon: "🤕",
+            icon: "bx-first-aid",
             category: .trauma,
             algorithm: ProtocolAlgorithm(nodes: [
                 AlgorithmNode(
