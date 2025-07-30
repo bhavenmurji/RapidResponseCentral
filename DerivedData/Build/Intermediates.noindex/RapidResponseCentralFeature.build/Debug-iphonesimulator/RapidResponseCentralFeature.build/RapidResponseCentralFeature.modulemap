@@ -1,0 +1,4 @@
+module RapidResponseCentralFeature {
+header "RapidResponseCentralFeature-Swift.h"
+export *
+}

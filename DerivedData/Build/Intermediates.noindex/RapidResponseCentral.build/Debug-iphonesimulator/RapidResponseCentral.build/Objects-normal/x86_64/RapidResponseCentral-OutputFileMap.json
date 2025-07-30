@@ -1,0 +1,28 @@
+{
+  "" : {
+    "diagnostics" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentral-master.dia",
+    "emit-module-dependencies" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentral-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentral-master-emit-module.dia",
+    "swift-dependencies" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentral-master.swiftdeps"
+  },
+  "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/bhavenmurji/Development/RapidResponseCentral/RapidResponseCentral/RapidResponseCentralApp.swift" : {
+    "const-values" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.swiftconstvalues",
+    "dependencies" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.d",
+    "diagnostics" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.dia",
+    "index-unit-output-path" : "/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.o",
+    "llvm-bc" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.bc",
+    "object" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.o",
+    "swift-dependencies" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp.swiftdeps",
+    "swiftmodule" : "/Users/bhavenmurji/Development/RapidResponseCentral/DerivedData/Build/Intermediates.noindex/RapidResponseCentral.build/Debug-iphonesimulator/RapidResponseCentral.build/Objects-normal/x86_64/RapidResponseCentralApp~partial.swiftmodule"
+  }
+}
