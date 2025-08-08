@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'RapidResponseCentral' in project 'RapidResponseCentral' (no dependencies)

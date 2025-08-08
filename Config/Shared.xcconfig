@@ -37,4 +37,4 @@ CODE_SIGN_ENTITLEMENTS = Config/RapidResponseCentral.entitlements
 // Code Signing
 // ==========================================
 CODE_SIGN_STYLE = Automatic
-DEVELOPMENT_TEAM = 
+DEVELOPMENT_TEAM = 265P763U88

@@ -28,7 +28,7 @@ public struct AppVersion: Hashable, Sendable {
     }
     
     // Build number based on current timestamp for uniqueness
-    private static var buildNumber: String {
+    public static var buildNumber: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMddHHmm"
         return formatter.string(from: Date())

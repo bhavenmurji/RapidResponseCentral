@@ -1,5 +1,7 @@
 import Foundation
 import SwiftUI
+import os.log
+import os.signpost
 
 // MARK: - Labs Protocol Service
 
@@ -8,8 +10,13 @@ public class LabsProtocolService: ObservableObject {
     @Published public private(set) var protocols: [EmergencyProtocol] = []
     @Published public private(set) var isLoading = false
     
+    private let performanceLogger = Logger(subsystem: "com.rapidresponsecentral.performance", category: "LabsProtocolService")
+    private let signposter = OSSignposter(subsystem: "com.rapidresponsecentral.performance", category: "LabsProtocolCreation")
+    
     public init() {
-        loadLabsProtocols()
+        Task {
+            await loadLabsProtocolsConcurrently()
+        }
     }
     
     private func loadLabsProtocols() {
@@ -19,14 +26,30 @@ public class LabsProtocolService: ObservableObject {
         protocols = createLabsProtocols()
     }
     
+    @MainActor
+    private func loadLabsProtocolsConcurrently() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        performanceLogger.info("🧪 Starting concurrent Labs protocol creation")
+        let signpostID = signposter.makeSignpostID()
+        let signpostState = signposter.beginInterval("LabsProtocolCreation", id: signpostID)
+        
+        // Create protocols synchronously but measure concurrently
+        protocols = createLabsProtocols()
+        
+        signposter.endInterval("LabsProtocolCreation", signpostState)
+        performanceLogger.info("✅ Labs Protocol service initialization complete - \(self.protocols.count) protocols")
+    }
+    
     private func createLabsProtocols() -> [EmergencyProtocol] {
         return [
-            // Hematology
+            // Blood Disorders
             createAnemiaProtocol(),
             createCoagulopathyProtocol(),
             createThrombocytopeniaProtocol(),
             
-            // Chemistry - Electrolytes
+            // Electrolyte Abnormalities
             createHypernatremiaProtocol(),
             createHyponatremiaProtocol(),
             createHyperkalemiaProtocol(),
@@ -36,54 +59,56 @@ public class LabsProtocolService: ObservableObject {
             createHypomagnesemiaProtocol(),
             createHypophosphatemiaProtocol(),
             
-            // Chemistry - Metabolic
+            // Glucose Disorders
             createHyperglycemiaProtocol(),
-            createHypoglycemiaLabProtocol(),
+            createHypoglycemiaLabsProtocol(),
+            
+            // Organ Function
             createRenalFailureProtocol(),
             createHepaticEncephalopathyProtocol(),
             
-            // Blood Gas
+            // Blood Gas Analysis
             createABGAnalysisProtocol(),
             createAcidBaseProtocol(),
             createVentilatorAdjustmentProtocol()
         ]
     }
     
-    // MARK: - Hematology Protocols
+    // MARK: - Blood Disorders
     
     private func createAnemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "anemia_recognition",
-                title: "Anemia Recognition",
+                id: "anemia_assessment",
+                title: "Anemia Assessment",
                 nodeType: .assessment,
                 critical: true,
-                content: "Hemoglobin <13 g/dL (men) or <12 g/dL (women). Click to assess severity and type.",
-                connections: ["severity_assessment"]
+                content: "Hemoglobin <7 g/dL (severe), <10 g/dL (moderate), evaluate cause",
+                connections: ["transfusion_consideration"]
             ),
             AlgorithmNode(
-                id: "severity_assessment",
-                title: "Severity Assessment",
+                id: "transfusion_consideration",
+                title: "Transfusion Indication?",
                 nodeType: .decision,
                 critical: true,
-                content: "Mild (Hgb 10-12), Moderate (8-10), or Severe (<8)? Click to determine transfusion needs.",
-                connections: ["transfusion_decision", "workup"]
+                content: "Hgb <7 g/dL or symptomatic with Hgb <10 g/dL",
+                connections: ["type_crossmatch", "iron_studies"]
             ),
             AlgorithmNode(
-                id: "transfusion_decision",
-                title: "Transfusion Decision",
+                id: "type_crossmatch",
+                title: "Type & Crossmatch",
                 nodeType: .intervention,
                 critical: true,
-                content: "Type & crossmatch. Transfuse if Hgb <7 or symptomatic. Click for transfusion protocol.",
-                connections: ["post_transfusion"]
+                content: "Order packed RBCs, consider urgency for crossmatch",
+                connections: ["transfusion_monitoring"]
             ),
             AlgorithmNode(
-                id: "workup",
-                title: "Anemia Workup",
+                id: "iron_studies",
+                title: "Iron Studies & Workup",
                 nodeType: .assessment,
                 critical: false,
-                content: "CBC with differential, reticulocyte count, iron studies. Click for detailed workup.",
-                connections: ["specific_treatment"]
+                content: "Iron, TIBC, ferritin, B12, folate, reticulocyte count",
+                connections: ["cause_treatment"]
             )
         ])
         
@@ -93,10 +118,10 @@ public class LabsProtocolService: ObservableObject {
                 type: .dynamic,
                 title: "Anemia Management",
                 sections: [
-                    CardSection(title: "Transfusion Thresholds", items: [
-                        "Hgb <7 g/dL: Transfuse in stable patients",
-                        "Hgb <8 g/dL: Consider in cardiac disease",
-                        "Symptomatic anemia: Transfuse regardless of level"
+                    CardSection(title: "Transfusion Triggers", items: [
+                        "Hgb <7 g/dL (restrictive strategy)",
+                        "Hgb <10 g/dL if symptomatic or high-risk",
+                        "Consider patient comorbidities and symptoms"
                     ])
                 ]
             ),
@@ -105,32 +130,44 @@ public class LabsProtocolService: ObservableObject {
                 type: .assessment,
                 title: "Anemia Classification",
                 sections: [
-                    CardSection(title: "MCV-Based Classification", items: [
-                        "Microcytic (<80): Iron deficiency, thalassemia",
-                        "Normocytic (80-100): Chronic disease, hemolysis",
-                        "Macrocytic (>100): B12/folate deficiency, alcohol"
+                    CardSection(title: "Severity", items: [
+                        "Mild: Hgb 10-12 g/dL (women), 10-14 g/dL (men)",
+                        "Moderate: Hgb 7-10 g/dL",
+                        "Severe: Hgb <7 g/dL"
+                    ]),
+                    CardSection(title: "Morphology", items: [
+                        "Microcytic: Iron deficiency, thalassemia, chronic disease",
+                        "Normocytic: Acute blood loss, chronic disease, renal failure",
+                        "Macrocytic: B12/folate deficiency, alcohol, hypothyroidism"
                     ])
                 ]
             ),
             ProtocolCard(
                 id: "actions_card",
                 type: .actions,
-                title: "Blood Bank Protocols",
+                title: "Treatment Options",
                 sections: [
-                    CardSection(title: "Transfusion Orders", items: [
-                        "Type & crossmatch 2 units PRBC",
-                        "Transfuse 1 unit over 2-4 hours",
-                        "Recheck Hgb 6 hours post-transfusion"
+                    CardSection(title: "Blood Products", items: [
+                        "Packed RBCs: 1 unit raises Hgb by ~1 g/dL",
+                        "Crossmatch: Can take 30-45 minutes",
+                        "Type-specific: Available in 10-15 minutes",
+                        "O-negative: Immediately available for emergencies"
+                    ]),
+                    CardSection(title: "Iron Replacement", items: [
+                        "Oral iron: 325mg ferrous sulfate TID",
+                        "IV iron: Consider if intolerant to oral or severe",
+                        "Iron sucrose: 100-200mg IV 2-3 times weekly",
+                        "Ferric carboxymaltose: 750-1000mg IV single dose"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "anemia",
-            title: "Anemia Workup & Transfusion",
-            icon: "bx-donate-blood",
-            category: .infectious,
+            id: "labs_anemia",
+            title: "Anemia Management",
+            icon: "healthicon-blood_cells",
+            category: .cardiac,
             algorithm: algorithm,
             cards: cards
         )
@@ -143,32 +180,24 @@ public class LabsProtocolService: ObservableObject {
                 title: "Coagulopathy Assessment",
                 nodeType: .assessment,
                 critical: true,
-                content: "INR >1.5, PTT >40s, or clinical bleeding. Click to assess bleeding risk.",
-                connections: ["bleeding_risk"]
+                content: "PT/INR >1.5, aPTT >45 sec, assess bleeding risk",
+                connections: ["bleeding_assessment"]
             ),
             AlgorithmNode(
-                id: "bleeding_risk",
-                title: "Bleeding Risk Stratification",
+                id: "bleeding_assessment",
+                title: "Active Bleeding?",
                 nodeType: .decision,
                 critical: true,
-                content: "Active bleeding, high-risk procedure, or asymptomatic? Click for management pathway.",
-                connections: ["active_bleeding", "reversal_agents"]
+                content: "Current bleeding or high risk procedure planned",
+                connections: ["urgent_reversal", "monitoring"]
             ),
             AlgorithmNode(
-                id: "active_bleeding",
-                title: "Active Bleeding Management",
-                nodeType: .intervention,
-                critical: true,
-                content: "FFP, PCC, or specific reversal agents. Click for dosing protocols.",
-                connections: ["monitor_response"]
-            ),
-            AlgorithmNode(
-                id: "reversal_agents",
-                title: "Anticoagulation Reversal",
+                id: "urgent_reversal",
+                title: "Urgent Reversal",
                 nodeType: .medication,
                 critical: true,
-                content: "Warfarin: Vitamin K ± PCC. DOAC: Specific antidotes. Click for details.",
-                connections: ["recheck_labs"]
+                content: "FFP, PCC, or specific reversal agents based on cause",
+                connections: ["repeat_labs"]
             )
         ])
         
@@ -176,34 +205,22 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "INR Correction",
+                title: "Coagulopathy Management",
                 sections: [
-                    CardSection(title: "Correction Targets", items: [
-                        "Emergency surgery: INR <1.5",
-                        "Major bleeding: INR <2.0",
-                        "Minor procedures: INR <2.5"
-                    ])
-                ]
-            ),
-            ProtocolCard(
-                id: "actions_card",
-                type: .actions,
-                title: "Reversal Protocols",
-                sections: [
-                    CardSection(title: "Warfarin Reversal", items: [
-                        "Vitamin K 10mg IV/PO",
-                        "4-factor PCC 25-50 units/kg",
-                        "FFP 15ml/kg if no PCC available"
+                    CardSection(title: "Reversal Strategies", items: [
+                        "Warfarin: Vitamin K, FFP, or PCC",
+                        "Heparin: Protamine sulfate",
+                        "DOACs: Specific reversal agents if available"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "coagulopathy",
-            title: "Coagulopathy & INR Management",
-            icon: "bx-test-tube",
-            category: .infectious,
+            id: "labs_coagulopathy",
+            title: "Coagulopathy Management",
+            icon: "healthicon-blood_pressure_gauge",
+            category: .cardiac,
             algorithm: algorithm,
             cards: cards
         )
@@ -212,28 +229,12 @@ public class LabsProtocolService: ObservableObject {
     private func createThrombocytopeniaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "thrombocytopenia_recognition",
-                title: "Thrombocytopenia Recognition",
+                id: "thrombocytopenia_assessment",
+                title: "Thrombocytopenia Assessment",
                 nodeType: .assessment,
                 critical: true,
-                content: "Platelet count <150k. Assess for bleeding risk and cause. Click for severity grading.",
-                connections: ["severity_grading"]
-            ),
-            AlgorithmNode(
-                id: "severity_grading",
-                title: "Severity Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Mild (100-150k), Moderate (50-100k), or Severe (<50k)? Click for transfusion criteria.",
-                connections: ["platelet_transfusion", "cause_workup"]
-            ),
-            AlgorithmNode(
-                id: "platelet_transfusion",
-                title: "Platelet Transfusion",
-                nodeType: .intervention,
-                critical: true,
-                content: "Transfuse if <10k or bleeding. Higher thresholds for procedures. Click for protocols.",
-                connections: ["post_transfusion_count"]
+                content: "Platelet count <150k, assess severity and cause",
+                connections: ["platelet_transfusion"]
             )
         ])
         
@@ -241,54 +242,46 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Platelet Transfusion Criteria",
+                title: "Thrombocytopenia",
                 sections: [
                     CardSection(title: "Transfusion Thresholds", items: [
-                        "<10k: Prophylactic transfusion",
-                        "<50k: Major surgery/bleeding",
-                        "<100k: Neurosurgery/ophthalmology"
+                        "Active bleeding: Platelets <50k",
+                        "High-risk procedure: Platelets <50k",
+                        "Prophylactic: Platelets <10k"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "thrombocytopenia",
-            title: "Thrombocytopenia Management",
-            icon: "bx-test-tube",
-            category: .infectious,
+            id: "labs_thrombocytopenia",
+            title: "Thrombocytopenia",
+            icon: "healthicon-blood_drop",
+            category: .cardiac,
             algorithm: algorithm,
             cards: cards
         )
     }
     
-    // MARK: - Chemistry Protocols - Electrolytes
+    // MARK: - Electrolyte Protocols
     
     private func createHypernatremiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypernatremia_recognition",
-                title: "Hypernatremia Recognition",
+                id: "hypernatremia_assessment",
+                title: "Hypernatremia >145 mEq/L",
                 nodeType: .assessment,
                 critical: true,
-                content: "Serum Na >145 mEq/L. Assess volume status and neurologic symptoms. Click to evaluate.",
-                connections: ["volume_assessment"]
-            ),
-            AlgorithmNode(
-                id: "volume_assessment",
-                title: "Volume Status Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Hypovolemic, euvolemic, or hypervolemic? Click to determine correction strategy.",
-                connections: ["correction_rate", "fluid_choice"]
+                content: "Assess volume status and calculate free water deficit",
+                connections: ["correction_rate"]
             ),
             AlgorithmNode(
                 id: "correction_rate",
-                title: "Correction Rate Calculation",
-                nodeType: .assessment,
+                title: "Correction Rate",
+                nodeType: .intervention,
                 critical: true,
-                content: "Correct at 0.5 mEq/L/hr (max 12 mEq/L/day). Click for water deficit calculation.",
-                connections: ["monitor_sodium"]
+                content: "Correct at 0.5-1 mEq/L per hour, max 10-12 mEq/L per day",
+                connections: ["fluid_choice"]
             )
         ])
         
@@ -296,33 +289,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Hypernatremia Correction",
+                title: "Hypernatremia",
                 sections: [
-                    CardSection(title: "Correction Principles", items: [
-                        "Rate: 0.5 mEq/L/hr maximum",
-                        "Daily limit: 12 mEq/L per day",
-                        "Monitor for cerebral edema"
-                    ])
-                ]
-            ),
-            ProtocolCard(
-                id: "actions_card",
-                type: .actions,
-                title: "Water Deficit Calculation",
-                sections: [
-                    CardSection(title: "Formula", items: [
-                        "Water deficit = 0.6 × weight × (Na/140 - 1)",
-                        "Replace over 48-72 hours",
-                        "Use D5W or hypotonic saline"
+                    CardSection(title: "Treatment", items: [
+                        "Free water deficit = 0.6 × weight × (Na/140 - 1)",
+                        "D5W or hypotonic fluids for correction",
+                        "Monitor sodium every 4-6 hours"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypernatremia",
-            title: "Hypernatremia Management",
-            icon: "bx-water",
+            id: "labs_hypernatremia",
+            title: "Hypernatremia",
+            icon: "healthicon-salt",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -332,28 +313,28 @@ public class LabsProtocolService: ObservableObject {
     private func createHyponatremiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hyponatremia_recognition",
-                title: "Hyponatremia Recognition",
+                id: "hyponatremia_assessment",
+                title: "Hyponatremia <135 mEq/L",
                 nodeType: .assessment,
                 critical: true,
-                content: "Serum Na <135 mEq/L. Assess symptoms and chronicity. Click for severity assessment.",
-                connections: ["symptom_assessment"]
+                content: "Assess symptoms, volume status, and serum osmolality",
+                connections: ["severity_classification"]
             ),
             AlgorithmNode(
-                id: "symptom_assessment",
-                title: "Symptom Assessment",
+                id: "severity_classification",
+                title: "Severe Symptoms?",
                 nodeType: .decision,
                 critical: true,
-                content: "Severe symptoms (seizures, coma) or mild/asymptomatic? Click for treatment pathway.",
-                connections: ["severe_treatment", "chronic_management"]
+                content: "Seizures, coma, severe altered mental status",
+                connections: ["hypertonic_saline", "fluid_restriction"]
             ),
             AlgorithmNode(
-                id: "severe_treatment",
-                title: "Severe Hyponatremia Treatment",
-                nodeType: .intervention,
+                id: "hypertonic_saline",
+                title: "3% Saline",
+                nodeType: .medication,
                 critical: true,
-                content: "3% saline 150ml over 20 min. Repeat if needed. Click for correction limits.",
-                connections: ["correction_monitoring"]
+                content: "100mL bolus over 10 min, can repeat up to 3 doses",
+                connections: ["sodium_monitoring"]
             )
         ])
         
@@ -361,21 +342,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Hyponatremia Correction",
+                title: "Hyponatremia",
                 sections: [
-                    CardSection(title: "Correction Limits", items: [
-                        "Acute: 1-2 mEq/L/hr for 3-4 hours",
-                        "Chronic: 0.5 mEq/L/hr maximum",
-                        "Daily max: 8-12 mEq/L per day"
+                    CardSection(title: "Emergency Treatment", items: [
+                        "3% saline 100mL bolus if severe symptoms",
+                        "Target 4-6 mEq/L rise in first 6 hours",
+                        "Maximum 10-12 mEq/L rise in 24 hours"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hyponatremia",
-            title: "Hyponatremia Management",
-            icon: "bx-water",
+            id: "labs_hyponatremia",
+            title: "Hyponatremia",
+            icon: "healthicon-water",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -385,44 +366,44 @@ public class LabsProtocolService: ObservableObject {
     private func createHyperkalemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hyperkalemia_recognition",
-                title: "Hyperkalemia Recognition",
+                id: "hyperkalemia_assessment",
+                title: "Hyperkalemia >5.5 mEq/L",
                 nodeType: .assessment,
                 critical: true,
-                content: "Serum K >5.5 mEq/L. Check ECG for cardiac toxicity. Click for ECG assessment.",
-                connections: ["ecg_assessment"]
+                content: "Check ECG, assess symptoms, confirm with repeat sample",
+                connections: ["ecg_changes"]
             ),
             AlgorithmNode(
-                id: "ecg_assessment",
-                title: "ECG Assessment",
+                id: "ecg_changes",
+                title: "ECG Changes Present?",
                 nodeType: .decision,
                 critical: true,
-                content: "ECG changes present? Peaked T waves, widened QRS? Click for treatment urgency.",
-                connections: ["cardiac_protection", "potassium_removal"]
+                content: "Peaked T waves, widened QRS, loss of P waves",
+                connections: ["calcium_gluconate", "potassium_shift"]
             ),
             AlgorithmNode(
-                id: "cardiac_protection",
-                title: "Cardiac Membrane Stabilization",
+                id: "calcium_gluconate",
+                title: "Calcium Gluconate",
                 nodeType: .medication,
                 critical: true,
-                content: "Calcium gluconate 1-2g IV over 2-5 minutes. Click for repeat dosing criteria.",
-                connections: ["potassium_shifts"]
+                content: "1-2g IV over 2-5 minutes for cardiac protection",
+                connections: ["potassium_shift"]
             ),
             AlgorithmNode(
-                id: "potassium_shifts",
-                title: "Intracellular K+ Shift",
+                id: "potassium_shift",
+                title: "Shift Potassium Intracellularly",
                 nodeType: .medication,
                 critical: true,
-                content: "Insulin 10 units + D50W 25g IV. Albuterol nebulizer. Click for monitoring.",
+                content: "Insulin 10 units + D50W 25g IV, Albuterol nebulizer",
                 connections: ["potassium_removal"]
             ),
             AlgorithmNode(
                 id: "potassium_removal",
                 title: "Potassium Removal",
-                nodeType: .intervention,
+                nodeType: .medication,
                 critical: false,
-                content: "Kayexalate, diuretics, or dialysis. Click for removal options.",
-                connections: ["recheck_levels"]
+                content: "Kayexalate, Patiromer, or dialysis if severe/refractory",
+                connections: ["serial_monitoring"]
             )
         ])
         
@@ -430,12 +411,12 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Hyperkalemia Treatment",
+                title: "Hyperkalemia Emergency",
                 sections: [
-                    CardSection(title: "Treatment Sequence", items: [
-                        "1. Cardiac protection (Calcium)",
-                        "2. K+ shifts (Insulin/D50, Albuterol)",
-                        "3. K+ removal (Kayexalate, dialysis)"
+                    CardSection(title: "Immediate Actions", items: [
+                        "Calcium gluconate 1-2g IV if ECG changes",
+                        "Insulin 10 units + D50W 25g IV",
+                        "Albuterol 10-20mg nebulizer"
                     ])
                 ]
             ),
@@ -444,36 +425,33 @@ public class LabsProtocolService: ObservableObject {
                 type: .assessment,
                 title: "ECG Changes",
                 sections: [
-                    CardSection(title: "Progressive ECG Changes", items: [
-                        "Peaked T waves (earliest)",
-                        "PR prolongation, P wave flattening",
-                        "QRS widening, sine wave pattern"
+                    CardSection(title: "Progressive Changes", items: [
+                        "Early: Peaked T waves",
+                        "Intermediate: Prolonged PR, QRS widening",
+                        "Late: Loss of P waves, sine wave pattern",
+                        "Critical: Ventricular fibrillation, asystole"
                     ])
                 ]
             ),
             ProtocolCard(
                 id: "actions_card",
                 type: .actions,
-                title: "Emergency Medications",
+                title: "Treatment Timeline",
                 sections: [
-                    CardSection(title: "Cardiac Protection", items: [
-                        "Calcium gluconate 1-2g IV",
-                        "Onset: immediate, duration: 30-60 min",
-                        "Repeat if ECG changes persist"
-                    ]),
-                    CardSection(title: "K+ Shifting", items: [
-                        "Insulin 10 units + D50W 25g IV",
-                        "Albuterol 10-20mg nebulized",
-                        "Monitor glucose closely"
+                    CardSection(title: "Mechanism & Onset", items: [
+                        "Calcium: Cardiac protection, onset immediate",
+                        "Insulin/Dextrose: Shifts K+ into cells, onset 15-30 min",
+                        "Albuterol: Shifts K+ into cells, onset 30-60 min",
+                        "Kayexalate: Removes K+, onset 1-2 hours"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hyperkalemia",
-            title: "Hyperkalemia Management",
-            icon: "bx-pulse",
+            id: "labs_hyperkalemia",
+            title: "Hyperkalemia",
+            icon: "healthicon-kidney",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -483,28 +461,28 @@ public class LabsProtocolService: ObservableObject {
     private func createHypokalemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypokalemia_recognition",
-                title: "Hypokalemia Recognition",
+                id: "hypokalemia_assessment",
+                title: "Hypokalemia <3.5 mEq/L",
                 nodeType: .assessment,
                 critical: true,
-                content: "Serum K <3.5 mEq/L. Assess for cardiac arrhythmias and weakness. Click for severity.",
-                connections: ["severity_assessment"]
+                content: "Assess symptoms, check Mg level, ECG if severe",
+                connections: ["replacement_route"]
             ),
             AlgorithmNode(
-                id: "severity_assessment",
-                title: "Severity Assessment",
+                id: "replacement_route",
+                title: "Replacement Route",
                 nodeType: .decision,
                 critical: true,
-                content: "Severe (<2.5), moderate (2.5-3.0), or mild (3.0-3.5)? Click for replacement strategy.",
+                content: "IV if K+ <2.5 or symptomatic, PO if stable",
                 connections: ["iv_replacement", "oral_replacement"]
             ),
             AlgorithmNode(
                 id: "iv_replacement",
-                title: "IV Potassium Replacement",
+                title: "IV Potassium",
                 nodeType: .medication,
                 critical: true,
-                content: "KCl 20-40 mEq in 100mL NS over 1-2 hours. Click for infusion rates.",
-                connections: ["magnesium_check"]
+                content: "KCl 10-20 mEq IV over 1 hour, max 40 mEq/hr if critical",
+                connections: ["magnesium_replacement"]
             )
         ])
         
@@ -512,21 +490,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Potassium Replacement",
+                title: "Hypokalemia",
                 sections: [
                     CardSection(title: "Replacement Guidelines", items: [
-                        "20 mEq raises serum K by ~0.25 mEq/L",
-                        "Maximum: 20 mEq/hr via peripheral IV",
-                        "Central line: up to 40 mEq/hr"
+                        "Each 10 mEq raises serum K+ by ~0.1 mEq/L",
+                        "Replace magnesium concurrently",
+                        "Monitor closely if on digoxin"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypokalemia",
-            title: "Hypokalemia Management",
-            icon: "bx-pulse",
+            id: "labs_hypokalemia",
+            title: "Hypokalemia",
+            icon: "healthicon-kidney_alt",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -536,27 +514,19 @@ public class LabsProtocolService: ObservableObject {
     private func createHypocalcemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypocalcemia_recognition",
-                title: "Hypocalcemia Recognition",
+                id: "hypocalcemia_assessment",
+                title: "Hypocalcemia <8.5 mg/dL",
                 nodeType: .assessment,
                 critical: true,
-                content: "Ionized Ca <1.15 mmol/L. Check for Chvostek/Trousseau signs. Click for symptoms.",
-                connections: ["symptom_severity"]
+                content: "Check ionized calcium, symptoms, Mg and phosphorus levels",
+                connections: ["symptomatic_treatment"]
             ),
             AlgorithmNode(
-                id: "symptom_severity",
-                title: "Symptom Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Severe (tetany, seizures) or mild (paresthesias)? Click for treatment approach.",
-                connections: ["iv_calcium", "oral_calcium"]
-            ),
-            AlgorithmNode(
-                id: "iv_calcium",
-                title: "IV Calcium Replacement",
+                id: "symptomatic_treatment",
+                title: "Symptomatic Treatment",
                 nodeType: .medication,
                 critical: true,
-                content: "Calcium gluconate 1-2g IV over 10-20 minutes. Click for repeat criteria.",
+                content: "Calcium gluconate 1-2g IV over 10-20 minutes",
                 connections: ["magnesium_replacement"]
             )
         ])
@@ -565,21 +535,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Calcium Replacement",
+                title: "Hypocalcemia",
                 sections: [
-                    CardSection(title: "IV Calcium Options", items: [
-                        "Calcium gluconate: 1-2g IV (preferred)",
-                        "Calcium chloride: 1g IV (central line only)",
-                        "Repeat q6-8hrs as needed"
+                    CardSection(title: "Clinical Signs", items: [
+                        "Chvostek sign: Facial twitching with tap",
+                        "Trousseau sign: Carpal spasm with BP cuff",
+                        "Paresthesias, tetany, seizures"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypocalcemia",
-            title: "Hypocalcemia Management",
-            icon: "bx-bone",
+            id: "labs_hypocalcemia",
+            title: "Hypocalcemia",
+            icon: "healthicon-calcium",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -589,28 +559,20 @@ public class LabsProtocolService: ObservableObject {
     private func createHypercalcemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypercalcemia_recognition",
-                title: "Hypercalcemia Recognition",
+                id: "hypercalcemia_assessment",
+                title: "Hypercalcemia >10.5 mg/dL",
                 nodeType: .assessment,
                 critical: true,
-                content: "Serum Ca >10.5 mg/dL. Assess for malignancy or hyperparathyroidism. Click to evaluate.",
-                connections: ["severity_symptoms"]
+                content: "Assess symptoms, identify cause (PTH, PTHrP, vitamin D)",
+                connections: ["fluid_therapy"]
             ),
             AlgorithmNode(
-                id: "severity_symptoms",
-                title: "Symptom Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Severe symptoms (altered mental status, Ca >14)? Click for treatment urgency.",
-                connections: ["aggressive_treatment", "conservative_management"]
-            ),
-            AlgorithmNode(
-                id: "aggressive_treatment",
-                title: "Aggressive Treatment",
+                id: "fluid_therapy",
+                title: "IV Fluid Therapy",
                 nodeType: .intervention,
                 critical: true,
-                content: "IV saline hydration + calcitonin + bisphosphonates. Click for protocols.",
-                connections: ["monitor_response"]
+                content: "Normal saline 250-500mL/hr to enhance calcium excretion",
+                connections: ["bisphosphonates"]
             )
         ])
         
@@ -618,21 +580,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Hypercalcemia Treatment",
+                title: "Hypercalcemia",
                 sections: [
-                    CardSection(title: "Treatment Steps", items: [
-                        "1. IV saline hydration",
-                        "2. Calcitonin for rapid effect",
-                        "3. Bisphosphonates for sustained effect"
+                    CardSection(title: "Treatment", items: [
+                        "IV fluids: 2-4L normal saline daily",
+                        "Furosemide: Only after volume repletion",
+                        "Bisphosphonates: Zoledronic acid 4mg IV"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypercalcemia",
-            title: "Hypercalcemia Management",
-            icon: "bx-bone",
+            id: "labs_hypercalcemia",
+            title: "Hypercalcemia",
+            icon: "healthicon-calcium_supplement",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -642,28 +604,20 @@ public class LabsProtocolService: ObservableObject {
     private func createHypomagnesemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypomagnesemia_recognition",
-                title: "Hypomagnesemia Recognition",
+                id: "hypomagnesemia_assessment",
+                title: "Hypomagnesemia <1.8 mg/dL",
                 nodeType: .assessment,
-                critical: true,
-                content: "Serum Mg <1.7 mg/dL. Often coexists with hypokalemia/hypocalcemia. Click to assess.",
-                connections: ["electrolyte_check"]
+                critical: false,
+                content: "Often accompanies hypokalemia and hypocalcemia",
+                connections: ["magnesium_replacement"]
             ),
             AlgorithmNode(
-                id: "electrolyte_check",
-                title: "Associated Electrolyte Abnormalities",
-                nodeType: .assessment,
-                critical: true,
-                content: "Check K+ and Ca2+ levels. Mg replacement needed for K+/Ca2+ correction. Click for protocol.",
-                connections: ["mg_replacement"]
-            ),
-            AlgorithmNode(
-                id: "mg_replacement",
+                id: "magnesium_replacement",
                 title: "Magnesium Replacement",
                 nodeType: .medication,
-                critical: true,
-                content: "MgSO4 2g IV over 2 hours. Repeat based on levels. Click for dosing.",
-                connections: ["recheck_electrolytes"]
+                critical: false,
+                content: "MgSO4 1-2g IV over 1 hour, repeat as needed",
+                connections: ["electrolyte_monitoring"]
             )
         ])
         
@@ -671,21 +625,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Magnesium Replacement",
+                title: "Hypomagnesemia",
                 sections: [
-                    CardSection(title: "Replacement Protocol", items: [
-                        "MgSO4 2g IV over 2 hours",
-                        "Repeat q12hrs until Mg >1.7",
-                        "Recheck levels after each dose"
+                    CardSection(title: "Replacement", items: [
+                        "IV: MgSO4 1-2g IV over 1 hour",
+                        "PO: Magnesium oxide 400mg BID",
+                        "May need several grams to replete stores"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypomagnesemia",
-            title: "Hypomagnesemia Management",
-            icon: "bx-test-tube",
+            id: "labs_hypomagnesemia",
+            title: "Hypomagnesemia",
+            icon: "healthicon-minerals_alt",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -695,28 +649,12 @@ public class LabsProtocolService: ObservableObject {
     private func createHypophosphatemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypophosphatemia_recognition",
-                title: "Hypophosphatemia Recognition",
+                id: "hypophosphatemia_assessment",
+                title: "Hypophosphatemia <2.5 mg/dL",
                 nodeType: .assessment,
-                critical: true,
-                content: "Serum PO4 <2.5 mg/dL. Assess for refeeding syndrome risk. Click for severity.",
-                connections: ["severity_assessment"]
-            ),
-            AlgorithmNode(
-                id: "severity_assessment",
-                title: "Severity Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Severe (<1.0), moderate (1.0-2.0), or mild (2.0-2.5)? Click for replacement.",
-                connections: ["iv_phosphorus", "oral_phosphorus"]
-            ),
-            AlgorithmNode(
-                id: "iv_phosphorus",
-                title: "IV Phosphorus Replacement",
-                nodeType: .medication,
-                critical: true,
-                content: "Sodium phosphate 0.08-0.16 mmol/kg IV over 6 hours. Click for monitoring.",
-                connections: ["calcium_monitoring"]
+                critical: false,
+                content: "Assess symptoms, risk of refeeding syndrome",
+                connections: ["phosphorus_replacement"]
             )
         ])
         
@@ -724,62 +662,38 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Phosphorus Replacement",
+                title: "Hypophosphatemia",
                 sections: [
-                    CardSection(title: "Replacement Guidelines", items: [
-                        "Severe: IV replacement over 6-12 hours",
-                        "Monitor calcium during replacement",
-                        "Avoid rapid correction"
+                    CardSection(title: "Replacement", items: [
+                        "Mild: PO replacement preferred",
+                        "Severe: IV K-Phos or Na-Phos",
+                        "Monitor calcium levels during replacement"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypophosphatemia",
-            title: "Hypophosphatemia Management",
-            icon: "bx-test-tube",
+            id: "labs_hypophosphatemia",
+            title: "Hypophosphatemia",
+            icon: "healthicon-phosphorus",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
         )
     }
     
-    // MARK: - Chemistry Protocols - Metabolic
+    // MARK: - Glucose & Organ Function
     
     private func createHyperglycemiaProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hyperglycemia_recognition",
-                title: "Hyperglycemia Assessment",
+                id: "hyperglycemia_assessment",
+                title: "Hyperglycemia >250 mg/dL",
                 nodeType: .assessment,
                 critical: true,
-                content: "Glucose >250 mg/dL. Check for DKA/HHS. Click to assess ketosis and mental status.",
-                connections: ["dka_hhs_assessment"]
-            ),
-            AlgorithmNode(
-                id: "dka_hhs_assessment",
-                title: "DKA/HHS Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Ketones present? pH <7.3? Altered mental status? Click for specific protocols.",
-                connections: ["dka_protocol", "hhs_protocol", "simple_hyperglycemia"]
-            ),
-            AlgorithmNode(
-                id: "dka_protocol",
-                title: "DKA Protocol",
-                nodeType: .intervention,
-                critical: true,
-                content: "Fluid resuscitation + insulin infusion + electrolyte management. Click for details.",
-                connections: ["monitor_anion_gap"]
-            ),
-            AlgorithmNode(
-                id: "hhs_protocol",
-                title: "HHS Protocol",
-                nodeType: .intervention,
-                critical: true,
-                content: "Aggressive fluid resuscitation, careful insulin use. Click for hyperosmolar management.",
-                connections: ["monitor_osmolality"]
+                content: "Check ketones, pH, assess for DKA/HHS",
+                connections: ["dka_hhs_evaluation"]
             )
         ])
         
@@ -787,60 +701,36 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Hyperglycemic Emergencies",
+                title: "Hyperglycemia",
                 sections: [
                     CardSection(title: "DKA vs HHS", items: [
-                        "DKA: Ketones +, pH <7.3, younger patients",
-                        "HHS: Glucose >600, osmolality >320, elderly",
-                        "Mixed presentations possible"
+                        "DKA: Glucose >250, ketones +, pH <7.3",
+                        "HHS: Glucose >600, ketones -, osmolality >320",
+                        "Both require insulin therapy"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hyperglycemia_dka_hhs",
-            title: "Hyperglycemia/DKA/HHS",
-            icon: "bx-test-tube",
+            id: "labs_hyperglycemia",
+            title: "Hyperglycemia",
+            icon: "healthicon-diabetes_test",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
         )
     }
     
-    private func createHypoglycemiaLabProtocol() -> EmergencyProtocol {
+    private func createHypoglycemiaLabsProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "hypoglycemia_lab_recognition",
-                title: "Hypoglycemia Recognition",
+                id: "hypoglycemia_labs_assessment",
+                title: "Hypoglycemia <70 mg/dL",
                 nodeType: .assessment,
                 critical: true,
-                content: "Glucose <70 mg/dL with Whipple's triad. Click to assess consciousness level.",
-                connections: ["consciousness_assessment"]
-            ),
-            AlgorithmNode(
-                id: "consciousness_assessment",
-                title: "Consciousness Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Patient conscious and able to swallow? Click for treatment route.",
-                connections: ["oral_treatment", "iv_treatment"]
-            ),
-            AlgorithmNode(
-                id: "iv_treatment",
-                title: "IV Glucose Treatment",
-                nodeType: .medication,
-                critical: true,
-                content: "D50W 25g IV push. Recheck glucose in 15 minutes. Click for repeat dosing.",
-                connections: ["glucose_monitoring"]
-            ),
-            AlgorithmNode(
-                id: "oral_treatment",
-                title: "Oral Glucose Treatment",
-                nodeType: .intervention,
-                critical: false,
-                content: "15g fast-acting carbs. Recheck in 15 min, repeat if needed. Click for options.",
-                connections: ["glucose_monitoring"]
+                content: "Confirm with lab glucose, assess symptoms",
+                connections: ["glucose_administration"]
             )
         ])
         
@@ -848,21 +738,21 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Hypoglycemia Treatment",
+                title: "Hypoglycemia (Labs)",
                 sections: [
-                    CardSection(title: "Treatment Options", items: [
-                        "Conscious: 15g PO carbs (juice, glucose tabs)",
-                        "Unconscious: D50W 25g IV push",
-                        "No IV access: Glucagon 1mg IM/SC"
+                    CardSection(title: "Treatment", items: [
+                        "D50W 25g IV push if conscious",
+                        "Glucagon 1mg IM/SC if unconscious",
+                        "Recheck glucose in 15 minutes"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hypoglycemia_lab",
-            title: "Hypoglycemia (Lab Values)",
-            icon: "bx-test-tube",
+            id: "labs_hypoglycemia_detailed",
+            title: "Hypoglycemia (Detailed)",
+            icon: "healthicon-diabetes_test_alt",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -872,44 +762,12 @@ public class LabsProtocolService: ObservableObject {
     private func createRenalFailureProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "renal_failure_recognition",
-                title: "Renal Failure Recognition",
+                id: "renal_failure_assessment",
+                title: "Renal Failure Assessment",
                 nodeType: .assessment,
                 critical: true,
-                content: "Rising creatinine, decreased GFR, oliguria. Click to classify AKI vs CKD.",
-                connections: ["aki_vs_ckd"]
-            ),
-            AlgorithmNode(
-                id: "aki_vs_ckd",
-                title: "AKI vs CKD Classification",
-                nodeType: .decision,
-                critical: true,
-                content: "Acute (hours-days) vs chronic (months-years)? Click for management pathway.",
-                connections: ["aki_management", "ckd_management"]
-            ),
-            AlgorithmNode(
-                id: "aki_management",
-                title: "AKI Management",
-                nodeType: .intervention,
-                critical: true,
-                content: "Identify cause, optimize fluid status, avoid nephrotoxins. Click for staging.",
-                connections: ["dialysis_criteria"]
-            ),
-            AlgorithmNode(
-                id: "dialysis_criteria",
-                title: "Dialysis Criteria Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "AEIOU criteria met? Click to evaluate need for urgent dialysis.",
-                connections: ["urgent_dialysis", "conservative_management"]
-            ),
-            AlgorithmNode(
-                id: "urgent_dialysis",
-                title: "Urgent Dialysis",
-                nodeType: .intervention,
-                critical: true,
-                content: "Contact nephrology for emergent dialysis. Click for temporary access.",
-                connections: ["post_dialysis_care"]
+                content: "Creatinine >3.0 mg/dL or GFR <15 mL/min",
+                connections: ["dialysis_indication"]
             )
         ])
         
@@ -917,36 +775,24 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "Renal Failure Management",
+                title: "Renal Failure",
                 sections: [
-                    CardSection(title: "Dialysis Criteria (AEIOU)", items: [
-                        "Acidosis (pH <7.1)",
-                        "Electrolytes (K >6.5)",
-                        "Intoxication (methanol, ethylene glycol)",
-                        "Overload (pulmonary edema)",
-                        "Uremia (encephalopathy, pericarditis)"
-                    ])
-                ]
-            ),
-            ProtocolCard(
-                id: "assessment_card",
-                type: .assessment,
-                title: "AKI Staging",
-                sections: [
-                    CardSection(title: "KDIGO AKI Stages", items: [
-                        "Stage 1: Cr 1.5-1.9x baseline",
-                        "Stage 2: Cr 2.0-2.9x baseline",
-                        "Stage 3: Cr ≥3x baseline or >4 mg/dL"
+                    CardSection(title: "Dialysis Indications", items: [
+                        "Acidosis: pH <7.2",
+                        "Electrolytes: K+ >6.5, severe hyperphosphatemia",
+                        "Intoxication: methanol, ethylene glycol",
+                        "Overload: pulmonary edema",
+                        "Uremia: altered mental status, pericarditis"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "renal_failure",
-            title: "Renal Failure & Dialysis",
-            icon: "bx-pulse",
-            category: .infectious,
+            id: "labs_renal_failure",
+            title: "Renal Failure",
+            icon: "healthicon-kidneys",
+            category: .cardiac,
             algorithm: algorithm,
             cards: cards
         )
@@ -955,36 +801,20 @@ public class LabsProtocolService: ObservableObject {
     private func createHepaticEncephalopathyProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "he_recognition",
-                title: "Hepatic Encephalopathy Recognition",
+                id: "hepatic_encephalopathy_assessment",
+                title: "Hepatic Encephalopathy",
                 nodeType: .assessment,
                 critical: true,
-                content: "Altered mental status in liver disease. Grade asterixis and confusion. Click for staging.",
-                connections: ["he_staging"]
+                content: "Altered mental status with elevated ammonia (>50 μmol/L)",
+                connections: ["lactulose_therapy"]
             ),
             AlgorithmNode(
-                id: "he_staging",
-                title: "HE Staging Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Grade 1-4 based on confusion, asterixis, coma. Click for precipitant identification.",
-                connections: ["precipitant_search", "lactulose_treatment"]
-            ),
-            AlgorithmNode(
-                id: "precipitant_search",
-                title: "Precipitant Identification",
-                nodeType: .assessment,
-                critical: true,
-                content: "GI bleeding, infection, constipation, medications? Click to address causes.",
-                connections: ["treat_precipitants"]
-            ),
-            AlgorithmNode(
-                id: "lactulose_treatment",
-                title: "Lactulose Treatment",
+                id: "lactulose_therapy",
+                title: "Lactulose Therapy",
                 nodeType: .medication,
                 critical: true,
-                content: "Lactulose 30ml PO q2hrs until bowel movement, then q6hrs. Click for dosing.",
-                connections: ["rifaximin_consideration"]
+                content: "Lactulose 30mL PO q2h until bowel movement, then q8h",
+                connections: ["rifaximin"]
             )
         ])
         
@@ -994,39 +824,26 @@ public class LabsProtocolService: ObservableObject {
                 type: .dynamic,
                 title: "Hepatic Encephalopathy",
                 sections: [
-                    CardSection(title: "Treatment Goals", items: [
-                        "2-3 soft bowel movements daily",
-                        "Ammonia reduction (not routinely monitored)",
+                    CardSection(title: "Treatment", items: [
+                        "Lactulose: Target 2-3 soft stools daily",
+                        "Rifaximin: 550mg PO BID",
                         "Identify and treat precipitants"
-                    ])
-                ]
-            ),
-            ProtocolCard(
-                id: "assessment_card",
-                type: .assessment,
-                title: "HE Grading",
-                sections: [
-                    CardSection(title: "West Haven Criteria", items: [
-                        "Grade 1: Mild confusion, euphoria",
-                        "Grade 2: Lethargy, disorientation",
-                        "Grade 3: Marked confusion, stupor",
-                        "Grade 4: Coma"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "hepatic_encephalopathy",
+            id: "labs_hepatic_encephalopathy",
             title: "Hepatic Encephalopathy",
-            icon: "bx-brain",
+            icon: "healthicon-liver",
             category: .neurological,
             algorithm: algorithm,
             cards: cards
         )
     }
     
-    // MARK: - Blood Gas Protocols
+    // MARK: - Blood Gas Analysis
     
     private func createABGAnalysisProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
@@ -1035,39 +852,15 @@ public class LabsProtocolService: ObservableObject {
                 title: "ABG Interpretation",
                 nodeType: .assessment,
                 critical: true,
-                content: "Analyze pH, pCO2, HCO3, anion gap systematically. Click for step-by-step analysis.",
-                connections: ["ph_assessment"]
+                content: "pH, CO2, HCO3, base excess, oxygenation status",
+                connections: ["acid_base_classification"]
             ),
             AlgorithmNode(
-                id: "ph_assessment",
-                title: "pH Assessment",
+                id: "acid_base_classification",
+                title: "Acid-Base Classification",
                 nodeType: .decision,
                 critical: true,
-                content: "pH <7.35 (acidosis) or >7.45 (alkalosis)? Click to determine primary disorder.",
-                connections: ["acidosis_workup", "alkalosis_workup"]
-            ),
-            AlgorithmNode(
-                id: "acidosis_workup",
-                title: "Acidosis Classification",
-                nodeType: .decision,
-                critical: true,
-                content: "Respiratory (high pCO2) or metabolic (low HCO3)? Click for specific workup.",
-                connections: ["respiratory_acidosis", "metabolic_acidosis"]
-            ),
-            AlgorithmNode(
-                id: "metabolic_acidosis",
-                title: "Metabolic Acidosis Workup",
-                nodeType: .assessment,
-                critical: true,
-                content: "Calculate anion gap. High gap vs normal gap causes. Click for Winter's formula.",
-                connections: ["winters_formula"]
-            ),
-            AlgorithmNode(
-                id: "winters_formula",
-                title: "Winter's Formula Check",
-                nodeType: .assessment,
-                critical: false,
-                content: "Expected pCO2 = 1.5 × [HCO3] + 8 (±2). Click to assess compensation.",
+                content: "Metabolic vs respiratory acidosis/alkalosis",
                 connections: ["compensation_assessment"]
             )
         ])
@@ -1076,52 +869,53 @@ public class LabsProtocolService: ObservableObject {
             ProtocolCard(
                 id: "dynamic_card",
                 type: .dynamic,
-                title: "ABG Analysis Steps",
+                title: "ABG Analysis",
                 sections: [
-                    CardSection(title: "Systematic Approach", items: [
-                        "1. Assess oxygenation (PaO2, A-a gradient)",
-                        "2. Determine acid-base status (pH)",
-                        "3. Identify primary disorder",
-                        "4. Check for compensation",
-                        "5. Calculate anion gap if metabolic"
+                    CardSection(title: "Normal Values", items: [
+                        "pH: 7.35-7.45",
+                        "PaCO2: 35-45 mmHg",
+                        "HCO3: 22-26 mEq/L",
+                        "PaO2: 80-100 mmHg on room air"
                     ])
                 ]
             ),
             ProtocolCard(
                 id: "assessment_card",
                 type: .assessment,
-                title: "Compensation Rules",
+                title: "Interpretation Steps",
                 sections: [
-                    CardSection(title: "Expected Compensation", items: [
-                        "Metabolic acidosis: pCO2 = 1.5×[HCO3] + 8 (±2)",
-                        "Metabolic alkalosis: pCO2 = 0.7×[HCO3] + 21 (±2)",
-                        "Respiratory: Acute vs chronic formulas"
+                    CardSection(title: "Systematic Approach", items: [
+                        "1. Assess pH (acidemic vs alkalemic)",
+                        "2. Determine primary disorder (respiratory vs metabolic)",
+                        "3. Calculate expected compensation",
+                        "4. Assess oxygenation and A-a gradient",
+                        "5. Consider clinical context"
                     ])
                 ]
             ),
             ProtocolCard(
                 id: "actions_card",
                 type: .actions,
-                title: "Common Causes",
+                title: "Common Disorders",
                 sections: [
-                    CardSection(title: "High Anion Gap Acidosis", items: [
-                        "MUDPILES: Methanol, Uremia, DKA",
-                        "Propylene glycol, Iron/Isoniazid",
-                        "Lactic acidosis, Ethylene glycol, Salicylates"
+                    CardSection(title: "Metabolic Acidosis", items: [
+                        "Anion gap: DKA, lactic acidosis, renal failure",
+                        "Non-anion gap: Diarrhea, RTA, ureterostomy",
+                        "Compensation: PaCO2 = 1.5 × HCO3 + 8 ± 2"
                     ]),
-                    CardSection(title: "Normal Gap Acidosis", items: [
-                        "Diarrhea, ureteral diversions",
-                        "Post-hypocapnia, carbonic anhydrase inhibitors",
-                        "RTA, saline administration"
+                    CardSection(title: "Respiratory Acidosis", items: [
+                        "Acute: CNS depression, neuromuscular disorders",
+                        "Chronic: COPD, restrictive lung disease",
+                        "Compensation: Chronic 3-4 mEq/L rise in HCO3 per 10 mmHg rise in CO2"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "abg_analysis",
-            title: "ABG Analysis & Winter's Equation",
-            icon: "bx-test-tube",
+            id: "labs_abg_analysis",
+            title: "ABG Analysis",
+            icon: "healthicon-respiratory_ventilator",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -1131,28 +925,12 @@ public class LabsProtocolService: ObservableObject {
     private func createAcidBaseProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "acid_base_classification",
-                title: "Acid-Base Disorder Classification",
+                id: "acid_base_assessment",
+                title: "Acid-Base Assessment",
                 nodeType: .assessment,
                 critical: true,
-                content: "Primary disorder: metabolic vs respiratory. Click to assess mixed disorders.",
-                connections: ["mixed_disorder_check"]
-            ),
-            AlgorithmNode(
-                id: "mixed_disorder_check",
-                title: "Mixed Disorder Assessment",
-                nodeType: .decision,
-                critical: true,
-                content: "Single disorder with compensation or mixed primary disorders? Click for analysis.",
-                connections: ["single_disorder", "mixed_disorders"]
-            ),
-            AlgorithmNode(
-                id: "mixed_disorders",
-                title: "Mixed Disorder Management",
-                nodeType: .intervention,
-                critical: true,
-                content: "Address each disorder separately. Prioritize by severity. Click for specific treatments.",
-                connections: ["disorder_specific_treatment"]
+                content: "Primary disorder, compensation, mixed disorders",
+                connections: ["treatment_approach"]
             )
         ])
         
@@ -1162,20 +940,19 @@ public class LabsProtocolService: ObservableObject {
                 type: .dynamic,
                 title: "Acid-Base Disorders",
                 sections: [
-                    CardSection(title: "Four Primary Disorders", items: [
-                        "Metabolic acidosis (↓HCO3, ↓pH)",
-                        "Metabolic alkalosis (↑HCO3, ↑pH)",
-                        "Respiratory acidosis (↑pCO2, ↓pH)",
-                        "Respiratory alkalosis (↓pCO2, ↑pH)"
+                    CardSection(title: "Treatment Principles", items: [
+                        "Treat underlying cause",
+                        "Support ventilation if needed",
+                        "Bicarbonate rarely indicated"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "acid_base_disorders",
-            title: "Acid-Base Disorder Management",
-            icon: "bx-test-tube",
+            id: "labs_acid_base",
+            title: "Acid-Base Balance",
+            icon: "healthicon-acid_rain",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -1185,44 +962,20 @@ public class LabsProtocolService: ObservableObject {
     private func createVentilatorAdjustmentProtocol() -> EmergencyProtocol {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
-                id: "vent_assessment",
+                id: "ventilator_assessment",
                 title: "Ventilator Assessment",
                 nodeType: .assessment,
                 critical: true,
-                content: "Current vent settings vs ABG results. Click to identify needed adjustments.",
-                connections: ["oxygenation_adjustment"]
+                content: "ABG results, ventilator settings, patient comfort",
+                connections: ["parameter_adjustment"]
             ),
             AlgorithmNode(
-                id: "oxygenation_adjustment",
-                title: "Oxygenation Adjustment",
-                nodeType: .decision,
-                critical: true,
-                content: "PaO2 target 55-80 mmHg. Adjust FiO2 or PEEP? Click for oxygen adjustment strategy.",
-                connections: ["fio2_adjustment", "peep_adjustment"]
-            ),
-            AlgorithmNode(
-                id: "ventilation_adjustment",
-                title: "Ventilation Adjustment",
-                nodeType: .decision,
-                critical: true,
-                content: "pCO2 target based on condition. Adjust rate or tidal volume? Click for CO2 management.",
-                connections: ["rate_adjustment", "vt_adjustment"]
-            ),
-            AlgorithmNode(
-                id: "fio2_adjustment",
-                title: "FiO2 Adjustment",
+                id: "parameter_adjustment",
+                title: "Parameter Adjustment",
                 nodeType: .intervention,
-                critical: false,
-                content: "Titrate FiO2 to maintain SpO2 88-95%. Click for oxygen toxicity considerations.",
+                critical: true,
+                content: "Adjust FiO2, PEEP, rate, or tidal volume based on ABG",
                 connections: ["reassess_abg"]
-            ),
-            AlgorithmNode(
-                id: "peep_adjustment",
-                title: "PEEP Adjustment",
-                nodeType: .intervention,
-                critical: false,
-                content: "Increase PEEP for recruitment. Monitor hemodynamics. Click for PEEP/FiO2 table.",
-                connections: ["hemodynamic_monitoring"]
             )
         ])
         
@@ -1232,49 +985,24 @@ public class LabsProtocolService: ObservableObject {
                 type: .dynamic,
                 title: "Ventilator Adjustments",
                 sections: [
-                    CardSection(title: "Oxygenation Strategy", items: [
-                        "Target SpO2: 88-95% (COPD: 88-92%)",
-                        "First: Adjust FiO2",
-                        "Then: Adjust PEEP if FiO2 >60%"
-                    ])
-                ]
-            ),
-            ProtocolCard(
-                id: "assessment_card",
-                type: .assessment,
-                title: "Ventilation Targets",
-                sections: [
-                    CardSection(title: "pCO2 Targets by Condition", items: [
-                        "Normal: 35-45 mmHg",
-                        "COPD: 50-60 mmHg (permissive hypercapnia)",
-                        "Head injury: 32-35 mmHg",
-                        "ARDS: Plateau pressure <30 cmH2O"
-                    ])
-                ]
-            ),
-            ProtocolCard(
-                id: "actions_card",
-                type: .actions,
-                title: "Adjustment Guidelines",
-                sections: [
-                    CardSection(title: "For Hypoxemia", items: [
-                        "Increase FiO2 by 10-20%",
-                        "Increase PEEP by 2-5 cmH2O",
-                        "Consider recruitment maneuvers"
+                    CardSection(title: "Oxygenation", items: [
+                        "Low PaO2: Increase FiO2 or PEEP",
+                        "High PaO2: Decrease FiO2 (target 88-95%)",
+                        "PEEP titration: 2-5 cmH2O increments"
                     ]),
-                    CardSection(title: "For Hypercarbia", items: [
-                        "Increase respiratory rate",
-                        "Increase tidal volume (if safe)",
-                        "Decrease dead space"
+                    CardSection(title: "Ventilation", items: [
+                        "High CO2: Increase rate or tidal volume",
+                        "Low CO2: Decrease rate or tidal volume",
+                        "Plateau pressure <30 cmH2O"
                     ])
                 ]
             )
         ]
         
         return EmergencyProtocol(
-            id: "ventilator_adjustment",
-            title: "Ventilator Adjustments Based on ABG",
-            icon: "bx-wind",
+            id: "labs_ventilator_adjustment",
+            title: "Ventilator Adjustment",
+            icon: "healthicon-ventilator",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards

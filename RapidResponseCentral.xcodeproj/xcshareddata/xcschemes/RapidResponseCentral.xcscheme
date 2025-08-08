@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1630"
+   LastUpgradeVersion = "1620"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -70,6 +70,15 @@
             ReferencedContainer = "container:RapidResponseCentral.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8B41F6442DEDD0D5001A66F9"
+            BuildableName = "RapidResponseCentral.app"
+            BlueprintName = "RapidResponseCentral"
+            ReferencedContainer = "container:RapidResponseCentral.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

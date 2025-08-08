@@ -1,5 +1,7 @@
 import Foundation
 import SwiftUI
+import os.log
+import os.signpost
 
 // MARK: - Calls Protocol Service
 
@@ -8,8 +10,13 @@ public class CallsProtocolService: ObservableObject {
     @Published public private(set) var protocols: [EmergencyProtocol] = []
     @Published public private(set) var isLoading = false
     
+    private let performanceLogger = Logger(subsystem: "com.rapidresponsecentral.performance", category: "CallsProtocolService")
+    private let signposter = OSSignposter(subsystem: "com.rapidresponsecentral.performance", category: "CallsProtocolCreation")
+    
     public init() {
-        loadCallsProtocols()
+        Task {
+            await loadCallsProtocolsConcurrently()
+        }
     }
     
     private func loadCallsProtocols() {
@@ -17,6 +24,22 @@ public class CallsProtocolService: ObservableObject {
         defer { isLoading = false }
         
         protocols = createCallsProtocols()
+    }
+    
+    @MainActor
+    private func loadCallsProtocolsConcurrently() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        performanceLogger.info("📞 Starting concurrent Calls protocol creation")
+        let signpostID = signposter.makeSignpostID()
+        let signpostState = signposter.beginInterval("CallsProtocolCreation", id: signpostID)
+        
+        // Create protocols synchronously on main actor
+        protocols = createCallsProtocols()
+        
+        signposter.endInterval("CallsProtocolCreation", signpostState)
+        performanceLogger.info("✅ Calls Protocol service initialization complete - \(self.protocols.count) protocols")
     }
     
     private func createCallsProtocols() -> [EmergencyProtocol] {
@@ -128,7 +151,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "acute_hf",
             title: "Acute Decompensated HF",
-            icon: "bx-heart",
+            icon: "healthicon-intravenous_drip",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -165,7 +188,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "right_hf",
             title: "Right Heart Failure",
-            icon: "bx-heart",
+            icon: "healthicon-heart_rate",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -202,7 +225,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "htn_emergency",
             title: "Hypertensive Emergency",
-            icon: "bx-pulse",
+            icon: "healthicon-blood_pressure_2",
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -282,7 +305,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "dka_protocol",
             title: "DKA/HHS Management",
-            icon: "bx-water-drop",
+            icon: "healthicon-diabetes_mellitus",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -319,7 +342,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "hypoglycemia",
             title: "Hypoglycemia",
-            icon: "bx-battery-low",
+            icon: "healthicon-glucose_meter",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -356,7 +379,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "adrenal_crisis",
             title: "Adrenal Crisis",
-            icon: "bx-shield-plus",
+            icon: "healthicon-hormone_replacement_therapy",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -411,7 +434,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "pneumothorax",
             title: "Pneumothorax",
-            icon: "bx-wind",
+            icon: "healthicon-lungs",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -448,7 +471,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "resp_failure",
             title: "Acute Respiratory Failure",
-            icon: "bx-wind",
+            icon: "healthicon-oxygen_mask",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -485,7 +508,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "asthma",
             title: "Asthma & COPD Exacerbation",
-            icon: "bx-wind",
+            icon: "healthicon-inhaler",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -524,7 +547,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "gi_bleeding",
             title: "GI Bleeding",
-            icon: "bx-donate-blood",
+            icon: "healthicon-stomach",
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -561,7 +584,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "bowel_obstruction",
             title: "Bowel Obstruction",
-            icon: "bx-food-menu",
+            icon: "healthicon-intestinal_blockage",
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -598,7 +621,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "antiemetic",
             title: "Antiemetic & Fluids",
-            icon: "bx-water",
+            icon: "healthicon-vomiting",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -637,7 +660,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "acute_pain",
             title: "Acute Pain Assessment",
-            icon: "bx-plus-medical",
+            icon: "healthicon-body_pain",
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -674,7 +697,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "opiate_conversion",
             title: "Opiate Conversion",
-            icon: "bx-calculator",
+            icon: "healthicon-medicines",
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -711,7 +734,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "eol_care",
             title: "End-of-Life Care",
-            icon: "bx-heart",
+            icon: "healthicon-palliative_care",
             category: .trauma,
             algorithm: algorithm,
             cards: cards

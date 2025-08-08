@@ -3,7 +3,7 @@ import SwiftUI
 struct RRTHomeView: View {
     @State private var searchText = ""
     @State private var selectedProtocol: EmergencyProtocol?
-    @StateObject private var protocolService = ProtocolService()
+    @EnvironmentObject private var protocolService: ProtocolService
     
     private let columns = [
         GridItem(.flexible()),
@@ -30,7 +30,7 @@ struct RRTHomeView: View {
                 }
             }
             .navigationDestination(for: EmergencyProtocol.self) { proto in
-                ProtocolDetailView(proto: proto)
+                ProtocolDetailView(protocol: proto)
             }
         }
     }

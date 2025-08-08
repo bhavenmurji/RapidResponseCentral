@@ -1,344 +1,441 @@
 import SwiftUI
 
-// MARK: - Medical Flowchart View (SMART DR Style)
-
-struct FlowchartView: View {
+// MARK: - Enhanced Flowchart View with Zoom
+public struct FlowchartView: View {
     let algorithm: ProtocolAlgorithm
     @Binding var selectedNodeId: String?
     let onNodeSelect: (String) -> Void
     
-    var body: some View {
+    // Zoom and pan state
+    @State private var zoomScale: CGFloat = 1.0
+    @State private var panOffset: CGSize = .zero
+    @State private var lastPanValue: CGSize = .zero
+    
+    // Zoom limits
+    private let minZoom: CGFloat = 0.5
+    private let maxZoom: CGFloat = 3.0
+    
+    public init(
+        algorithm: ProtocolAlgorithm,
+        selectedNodeId: Binding<String?>,
+        onNodeSelect: @escaping (String) -> Void
+    ) {
+        self.algorithm = algorithm
+        self._selectedNodeId = selectedNodeId
+        self.onNodeSelect = onNodeSelect
+    }
+    
+    public var body: some View {
         GeometryReader { geometry in
-            ScrollView([.horizontal, .vertical], showsIndicators: false) {
-                ZStack(alignment: .topLeading) {
-                    // Connection lines with labels (draw first, behind nodes)
-                    FlowchartConnectionsView(
-                        algorithm: algorithm,
-                        selectedNodeId: selectedNodeId ?? "",
-                        containerWidth: geometry.size.width
-                    )
-                    
-                    // Nodes with proper positioning
-                    FlowchartNodesView(
-                        algorithm: algorithm,
-                        selectedNodeId: $selectedNodeId,
-                        onNodeSelect: onNodeSelect,
-                        containerWidth: geometry.size.width
-                    )
+            ZStack {
+                // Background
+                Color(red: 0.98, green: 0.98, blue: 1.0)
+                    .ignoresSafeArea()
+                
+                // Scrollable and zoomable content
+                ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                    flowchartContent
+                        .scaleEffect(zoomScale)
+                        .offset(panOffset)
+                        .frame(
+                            minWidth: max(geometry.size.width, calculateContentWidth() * zoomScale),
+                            minHeight: max(geometry.size.height, calculateContentHeight() * zoomScale)
+                        )
                 }
-                .frame(minWidth: max(300, geometry.size.width - 20), 
-                       minHeight: max(400, CGFloat(algorithm.nodes.count) * 100))
-                .padding(20)
+                .clipped()
+                .simultaneousGesture(panGesture)
+                .simultaneousGesture(magnifyGesture)
+                
+                // Zoom controls overlay
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        zoomControlsOverlay
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 16)
+                    }
+                }
             }
-            .background(Color(.systemBackground))
         }
-    }
-}
-
-// MARK: - Flowchart Nodes Layout
-
-struct FlowchartNodesView: View {
-    let algorithm: ProtocolAlgorithm
-    @Binding var selectedNodeId: String?
-    let onNodeSelect: (String) -> Void
-    let containerWidth: CGFloat
-    
-    var body: some View {
-        ForEach(Array(algorithm.nodes.enumerated()), id: \.element.id) { index, node in
-            FlowchartNodeView(
-                node: node,
-                isSelected: selectedNodeId == node.id,
-                onTap: { onNodeSelect(node.id) }
-            )
-            .position(positionForNode(node, at: index))
+        .onAppear {
+            // Center on first node if available
+            centerOnSelectedNode()
+        }
+        .onChange(of: selectedNodeId) { _, _ in
+            centerOnSelectedNode()
         }
     }
     
-    private func positionForNode(_ node: AlgorithmNode, at index: Int) -> CGPoint {
-        let verticalSpacing: CGFloat = 100
-        let centerX = containerWidth / 2
-        let startY: CGFloat = 40
-        
-        // Create a cleaner vertical flow with centered nodes
-        var yPosition = startY + CGFloat(index) * verticalSpacing
-        var xPosition = centerX
-        
-        // For decision nodes with branches, offset slightly
-        if index > 0 {
-            let prevNode = algorithm.nodes[index - 1]
-            if prevNode.nodeType == .decision && prevNode.connections.count > 1 {
-                // This is likely a branch from a decision
-                let connectionIndex = prevNode.connections.firstIndex(of: node.id) ?? 0
-                xPosition = centerX + (connectionIndex == 0 ? -80 : 80)
+    // MARK: - Flowchart Content
+    private var flowchartContent: some View {
+        LazyVStack(alignment: .leading, spacing: 20) {
+            ForEach(Array(algorithm.nodes.enumerated()), id: \.element.id) { index, node in
+                EnhancedNodeView(
+                    node: node,
+                    isSelected: selectedNodeId == node.id,
+                    onTap: { onNodeSelect(node.id) }
+                )
+                .padding(.horizontal, 20)
+                
+                // Connection indicator
+                if !node.connections.isEmpty {
+                    connectionIndicator
+                }
             }
         }
+        .frame(minWidth: 350)
+        .padding(.vertical, 20)
+    }
+    
+    // MARK: - Connection Indicator
+    private var connectionIndicator: some View {
+        HStack {
+            Spacer()
+            VStack(spacing: 4) {
+                ForEach(0..<3) { _ in
+                    Circle()
+                        .fill(Color.blue.opacity(0.6))
+                        .frame(width: 4, height: 4)
+                }
+            }
+            Spacer()
+        }
+    }
+    
+    // MARK: - Zoom Controls
+    private var zoomControlsOverlay: some View {
+        VStack(spacing: 8) {
+            Button(action: zoomIn) {
+                Image(systemName: "plus.magnifyingglass")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+                    .frame(width: 40, height: 40)
+                    .background(.regularMaterial, in: Circle())
+                    .shadow(radius: 2)
+            }
+            
+            Button(action: zoomOut) {
+                Image(systemName: "minus.magnifyingglass")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+                    .frame(width: 40, height: 40)
+                    .background(.regularMaterial, in: Circle())
+                    .shadow(radius: 2)
+            }
+            
+            Button(action: resetZoom) {
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+                    .frame(width: 40, height: 40)
+                    .background(.regularMaterial, in: Circle())
+                    .shadow(radius: 2)
+            }
+        }
+    }
+    
+    // MARK: - Gestures
+    private var panGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                let delta = CGSize(
+                    width: value.translation.width - lastPanValue.width,
+                    height: value.translation.height - lastPanValue.height
+                )
+                panOffset = CGSize(
+                    width: panOffset.width + delta.width,
+                    height: panOffset.height + delta.height
+                )
+                lastPanValue = value.translation
+            }
+            .onEnded { _ in
+                lastPanValue = .zero
+            }
+    }
+    
+    private var magnifyGesture: some Gesture {
+        MagnifyGesture()
+            .onChanged { value in
+                let newScale = zoomScale * value.magnification
+                zoomScale = min(max(newScale, minZoom), maxZoom)
+            }
+    }
+    
+    // MARK: - Zoom Actions
+    private func zoomIn() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            zoomScale = min(zoomScale * 1.5, maxZoom)
+        }
+    }
+    
+    private func zoomOut() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            zoomScale = max(zoomScale / 1.5, minZoom)
+        }
+    }
+    
+    private func resetZoom() {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            zoomScale = 1.0
+            panOffset = .zero
+        }
+    }
+    
+    // MARK: - Helper Methods
+    private func calculateContentWidth() -> CGFloat {
+        return 350 // Minimum width for nodes
+    }
+    
+    private func calculateContentHeight() -> CGFloat {
+        let nodeHeight: CGFloat = 80
+        let spacing: CGFloat = 20
+        let connectionHeight: CGFloat = 20
         
-        return CGPoint(x: xPosition, y: yPosition)
+        let nodesWithConnections = algorithm.nodes.filter { !$0.connections.isEmpty }.count
+        return CGFloat(algorithm.nodes.count) * (nodeHeight + spacing) + 
+               CGFloat(nodesWithConnections) * connectionHeight + 40
+    }
+    
+    private func centerOnSelectedNode() {
+        // Optional: Center the view on the selected node
+        // Implementation could calculate the position of the selected node
+        // and adjust panOffset to center it
     }
 }
 
-// MARK: - Flowchart Node (SMART DR Style)
-
-struct FlowchartNodeView: View {
+// MARK: - Enhanced Node View
+private struct EnhancedNodeView: View {
     let node: AlgorithmNode
     let isSelected: Bool
     let onTap: () -> Void
     
+    @State private var isPressed = false
+    
     var body: some View {
         Button(action: onTap) {
-            Text(node.title)
-                .font(.system(size: 12, weight: .medium))
-                .multilineTextAlignment(.center)
-                .foregroundColor(textColorForNode(node))
-                .lineLimit(2)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .frame(minWidth: 100, maxWidth: 180)
-                .background(backgroundForNode(node, isSelected: isSelected))
-                .overlay(
-                    shapeForNode(node)
-                        .stroke(strokeColorForNode(node, isSelected: isSelected), lineWidth: 2)
-                )
-                .clipShape(shapeForNode(node))
-        }
-        .buttonStyle(.plain)
-        .scaleEffect(isSelected ? 1.02 : 1.0)
-        .animation(.easeInOut(duration: 0.15), value: isSelected)
-        .shadow(color: .black.opacity(isSelected ? 0.1 : 0.03), radius: 2, y: 1)
-    }
-    
-    private func shapeForNode(_ node: AlgorithmNode) -> AnyShape {
-        switch node.nodeType {
-        case .decision:
-            return AnyShape(DiamondShape())
-        case .endpoint:
-            return AnyShape(RoundedRectangle(cornerRadius: 20))
-        default:
-            return AnyShape(RoundedRectangle(cornerRadius: 6))
-        }
-    }
-    
-    private func backgroundForNode(_ node: AlgorithmNode, isSelected: Bool) -> Color {
-        if isSelected {
-            return Color.blue.opacity(0.08)
-        }
-        
-        switch node.nodeType {
-        case .decision:
-            return Color(.systemBackground)
-        case .assessment:
-            return Color(.systemGray6)
-        case .intervention, .medication:
-            return Color.green.opacity(0.9)
-        case .endpoint:
-            return Color.orange.opacity(0.9)
-        }
-    }
-    
-    private func textColorForNode(_ node: AlgorithmNode) -> Color {
-        switch node.nodeType {
-        case .decision, .assessment:
-            return node.critical ? .red : .primary
-        case .intervention, .medication, .endpoint:
-            return .white
-        }
-    }
-    
-    private func strokeColorForNode(_ node: AlgorithmNode, isSelected: Bool) -> Color {
-        if isSelected {
-            return .blue
-        }
-        
-        switch node.nodeType {
-        case .decision:
-            return Color.gray.opacity(0.4)
-        case .assessment:
-            return Color.gray.opacity(0.3)
-        case .intervention, .medication:
-            return Color.green.opacity(0.7)
-        case .endpoint:
-            return Color.orange.opacity(0.7)
-        }
-    }
-}
-
-// MARK: - Diamond Shape for Decision Nodes
-
-struct DiamondShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        
-        path.move(to: CGPoint(x: center.x, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: center.y))
-        path.addLine(to: CGPoint(x: center.x, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: center.y))
-        path.closeSubpath()
-        
-        return path
-    }
-}
-
-// MARK: - Flowchart Connections with Labels
-
-struct FlowchartConnectionsView: View {
-    let algorithm: ProtocolAlgorithm
-    let selectedNodeId: String
-    let containerWidth: CGFloat
-    
-    var body: some View {
-        ForEach(Array(algorithm.nodes.enumerated()), id: \.element.id) { index, node in
-            ForEach(Array(node.connections.enumerated()), id: \.offset) { connectionIndex, connectionId in
-                if let targetIndex = algorithm.nodes.firstIndex(where: { $0.id == connectionId }) {
-                    let targetNode = algorithm.nodes[targetIndex]
-                    FlowchartArrowWithLabel(
-                        from: positionForNode(node, at: index),
-                        to: positionForNode(targetNode, at: targetIndex),
-                        label: labelForConnection(from: node, to: targetNode, index: connectionIndex),
-                        isHighlighted: selectedNodeId == node.id || selectedNodeId == connectionId,
-                        fromNodeType: node.nodeType,
-                        toNodeType: targetNode.nodeType
-                    )
+            VStack(alignment: .leading, spacing: 12) {
+                // Header with icon and title
+                HStack(spacing: 12) {
+                    // Enhanced node icon
+                    ZStack {
+                        RoundedRectangle(cornerRadius: iconCornerRadius)
+                            .fill(backgroundColorForNode(node))
+                            .frame(width: 36, height: 36)
+                            .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
+                        
+                        Image(systemName: iconForNodeType(node.nodeType))
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.white)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(node.title)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(2)
+                        
+                        // Node type badge
+                        Text(nodeTypeName(node.nodeType))
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(
+                                Capsule()
+                                    .fill(backgroundColorForNode(node).opacity(0.2))
+                            )
+                            .foregroundColor(backgroundColorForNode(node))
+                    }
+                    
+                    Spacer()
+                    
+                    // Critical indicator
+                    if node.critical {
+                        VStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.system(size: 16))
+                                .foregroundColor(.red)
+                                .padding(6)
+                                .background(
+                                    Circle()
+                                        .fill(.red.opacity(0.1))
+                                )
+                            Spacer()
+                        }
+                    }
+                }
+                
+                // Content
+                if !node.content.isEmpty {
+                    Text(node.content)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(4)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                
+                // Connections info
+                if !node.connections.isEmpty {
+                    HStack(spacing: 6) {
+                        Image(systemName: "arrow.right.circle.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.blue)
+                        
+                        Text("\(node.connections.count) next step\(node.connections.count == 1 ? "" : "s")")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.blue)
+                        
+                        Spacer()
+                        
+                        if isSelected {
+                            Text("TAP TO CONTINUE")
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.blue)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 2)
+                                .background(
+                                    Capsule()
+                                        .stroke(.blue, lineWidth: 1)
+                                )
+                        }
+                    }
+                    .padding(.top, 4)
                 }
             }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.regularMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(strokeColor, lineWidth: strokeWidth)
+                    )
+                    .shadow(
+                        color: shadowColor,
+                        radius: shadowRadius,
+                        y: shadowOffsetY
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+        .scaleEffect(isPressed ? 0.98 : (isSelected ? 1.02 : 1.0))
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
+        .animation(.easeInOut(duration: 0.1), value: isPressed)
+        .onLongPressGesture(minimumDuration: 0) {
+            // Just for press effect
+        } onPressingChanged: { pressing in
+            isPressed = pressing
         }
     }
     
-    private func positionForNode(_ node: AlgorithmNode, at index: Int) -> CGPoint {
-        let verticalSpacing: CGFloat = 100
-        let centerX = containerWidth / 2
-        let startY: CGFloat = 40
-        
-        var yPosition = startY + CGFloat(index) * verticalSpacing
-        var xPosition = centerX
-        
-        if index > 0 {
-            let prevNode = algorithm.nodes[index - 1]
-            if prevNode.nodeType == .decision && prevNode.connections.count > 1 {
-                let connectionIndex = prevNode.connections.firstIndex(of: node.id) ?? 0
-                xPosition = centerX + (connectionIndex == 0 ? -80 : 80)
-            }
+    // MARK: - Helper Properties
+    private var iconCornerRadius: CGFloat {
+        switch node.nodeType {
+        case .decision: return 8
+        case .endpoint: return 18
+        default: return 6
         }
-        
-        return CGPoint(x: xPosition, y: yPosition)
     }
     
-    private func labelForConnection(from: AlgorithmNode, to: AlgorithmNode, index: Int) -> String {
-        if from.nodeType == .decision {
-            return index == 0 ? "Yes" : "No"
+    private var strokeColor: Color {
+        if isSelected {
+            return .blue
+        } else if node.critical {
+            return .red.opacity(0.8)
+        } else {
+            return .clear
         }
-        return ""
+    }
+    
+    private var strokeWidth: CGFloat {
+        if isSelected {
+            return 2.5
+        } else if node.critical {
+            return 2.0
+        } else {
+            return 0
+        }
+    }
+    
+    private var shadowColor: Color {
+        if isSelected {
+            return .blue.opacity(0.3)
+        } else if node.critical {
+            return .red.opacity(0.2)
+        } else {
+            return .black.opacity(0.1)
+        }
+    }
+    
+    private var shadowRadius: CGFloat {
+        if isSelected {
+            return 8
+        } else if node.critical {
+            return 6
+        } else {
+            return 4
+        }
+    }
+    
+    private var shadowOffsetY: CGFloat {
+        isSelected || node.critical ? 4 : 2
+    }
+    
+    private func nodeTypeName(_ type: NodeType) -> String {
+        switch type {
+        case .decision: return "Decision"
+        case .assessment: return "Assessment"
+        case .intervention: return "Intervention"
+        case .medication: return "Medication"
+        case .endpoint: return "Complete"
+        case .action: return "Action"
+        }
+    }
+    
+    private func iconForNodeType(_ type: NodeType) -> String {
+        switch type {
+        case .decision:
+            return "diamond.fill"
+        case .assessment:
+            return "stethoscope"
+        case .intervention:
+            return "cross.case.fill"
+        case .medication:
+            return "pills.fill"
+        case .endpoint:
+            return "checkmark.circle.fill"
+        case .action:
+            return "hand.raised.fill"
+        }
+    }
+    
+    private func backgroundColorForNode(_ node: AlgorithmNode) -> Color {
+        if node.critical {
+            return .red
+        }
+        
+        switch node.nodeType {
+        case .decision:
+            return .blue
+        case .assessment:
+            return .orange
+        case .action:
+            return .indigo
+        case .intervention:
+            return .green
+        case .medication:
+            return .purple
+        case .endpoint:
+            return .gray
+        }
     }
 }
-
-// MARK: - Flowchart Arrow with Label
-
-struct FlowchartArrowWithLabel: View {
-    let from: CGPoint
-    let to: CGPoint
-    let label: String
-    let isHighlighted: Bool
-    let fromNodeType: NodeType
-    let toNodeType: NodeType
-    
-    var body: some View {
-        ZStack {
-            // Arrow line
-            Path { path in
-                let adjustedFrom = adjustedStartPoint(from: from, to: to, nodeType: fromNodeType)
-                let adjustedTo = adjustedEndPoint(from: from, to: to, nodeType: toNodeType)
-                
-                path.move(to: adjustedFrom)
-                path.addLine(to: adjustedTo)
-            }
-            .stroke(
-                isHighlighted ? Color.blue : Color.gray.opacity(0.5),
-                style: StrokeStyle(
-                    lineWidth: isHighlighted ? 2 : 1.5,
-                    lineCap: .round
-                )
-            )
-            
-            // Arrow head
-            Path { path in
-                let adjustedFrom = adjustedStartPoint(from: from, to: to, nodeType: fromNodeType)
-                let adjustedTo = adjustedEndPoint(from: from, to: to, nodeType: toNodeType)
-                
-                let angle = atan2(adjustedTo.y - adjustedFrom.y, adjustedTo.x - adjustedFrom.x)
-                let arrowLength: CGFloat = 8
-                let arrowAngle: CGFloat = .pi / 6
-                
-                let arrowStart = CGPoint(
-                    x: adjustedTo.x - arrowLength * cos(angle - arrowAngle),
-                    y: adjustedTo.y - arrowLength * sin(angle - arrowAngle)
-                )
-                let arrowEnd = CGPoint(
-                    x: adjustedTo.x - arrowLength * cos(angle + arrowAngle),
-                    y: adjustedTo.y - arrowLength * sin(angle + arrowAngle)
-                )
-                
-                path.move(to: arrowStart)
-                path.addLine(to: adjustedTo)
-                path.addLine(to: arrowEnd)
-            }
-            .stroke(
-                isHighlighted ? Color.blue : Color.gray.opacity(0.5),
-                style: StrokeStyle(
-                    lineWidth: isHighlighted ? 2 : 1.5,
-                    lineCap: .round,
-                    lineJoin: .round
-                )
-            )
-            
-            // Label (Yes/No)
-            if !label.isEmpty {
-                Text(label)
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(label == "Yes" ? .green : .red)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 1)
-                    .background(Color(.systemBackground))
-                    .position(labelPosition())
-            }
-        }
-    }
-    
-    private func adjustedStartPoint(from: CGPoint, to: CGPoint, nodeType: NodeType) -> CGPoint {
-        let nodeRadius: CGFloat = nodeType == .decision ? 30 : 25
-        let angle = atan2(to.y - from.y, to.x - from.x)
-        
-        return CGPoint(
-            x: from.x + nodeRadius * cos(angle),
-            y: from.y + nodeRadius * sin(angle)
-        )
-    }
-    
-    private func adjustedEndPoint(from: CGPoint, to: CGPoint, nodeType: NodeType) -> CGPoint {
-        let nodeRadius: CGFloat = nodeType == .decision ? 30 : 25
-        let angle = atan2(to.y - from.y, to.x - from.x)
-        
-        return CGPoint(
-            x: to.x - nodeRadius * cos(angle),
-            y: to.y - nodeRadius * sin(angle)
-        )
-    }
-    
-    private func labelPosition() -> CGPoint {
-        let midX = (from.x + to.x) / 2
-        let midY = (from.y + to.y) / 2
-        
-        // Offset label slightly to avoid overlapping with arrow
-        let angle = atan2(to.y - from.y, to.x - from.x)
-        let offset: CGFloat = 20
-        
-        return CGPoint(
-            x: midX - offset * sin(angle),
-            y: midY + offset * cos(angle)
-        )
-    }
-}
-
-// MARK: - Preview
 
 #Preview {
     FlowchartView(
@@ -358,38 +455,6 @@ struct FlowchartArrowWithLabel: View {
                 critical: true,
                 content: "Evidence of bleeding on CT",
                 connections: ["action1", "action2"]
-            ),
-            AlgorithmNode(
-                id: "action1",
-                title: "Contact Neurosurgeons",
-                nodeType: .intervention,
-                critical: true,
-                content: "Immediate neurosurgical consultation",
-                connections: []
-            ),
-            AlgorithmNode(
-                id: "action2",
-                title: "Aspirin 300mg",
-                nodeType: .medication,
-                critical: false,
-                content: "PO/NG/PR STAT",
-                connections: ["decision2"]
-            ),
-            AlgorithmNode(
-                id: "decision2",
-                title: "< 4.5 hours since onset?",
-                nodeType: .decision,
-                critical: true,
-                content: "Time window for thrombolysis",
-                connections: ["thrombolysis", "maintenance"]
-            ),
-            AlgorithmNode(
-                id: "thrombolysis",
-                title: "Thrombolysis",
-                nodeType: .intervention,
-                critical: true,
-                content: "Administer thrombolytic therapy",
-                connections: []
             )
         ]),
         selectedNodeId: .constant("decision1"),

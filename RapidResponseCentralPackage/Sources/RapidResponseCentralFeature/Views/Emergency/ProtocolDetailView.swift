@@ -1,13 +1,19 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
-struct ProtocolDetailView: View {
+// MARK: - Professional Medical Protocol Detail View
+public struct ProtocolDetailView: View {
     let proto: EmergencyProtocol
     @State private var selectedNodeId: String?
+    @State private var selectedNode: AlgorithmNode?
     @State private var currentCardIndex = 0
     @StateObject private var session: ProtocolSession
     @Environment(\.dismiss) private var dismiss
+    @State private var showingEventLog = false
     
-    init(proto: EmergencyProtocol) {
+    public init(protocol proto: EmergencyProtocol) {
         self.proto = proto
         self._session = StateObject(wrappedValue: ProtocolSession(
             protocolId: proto.id,
@@ -16,74 +22,45 @@ struct ProtocolDetailView: View {
         ))
     }
     
-    var body: some View {
-        GeometryReader { outerGeometry in
+    public var body: some View {
+        GeometryReader { geometry in
             VStack(spacing: 0) {
-                // Timer Banner
+                // Timer Banner - Fixed Height
                 ProtocolTimerBanner(session: session)
-                    .background(Color(.systemBackground))
-                    .shadow(color: Color.black.opacity(0.1), radius: 2, y: 2)
+                    .frame(height: 60)
+                    .background(.regularMaterial)
+                    .shadow(color: Color.black.opacity(0.08), radius: 1, y: 1)
                 
-                // 50/50 Split Layout
-                GeometryReader { geometry in
-                    VStack(spacing: 0) {
-                        // Top Panel: Dynamic Information Cards (50%)
-                        TabView(selection: $currentCardIndex) {
-                            ForEach(Array(proto.cards.enumerated()), id: \.offset) { index, card in
-                                ScrollView {
-                                    ProtocolCardView(card: card)
-                                        .padding(.horizontal, 16)
-                                        .padding(.vertical, 16)
-                                }
-                                .tag(index)
-                            }
-                        }
-                        .tabViewStyle(.page(indexDisplayMode: .automatic))
-                        .frame(height: max(200, geometry.size.height * 0.45))
-                        .background(Color(.systemBackground))
-                        
-                        Divider()
-                        
-                        // Bottom Panel: Interactive Algorithm Flowchart (50%)
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("Decision Tree Flowchart")
-                                    .font(.caption)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text("Tap nodes to navigate")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.top, 8)
-                            
-                            FlowchartView(
-                                algorithm: proto.algorithm,
-                                selectedNodeId: $selectedNodeId,
-                                onNodeSelect: { nodeId in
-                                    handleNodeSelection(nodeId)
-                                }
-                            )
-                            .padding(.horizontal, 4)
-                        }
-                        .frame(height: max(200, geometry.size.height * 0.45))
-                        .background(Color(.systemGroupedBackground))
-                    }
+                // Main Content Area - Proper 45/50/5 Vertical Split
+                VStack(spacing: 0) {
+                    // TOP (45%): Protocol Information Cards
+                    cardsPanel
+                        .frame(height: (geometry.size.height - 60) * 0.45)
+                    
+                    // Horizontal Divider
+                    Rectangle()
+                        .fill(Color(.systemGray5))
+                        .frame(height: 1)
+                    
+                    // MIDDLE (50%): Flowchart View
+                    flowchartPanel
+                        .frame(height: (geometry.size.height - 60) * 0.50)
+                    
+                    // Horizontal Divider
+                    Rectangle()
+                        .fill(Color(.systemGray5))
+                        .frame(height: 1)
+                    
+                    // BOTTOM (5%): Protocol Flow Navigation
+                    protocolFlowPanel
+                        .frame(height: (geometry.size.height - 60) * 0.05)
+                        .background(Color(.systemGray6))
                 }
             }
         }
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("End") {
-                    dismiss()
-                }
-                .foregroundColor(.red)
-            }
-        }
-        .navigationBarBackButtonHidden(true)
+        #endif
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
@@ -91,89 +68,355 @@ struct ProtocolDetailView: View {
                         Image(systemName: "chevron.left")
                         Text("Back")
                     }
+                    .foregroundColor(.blue)
+                }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack(spacing: 16) {
+                    Button(action: { showingEventLog.toggle() }) {
+                        Image(systemName: "list.bullet.clipboard")
+                            .foregroundColor(.blue)
+                    }
+                    
+                    Button("End Protocol") {
+                        dismiss()
+                    }
+                    .foregroundColor(.red)
+                    .fontWeight(.medium)
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
         .onAppear {
-            // Select first node
+            // Select first node on appear
             if selectedNodeId == nil, let firstNode = proto.algorithm.nodes.first {
                 selectedNodeId = firstNode.id
+                selectedNode = firstNode
+            }
+        }
+        .sheet(isPresented: $showingEventLog) {
+            EventLogModal(session: session)
+        }
+    }
+    
+    // MARK: - Panel Components
+    
+    // Flowchart Panel (Middle 50%)
+    private var flowchartPanel: some View {
+        VStack(spacing: 0) {
+            // Compact Panel Header for Middle Section
+            HStack {
+                Text("Protocol Algorithm")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
+                Spacer()
+                if let selectedNode {
+                    HStack(spacing: 4) {
+                        Image(systemName: selectedNode.critical ? "exclamationmark.triangle.fill" : "info.circle.fill")
+                        Text(selectedNode.critical ? "Critical" : "Active")
+                    }
+                    .font(.caption2)
+                    .foregroundColor(selectedNode.critical ? .red : .blue)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(
+                        Capsule()
+                            .fill((selectedNode.critical ? Color.red : Color.blue).opacity(0.1))
+                    )
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color(.systemBackground))
+            
+            Rectangle()
+                .fill(Color(.systemGray5))
+                .frame(height: 1)
+            
+            // Flowchart Content
+            FigmaOmnichartView(
+                algorithm: proto.algorithm,
+                selectedNodeId: $selectedNodeId,
+                onNodeSelect: { nodeId in
+                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+                        handleNodeSelection(node)
+                    }
+                }
+            )
+            .background(Color(.systemBackground))
+        }
+    }
+    
+    // Information Cards Panel (Top 45%)
+    private var cardsPanel: some View {
+        VStack(spacing: 0) {
+            // Prominent Panel Header for Top Section
+            HStack {
+                Text("Protocol Information")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                Spacer()
+                if !proto.cards.isEmpty {
+                    Text("\(currentCardIndex + 1) of \(proto.cards.count)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(Color(.systemGray6))
+                        )
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(Color(.systemBackground))
+            
+            Rectangle()
+                .fill(Color(.systemGray5))
+                .frame(height: 1)
+            
+            // Cards Content
+            if !proto.cards.isEmpty {
+                TabView(selection: $currentCardIndex) {
+                    ForEach(Array(proto.cards.enumerated()), id: \.offset) { index, card in
+                        ScrollView {
+                            MedicalProtocolCard(
+                                card: card,
+                                selectedNode: selectedNodeId.flatMap { id in
+                                    proto.algorithm.nodes.first { $0.id == id }
+                                },
+                                algorithm: proto.algorithm,
+                                onNodeSelect: { nodeId in
+                                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+                                        handleNodeSelection(node)
+                                    }
+                                }
+                            )
+                            .padding(16)
+                        }
+                        .background(Color(.systemBackground))
+                        .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+            } else {
+                VStack {
+                    Spacer()
+                    Image(systemName: "doc.text")
+                        .font(.system(size: 48))
+                        .foregroundColor(.secondary)
+                    Text("No information cards available")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                .background(Color(.systemBackground))
             }
         }
     }
     
-    private func handleNodeSelection(_ nodeId: String) {
-        selectedNodeId = nodeId
+    // Minimal Protocol Flow Panel (Bottom 5%)
+    private var protocolFlowPanel: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Protocol Flow")
+                    .font(.caption2)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+                Spacer()
+                if let selectedNode {
+                    Text("Current: \(selectedNode.title)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.top, 4)
+            
+            CompactFlowchartView(
+                algorithm: proto.algorithm,
+                selectedNodeId: $selectedNodeId,
+                onNodeSelect: { nodeId in
+                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+                        handleNodeSelection(node)
+                    }
+                }
+            )
+            .padding(.horizontal, 4)
+            .padding(.bottom, 2)
+        }
+    }
+    
+    // MARK: - Node Selection Handler
+    
+    private func handleNodeSelection(_ node: AlgorithmNode) {
+        selectedNodeId = node.id
+        selectedNode = node
         
-        // Update card index based on node selection
-        if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+        // Update card index based on node selection with smooth animation
+        withAnimation(.easeInOut(duration: 0.3)) {
             switch node.nodeType {
             case .assessment:
                 currentCardIndex = min(1, proto.cards.count - 1) // Assessment card if available
-            case .intervention, .medication:
+            case .intervention, .medication, .action:
                 currentCardIndex = min(2, proto.cards.count - 1) // Actions card if available
             case .decision, .endpoint:
                 currentCardIndex = 0 // Dynamic content card
             }
         }
         
-        // Log the node transition
+        // Log the node transition for analytics
         let currentTime = Date().timeIntervalSince(session.startTime)
         let event = EventLogEntry(
             relativeTime: currentTime,
             type: .algorithmNode,
-            description: "Moved to: \(proto.algorithm.nodes.first(where: { $0.id == nodeId })?.title ?? nodeId)"
+            description: "Navigated to: \(node.title)"
         )
         session.addEvent(event)
     }
 }
 
-struct ProtocolCardView: View {
+// MARK: - Medical Protocol Card Component
+
+struct MedicalProtocolCard: View {
     let card: ProtocolCard
+    let selectedNode: AlgorithmNode?
+    let algorithm: ProtocolAlgorithm
+    let onNodeSelect: (String) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Card Header
-            HStack {
-                Image(systemName: iconForCardType(card.type))
-                    .font(.subheadline)
-                    .foregroundColor(colorForCardType(card.type))
+            // Professional Card Header
+            cardHeader
+            
+            // Current Node Context (if available)
+            if let selectedNode {
+                currentNodeContext(selectedNode)
+            }
+            
+            // Card Sections
+            ForEach(card.sections) { section in
+                cardSection(section)
+            }
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.secondarySystemBackground))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color(.systemGray5), lineWidth: 1)
+        )
+    }
+    
+    private var cardHeader: some View {
+        HStack(spacing: 12) {
+            // Card Type Icon
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(colorForCardType(card.type).opacity(0.15))
+                    .frame(width: 40, height: 40)
                 
+                Image(systemName: iconForCardType(card.type))
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(colorForCardType(card.type))
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
                 Text(card.title)
-                    .font(.subheadline)
+                    .font(.title3)
                     .fontWeight(.semibold)
+                    .foregroundColor(.primary)
+                
+                Text(cardTypeDescription(card.type))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+        }
+    }
+    
+    private func currentNodeContext(_ node: AlgorithmNode) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("CURRENT STEP")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(.secondary)
+                Spacer()
+                if node.critical {
+                    Label("Critical", systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .labelStyle(.titleAndIcon)
+                }
+            }
+            
+            HStack(spacing: 12) {
+                Image(systemName: nodeTypeIcon(node.nodeType))
+                    .font(.title3)
+                    .foregroundColor(nodeTypeColor(node.nodeType))
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(node.title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                    if !node.content.isEmpty {
+                        Text(node.content)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
                 
                 Spacer()
             }
-            
-            // Card Content
-            ForEach(card.sections) { section in
-                VStack(alignment: .leading, spacing: 6) {
-                    if !section.title.isEmpty {
-                        Text(section.title)
-                            .font(.footnote)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.primary)
-                    }
-                    
-                    ForEach(section.items, id: \.self) { item in
-                        HStack(alignment: .top, spacing: 6) {
-                            Text("•")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(item)
-                                .font(.caption)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .lineLimit(nil)
-                        }
-                    }
-                }
-                .padding(.vertical, 2)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.tertiarySystemBackground))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(node.critical ? Color.red.opacity(0.3) : Color.blue.opacity(0.3), lineWidth: 1)
+        )
+    }
+    
+    private func cardSection(_ section: CardSection) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if !section.title.isEmpty {
+                Text(section.title)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
             }
             
-            Spacer(minLength: 20)
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(section.items, id: \.self) { item in
+                    HStack(alignment: .top, spacing: 8) {
+                        Text("•")
+                            .font(.subheadline)
+                            .foregroundColor(colorForCardType(card.type))
+                            .fontWeight(.bold)
+                        
+                        Text(item)
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
         }
     }
+    
+    // MARK: - Helper Functions
     
     private func iconForCardType(_ type: CardType) -> String {
         switch type {
@@ -196,98 +439,22 @@ struct ProtocolCardView: View {
             return .green
         }
     }
-}
-
-struct AlgorithmFlowView: View {
-    let algorithm: ProtocolAlgorithm
-    @Binding var selectedNodeId: String?
-    let onNodeSelect: (String) -> Void
     
-    var body: some View {
-        // Simple vertical layout for now - can be enhanced with proper flowchart layout
-        VStack(alignment: .leading, spacing: 16) {
-            ForEach(algorithm.nodes) { node in
-                AlgorithmNodeView(
-                    node: node,
-                    isSelected: selectedNodeId == node.id,
-                    onTap: {
-                        onNodeSelect(node.id)
-                    }
-                )
-            }
+    private func cardTypeDescription(_ type: CardType) -> String {
+        switch type {
+        case .dynamic:
+            return "Context-aware information"
+        case .assessment:
+            return "Clinical assessment guide"
+        case .actions:
+            return "Required interventions"
         }
-        .frame(minWidth: 300)
-    }
-}
-
-struct AlgorithmNodeView: View {
-    let node: AlgorithmNode
-    let isSelected: Bool
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 10) {
-                // Node Icon
-                Image(systemName: iconForNodeType(node.nodeType))
-                    .font(.caption)
-                    .foregroundColor(.white)
-                    .frame(width: 28, height: 28)
-                    .background(backgroundColorForNode(node))
-                    .clipShape(RoundedRectangle(cornerRadius: node.nodeType == .endpoint ? 14 : 6))
-                
-                // Node Content
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(node.title)
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundColor(node.critical ? .red : .primary)
-                        .lineLimit(1)
-                    
-                    Text(node.content)
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
-                    if !node.connections.isEmpty {
-                        Text("→ Next options available")
-                            .font(.caption2)
-                            .foregroundColor(.blue)
-                            .italic()
-                    }
-                }
-                
-                Spacer(minLength: 8)
-                
-                // Selection indicator
-                if isSelected {
-                    Image(systemName: "chevron.right.circle.fill")
-                        .font(.caption)
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(isSelected ? Color.blue.opacity(0.1) : Color(.systemBackground))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? Color.blue : Color(.separator), lineWidth: isSelected ? 2 : 0.5)
-            )
-        }
-        .buttonStyle(.plain)
-        .scaleEffect(isSelected ? 1.02 : 1.0)
-        .animation(.easeInOut(duration: 0.2), value: isSelected)
     }
     
-    private func iconForNodeType(_ type: NodeType) -> String {
+    private func nodeTypeIcon(_ type: NodeType) -> String {
         switch type {
         case .decision:
-            return "questionmark.diamond"
+            return "arrow.triangle.branch"
         case .assessment:
             return "stethoscope"
         case .intervention:
@@ -296,20 +463,18 @@ struct AlgorithmNodeView: View {
             return "pills"
         case .endpoint:
             return "checkmark.circle"
+        case .action:
+            return "hand.raised"
         }
     }
     
-    private func backgroundColorForNode(_ node: AlgorithmNode) -> Color {
-        if node.critical {
-            return .red
-        }
-        
-        switch node.nodeType {
+    private func nodeTypeColor(_ type: NodeType) -> Color {
+        switch type {
         case .decision:
             return .blue
         case .assessment:
             return .orange
-        case .intervention:
+        case .intervention, .action:
             return .green
         case .medication:
             return .purple
@@ -319,40 +484,46 @@ struct AlgorithmNodeView: View {
     }
 }
 
+
+
 #Preview {
-    NavigationStack {
-        ProtocolDetailView(
-            proto: EmergencyProtocol(
-                id: "code-blue",
-                title: "Code Blue",
-                icon: "heart.fill",
-                category: .cardiac,
-                algorithm: ProtocolAlgorithm(
-                    nodes: [
-                        AlgorithmNode(
-                            id: "start",
-                            title: "Unresponsive Patient",
-                            nodeType: .assessment,
-                            critical: true,
-                            content: "Check pulse and breathing",
-                            connections: ["cpr", "shock"]
-                        )
-                    ]
-                ),
-                cards: [
-                    ProtocolCard(
-                        id: "dynamic",
-                        type: .dynamic,
-                        title: "Current Step",
-                        sections: [
-                            CardSection(
-                                title: "Actions",
-                                items: ["Check responsiveness", "Call for help", "Get AED"]
+    if #available(iOS 16.0, macOS 13.0, *) {
+        NavigationStack {
+            ProtocolDetailView(
+                protocol: EmergencyProtocol(
+                    id: "code-blue",
+                    title: "Code Blue",
+                    icon: "heart.fill",
+                    category: .cardiac,
+                    algorithm: ProtocolAlgorithm(
+                        nodes: [
+                            AlgorithmNode(
+                                id: "start",
+                                title: "Unresponsive Patient",
+                                nodeType: .assessment,
+                                critical: true,
+                                content: "Check pulse and breathing",
+                                connections: ["cpr", "shock"]
                             )
                         ]
-                    )
-                ]
+                    ),
+                    cards: [
+                        ProtocolCard(
+                            id: "dynamic",
+                            type: .dynamic,
+                            title: "Current Step",
+                            sections: [
+                                CardSection(
+                                    title: "Actions",
+                                    items: ["Check responsiveness", "Call for help", "Get AED"]
+                                )
+                            ]
+                        )
+                    ]
+                )
             )
-        )
+        }
+    } else {
+        Text("Preview requires iOS 16+")
     }
 }

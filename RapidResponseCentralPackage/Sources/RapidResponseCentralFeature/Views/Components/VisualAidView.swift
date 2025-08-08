@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 // MARK: - Visual Aid View Component
 // Purpose: Display educational images with annotations and interactive elements
@@ -44,7 +47,7 @@ struct VisualAidView: View {
                 } placeholder: {
                     ZStack {
                         Rectangle()
-                            .fill(Color(.systemGray6))
+                            .fill(Color.gray.opacity(0.2))
                         
                         VStack(spacing: 8) {
                             Image(systemName: "photo")
@@ -68,7 +71,7 @@ struct VisualAidView: View {
                 minHeight: sizing.minHeight,
                 maxHeight: sizing.maxHeight
             )
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.2))
             .cornerRadius(12)
             .onTapGesture {
                 if visualAid.interactionType == .tap {
@@ -91,12 +94,21 @@ struct VisualAidView: View {
                     .animation(.easeInOut(duration: 0.3), value: selectedAnnotation)
             }
         }
+        #if os(iOS)
         .fullScreenCover(isPresented: $showingFullScreen) {
             FullScreenVisualAidView(
                 visualAid: visualAid,
                 selectedAnnotation: $selectedAnnotation
             )
         }
+        #else
+        .sheet(isPresented: $showingFullScreen) {
+            FullScreenVisualAidView(
+                visualAid: visualAid,
+                selectedAnnotation: $selectedAnnotation
+            )
+        }
+        #endif
     }
 }
 
@@ -185,7 +197,7 @@ struct AnnotationDetailView: View {
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemGray6))
+                .fill(Color.gray.opacity(0.2))
         )
     }
 }
@@ -254,9 +266,11 @@ struct FullScreenVisualAidView: View {
                 }
             }
             .navigationTitle(visualAid.title)
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar(content: {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -316,7 +330,7 @@ struct RhythmRecognitionView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
+                .fill(Color.white)
                 .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
         )
     }

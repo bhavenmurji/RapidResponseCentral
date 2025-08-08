@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct WelcomeView: View {
     @Binding var showingWelcome: Bool
@@ -66,8 +69,10 @@ struct WelcomeView: View {
                 )
                 .tag(5)
             }
+            #if os(iOS)
             .tabViewStyle(.page)
             .indexViewStyle(.page(backgroundDisplayMode: .always))
+            #endif
             
             // Skip button
             if currentPage < 5 {
@@ -88,7 +93,7 @@ struct WelcomeView: View {
                     .foregroundColor(.blue)
                     .padding()
                 }
-                .background(Color(.systemBackground))
+                .background(Color.white)
             }
         }
     }

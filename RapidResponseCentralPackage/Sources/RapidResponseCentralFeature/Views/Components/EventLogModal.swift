@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct EventLogModal: View {
     let session: ProtocolSession
@@ -34,7 +37,7 @@ struct EventLogModal: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.2))
                 
                 // Event List
                 if session.events.isEmpty {
@@ -87,7 +90,7 @@ struct EventLogModal: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color(.systemGray5))
+                            .background(Color.gray.opacity(0.3))
                             .foregroundColor(.red)
                             .cornerRadius(10)
                     }
@@ -95,9 +98,11 @@ struct EventLogModal: View {
                 .padding()
             }
             .navigationTitle("EVENT LOG")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -224,15 +229,17 @@ struct EditEventView: View {
                 }
             }
             .navigationTitle("EDIT EVENT")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .automatic) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Save") {
                         // TODO: Update event
                         dismiss()
