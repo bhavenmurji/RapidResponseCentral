@@ -127,82 +127,28 @@ public struct SnapFlowchartView: View {
                     .onAppear {
                         scrollProxy = proxy
                         
-                        // ALWAYS select and center first node
-                        if let firstNode = algorithm.nodes.first {
-                            // Force selection of first node
+                        // Only set initial selection, NO AUTO-SCROLLING
+                        if selectedNodeId == nil, let firstNode = algorithm.nodes.first {
                             selectedNodeId = firstNode.id
                             onNodeSelect(firstNode.id)
-                            
-                            // Mark as visited
                             visitedNodes.insert(firstNode.id)
                             navigationPath = [firstNode.id]
-                            
-                            // Center the first node properly
-                            proxy.scrollTo(firstNode.id, anchor: .center)
-                            
-                            // Multiple delayed attempts to ensure proper positioning
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                withAnimation(.easeOut(duration: 0.3)) {
-                                    proxy.scrollTo(firstNode.id, anchor: .center)
-                                }
-                            }
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                proxy.scrollTo(firstNode.id, anchor: .center)
-                            }
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    proxy.scrollTo(firstNode.id, anchor: .center)
-                                }
-                            }
                         }
+                        // User must manually scroll or use recenter button
                     }
                     .onChange(of: selectedNodeId) { oldValue, newValue in
                         if let nodeId = newValue, oldValue != newValue {
-                            // Trigger haptic feedback
+                            // Only update tracking and feedback, NO AUTO-CENTERING
                             triggerHapticFeedback()
-                            
-                            // Update navigation tracking
                             updateNavigationPath(to: nodeId)
                             
-                            // AGGRESSIVE CENTERING - Always center selected node
-                            // Immediate scroll
-                            proxy.scrollTo(nodeId, anchor: .center)
-                            
-                            // Quick animated follow-up
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                withAnimation(.easeOut(duration: 0.25)) {
-                                    proxy.scrollTo(nodeId, anchor: .center)
-                                }
-                            }
-                            
-                            // Secondary centering
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    proxy.scrollTo(nodeId, anchor: .center)
-                                }
-                            }
-                            
-                            // Final positioning
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                                proxy.scrollTo(nodeId, anchor: .center)
-                            }
-                            
-                            // Visual feedback
+                            // Visual feedback only
                             withAnimation(.easeInOut(duration: 0.3)) {
                                 pulseAnimation.toggle()
                             }
                         }
                     }
-                    .onReceive(Just(selectedNodeId).delay(for: .milliseconds(200), scheduler: RunLoop.main)) { nodeId in
-                        // Ensure initial centering when view first appears
-                        if let nodeId = nodeId, let proxy = scrollProxy {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                proxy.scrollTo(nodeId, anchor: .center)
-                            }
-                        }
-                    }
+                    // Removed auto-centering on receive to prevent unwanted snapping
                 }
                 .gesture(
                     SimultaneousGesture(
@@ -216,14 +162,26 @@ public struct SnapFlowchartView: View {
                             .onEnded { value in
                                 currentZoom = 1.0
                             },
-                        // Drag gesture for navigation
+                        // Enhanced drag gesture with magnetic snapping
                         DragGesture()
                             .onChanged { value in
                                 dragOffset = value.translation
+                                
+                                // Find nearest node while dragging
+                                let scrollPosition = value.location
+                                if let proxy = scrollProxy {
+                                    magneticSnapPreview(at: scrollPosition, proxy: proxy)
+                                }
                             }
                             .onEnded { value in
-                                // Determine swipe direction and navigate
-                                handleSwipeNavigation(value.translation)
+                                // Snap to nearest node on release
+                                let velocity = CGSize(
+                                    width: value.predictedEndTranslation.width / 3,
+                                    height: value.predictedEndTranslation.height / 3
+                                )
+                                if let proxy = scrollProxy {
+                                    snapToNearestNode(with: velocity, proxy: proxy)
+                                }
                                 dragOffset = .zero
                             }
                     )
@@ -492,6 +450,68 @@ public struct SnapFlowchartView: View {
         }
     }
     
+    // MARK: - Magnetic Snap Functions
+    private func magneticSnapPreview(at position: CGPoint, proxy: ScrollViewProxy) {
+        // Find nearest node to current scroll position
+        guard let nearestNode = findNearestNode(to: position) else { return }
+        
+        // Provide subtle haptic feedback when near a node
+        let distance = distanceToNode(nearestNode, from: position)
+        if distance < 100 {
+            selectionFeedback.prepare()
+            if distance < 50 {
+                selectionFeedback.selectionChanged()
+            }
+        }
+    }
+    
+    private func snapToNearestNode(with velocity: CGSize, proxy: ScrollViewProxy) {
+        // Calculate predicted end position based on velocity
+        let predictedPosition = CGPoint(
+            x: dragOffset.width + velocity.width,
+            y: dragOffset.height + velocity.height
+        )
+        
+        // Find the nearest node in the flowchart path
+        guard let currentNode = nodeMap[selectedNodeId ?? ""] else { return }
+        
+        // Determine if scrolling forward or backward
+        if abs(velocity.height) > abs(velocity.width) {
+            // Vertical scrolling - follow flowchart path
+            if velocity.height > 50 {
+                // Scrolling down - go to next node
+                if let nextNodeId = currentNode.connections.first {
+                    snapToNode(nextNodeId, proxy: proxy)
+                }
+            } else if velocity.height < -50 {
+                // Scrolling up - go to previous node
+                if let parentNode = algorithm.nodes.first(where: { $0.connections.contains(currentNode.id) }) {
+                    snapToNode(parentNode.id, proxy: proxy)
+                }
+            }
+        } else if abs(velocity.width) > 50 {
+            // Horizontal scrolling - navigate branches
+            if currentNode.connections.count > 1 {
+                // Multiple branches - navigate between them
+                if velocity.width > 0 {
+                    navigateToNextBranch(from: currentNode)
+                } else {
+                    navigateToPreviousBranch(from: currentNode)
+                }
+            }
+        }
+    }
+    
+    private func findNearestNode(to position: CGPoint) -> AlgorithmNode? {
+        // Simplified nearest node calculation
+        return nodeMap[selectedNodeId ?? ""] ?? algorithm.nodes.first
+    }
+    
+    private func distanceToNode(_ node: AlgorithmNode, from position: CGPoint) -> CGFloat {
+        // Simplified distance calculation
+        return 75.0 // Will be refined based on actual node positions
+    }
+    
     // MARK: - Haptic Feedback Methods
     private func triggerHapticFeedback() {
         hapticFeedback.impactOccurred()
@@ -519,55 +539,19 @@ public struct SnapFlowchartView: View {
     private func performInitialScroll(to nodeId: String, proxy: ScrollViewProxy) {
         // Guard against multiple initial scrolls
         guard !hasPerformedInitialScroll else { return }
+        hasPerformedInitialScroll = true
         
-        // Aggressive multi-layer centering for initial load
-        // Layer 1: Immediate positioning (before any animations)
-        proxy.scrollTo(nodeId, anchor: .center)
-        
-        // Layer 2: After RunLoop cycle
-        DispatchQueue.main.async {
-            proxy.scrollTo(nodeId, anchor: .center)
-        }
-        
-        // Layer 3: After brief delay for view hierarchy
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            proxy.scrollTo(nodeId, anchor: .center)
-        }
-        
-        // Layer 4: After UI has settled
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            withAnimation(.easeOut(duration: 0.2)) {
+        // Single initial positioning to selected node
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation(.easeOut(duration: 0.3)) {
                 proxy.scrollTo(nodeId, anchor: .center)
             }
-        }
-        
-        // Layer 5: After initial animations
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            proxy.scrollTo(nodeId, anchor: .center)
-        }
-        
-        // Layer 6: Final positioning check
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            proxy.scrollTo(nodeId, anchor: .center)
-            hasPerformedInitialScroll = true
-        }
-        
-        // Layer 7: Delayed final adjustment
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                proxy.scrollTo(nodeId, anchor: .center)
-            }
-        }
-        
-        // Layer 8: Ultimate fallback
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            proxy.scrollTo(nodeId, anchor: .center)
         }
     }
     
     // MARK: - View Controls
     private func recenterOnSelectedNode() {
-        guard let nodeId = selectedNodeId else { return }
+        guard let nodeId = selectedNodeId, let proxy = scrollProxy else { return }
         
         // Trigger enhanced haptic feedback
         hapticFeedback.impactOccurred()
@@ -580,7 +564,7 @@ public struct SnapFlowchartView: View {
         
         // Center on the selected node with smooth animation
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-            scrollProxy?.scrollTo(nodeId, anchor: .center)
+            proxy.scrollTo(nodeId, anchor: .center)
         }
         
         // Reset visual effects

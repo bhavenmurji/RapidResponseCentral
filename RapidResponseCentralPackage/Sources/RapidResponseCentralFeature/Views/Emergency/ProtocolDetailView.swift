@@ -37,11 +37,11 @@ public struct ProtocolDetailView: View {
     public var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                // TOP 38%: Ultra-Efficient Clinical Cards with proper spacing
+                // TOP 35%: Ultra-Efficient Clinical Cards with proper spacing
                 VStack(spacing: 0) {
                     // Add proper top padding to avoid navigation bar overlap
                     Color.clear
-                        .frame(height: 8) // Reduced from 20 to 8 for better space usage
+                        .frame(height: 16) // Increased to ensure no overlap with navigation
                     
                     // Protocol header with timer
                     HStack(spacing: 12) {
@@ -164,7 +164,7 @@ public struct ProtocolDetailView: View {
                     .padding(.horizontal, 8) // Small horizontal padding
                     .background(Color(.systemBackground))
             }
-            .frame(height: geometry.size.height * 0.35)  // Reduced to 35% to prevent card overlap with back button
+            .frame(height: min(geometry.size.height * 0.35, 280))  // Cap at 280px to prevent overflow
             .layoutPriority(1)
             
             // Divider
@@ -237,7 +237,7 @@ public struct ProtocolDetailView: View {
         }
         .ignoresSafeArea(.container, edges: .bottom)
         .navigationBarTitleDisplayMode(.inline)
-        .padding(.top, 1) // Small additional padding to ensure no overlap
+        .padding(.top, 0) // Removed padding as it's handled internally
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
@@ -418,21 +418,32 @@ public struct ProtocolDetailView: View {
     }
     
     private func navigateToPreviousNode() {
-        guard let currentNode = selectedNode,
-              let currentIndex = proto.algorithm.nodes.firstIndex(where: { $0.id == currentNode.id }),
-              currentIndex > 0 else { return }
+        guard let currentNode = selectedNode else { return }
         
-        let previousNode = proto.algorithm.nodes[currentIndex - 1]
-        handleNodeSelection(previousNode)
+        // Find parent node (node that connects to current)
+        if let parentNode = proto.algorithm.nodes.first(where: { $0.connections.contains(currentNode.id) }) {
+            handleNodeSelection(parentNode)
+        } else if let currentIndex = proto.algorithm.nodes.firstIndex(where: { $0.id == currentNode.id }),
+                  currentIndex > 0 {
+            // Fallback to previous by index if no parent found
+            let previousNode = proto.algorithm.nodes[currentIndex - 1]
+            handleNodeSelection(previousNode)
+        }
     }
     
     private func navigateToNextNode() {
-        guard let currentNode = selectedNode,
-              let currentIndex = proto.algorithm.nodes.firstIndex(where: { $0.id == currentNode.id }),
-              currentIndex < proto.algorithm.nodes.count - 1 else { return }
+        guard let currentNode = selectedNode else { return }
         
-        let nextNode = proto.algorithm.nodes[currentIndex + 1]
-        handleNodeSelection(nextNode)
+        // Follow the flowchart connections
+        if let firstConnection = currentNode.connections.first,
+           let nextNode = proto.algorithm.nodes.first(where: { $0.id == firstConnection }) {
+            handleNodeSelection(nextNode)
+        } else if let currentIndex = proto.algorithm.nodes.firstIndex(where: { $0.id == currentNode.id }),
+                  currentIndex < proto.algorithm.nodes.count - 1 {
+            // Fallback to next by index if no connections
+            let nextNode = proto.algorithm.nodes[currentIndex + 1]
+            handleNodeSelection(nextNode)
+        }
     }
     
     // MARK: - Helper Functions

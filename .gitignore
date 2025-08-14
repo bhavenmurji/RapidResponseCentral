@@ -77,21 +77,16 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Claude Flow generated files
-.claude/settings.local.json
+# Claude-specific files
+.claude/
+CLAUDE.md
 .claude-flow/
 .mcp.json
 claude-flow.config.json
 .swarm/
 .hive-mind/
-memory/claude-flow-data.json
-memory/sessions/*
-!memory/sessions/README.md
-memory/agents/*
-!memory/agents/README.md
-coordination/memory_bank/*
-coordination/subtasks/*
-coordination/orchestration/*
+memory/
+coordination/
 *.db
 *.db-journal
 *.db-wal
@@ -147,12 +142,19 @@ README_TEMP.md
 CLAUDE.local.md
 .icon_state
 
-# Large asset directories
+# Large asset directories and unused resources
 Assets/TestingScreenShots/
 Assets/FamMedCentral/
+Assets/healthicons/
 Big Test*/
 your-project/
 xcode-mcp-server/
 Figma-Context-MCP/
 claudecode-rule2hook/
 docs/
+unified-agent-config.json
+parallel-agent-orchestrator.sh
+parallel-swarm-demo.sh
+example-parallel-task.md
+claude-code-parallel-agents.md
+add_healthicons_to_assets.sh
