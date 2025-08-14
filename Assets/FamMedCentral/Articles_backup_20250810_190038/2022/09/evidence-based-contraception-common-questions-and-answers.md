@@ -1,0 +1,581 @@
+---
+abstract: Primary care clinicians are uniquely situated to reduce unintended pregnancy
+  in the context of a patient's medical comorbidities, social circumstance, and gender
+  identity. New evidence regarding contraception use has emerged in recent years.
+  The copper intrauterine device is the most effective option for emergency contraception,
+  with similar effectiveness found for the levonorgestrel-releasing intrauterine system,
+  52 mg, and both offer extended future contraception. Ulipristal given within 120
+  hours after unprotected intercourse is the most effective oral emergency contraceptive.
+  Oral levonorgestrel, 1.5 mg, is slightly less effective than ulipristal, and is
+  less effective in patients with a body mass index of more than 30 kg per m2 and
+  if administered after 72 hours. The Yuzpe method, which uses a combination of oral
+  contraceptives, is less effective than ulipristal or oral levonorgestrel, 1.5 mg,
+  and has high risk of nausea and vomiting. Contraception methods based on fertility
+  awareness are safe and have similar effectiveness as condom use and the withdrawal
+  method. Patients who have migraine with aura have a higher risk of ischemic stroke,
+  and combined oral contraceptives appear to increase this risk. Therefore, the Centers
+  for Disease Control and Prevention recommends avoiding their use in these patients.
+  Studies support the extended use of the levonorgestrel-releasing intrauterine system,
+  52 mg, for seven years, the copper intrauterine device for 12 years, and the etonogestrel
+  subdermal contraceptive implant for five years. One levonorgestrel-releasing intrauterine
+  device, 52 mg, (Mirena) was recently approved by the U.S. Food and Drug Administration
+  (FDA) for seven years of use to prevent pregnancy. However, the intervals for the
+  copper intrauterine device and the etonogestrel subdermal contraceptive implant
+  are longer than approved by the FDA, and patient-clinician shared decision-making
+  should be used. Subcutaneous depot medroxyprogesterone acetate, 104 mg, a newer
+  formulation with prefilled syringes, can be safely self-administered every 13 weeks.
+  Because bone density loss appears to be reversible, the American College of Obstetricians
+  and Gynecologists recommends considering use of depot medroxyprogesterone acetate
+  beyond two years despite an FDA boxed warning about increased fracture risk. Testosterone
+  does not prevent pregnancy but is safe to use with hormonal contraception; thus,
+  transgender and gender-diverse patients with a uterus can be offered the full range
+  of contraceptive options.
+authors:
+- Paradise, Scott L
+- Landis, Corinne A
+- Klein, David A
+category: Clinical Review
+clinical_significance: High
+cme_credits: 0.0
+doi: ''
+evidence_level: ''
+external_resources:
+- title: PubMed Entry
+  type: reference
+  url: https://pubmed.ncbi.nlm.nih.gov/36126006/
+file_path: 2022/09/evidence-based-contraception-common-questions-and-answers.md
+issue: '3'
+keywords:
+- Contraceptives, Postcoital
+- Humans
+- Contraception, Postcoital
+- Contraceptives, Oral, Combined
+- Medroxyprogesterone Acetate
+- Pregnancy
+- Levonorgestrel
+- Female
+- Male
+- Gender Identity
+last_updated: '2025-08-09'
+mesh_terms:
+- Contraception, Postcoital
+- Contraceptives, Oral, Combined
+- Contraceptives, Postcoital
+- Female
+- Gender Identity
+- Humans
+- Levonorgestrel
+- Male
+- Medroxyprogesterone Acetate
+- Pregnancy
+- Testosterone
+- United States
+original_format: PubMed
+pages: 251-259
+patient_population: Maternal
+peer_reviewed: true
+pmid: '36126006'
+processed_date: '2025-08-09'
+publication_date: '2022-09-01'
+pubmed_enriched: true
+pubmed_enriched_date: '2025-08-09'
+reading_time_minutes: 6
+source: American family physician
+specialties:
+- Family Medicine
+status: processed
+tags:
+- clinical-review
+- family-practice
+- clinical-medicine
+- pubmed-enhanced
+title: 'Evidence-Based Contraception: Common Questions and Answers.'
+topics:
+- Family Medicine
+- Pregnancy
+- Maternal Health
+- Obstetrics
+volume: '106'
+publication_types: &id001
+- Journal Article
+pubmed_content_enriched: true
+pubmed_full_data:
+  pmid: '36126006'
+  title: 'Evidence-Based Contraception: Common Questions and Answers.'
+  abstract:
+    text: Primary care clinicians are uniquely situated to reduce unintended pregnancy
+      in the context of a patient's medical comorbidities, social circumstance, and
+      gender identity. New evidence regarding contraception use has emerged in recent
+      years. The copper intrauterine device is the most effective option for emergency
+      contraception, with similar effectiveness found for the levonorgestrel-releasing
+      intrauterine system, 52 mg, and both offer extended future contraception. Ulipristal
+      given within 120 hours after unprotected intercourse is the most effective oral
+      emergency contraceptive. Oral levonorgestrel, 1.5 mg, is slightly less effective
+      than ulipristal, and is less effective in patients with a body mass index of
+      more than 30 kg per m2 and if administered after 72 hours. The Yuzpe method,
+      which uses a combination of oral contraceptives, is less effective than ulipristal
+      or oral levonorgestrel, 1.5 mg, and has high risk of nausea and vomiting. Contraception
+      methods based on fertility awareness are safe and have similar effectiveness
+      as condom use and the withdrawal method. Patients who have migraine with aura
+      have a higher risk of ischemic stroke, and combined oral contraceptives appear
+      to increase this risk. Therefore, the Centers for Disease Control and Prevention
+      recommends avoiding their use in these patients. Studies support the extended
+      use of the levonorgestrel-releasing intrauterine system, 52 mg, for seven years,
+      the copper intrauterine device for 12 years, and the etonogestrel subdermal
+      contraceptive implant for five years. One levonorgestrel-releasing intrauterine
+      device, 52 mg, (Mirena) was recently approved by the U.S. Food and Drug Administration
+      (FDA) for seven years of use to prevent pregnancy. However, the intervals for
+      the copper intrauterine device and the etonogestrel subdermal contraceptive
+      implant are longer than approved by the FDA, and patient-clinician shared decision-making
+      should be used. Subcutaneous depot medroxyprogesterone acetate, 104 mg, a newer
+      formulation with prefilled syringes, can be safely self-administered every 13
+      weeks. Because bone density loss appears to be reversible, the American College
+      of Obstetricians and Gynecologists recommends considering use of depot medroxyprogesterone
+      acetate beyond two years despite an FDA boxed warning about increased fracture
+      risk. Testosterone does not prevent pregnancy but is safe to use with hormonal
+      contraception; thus, transgender and gender-diverse patients with a uterus can
+      be offered the full range of contraceptive options.
+  authors:
+  - last_name: Paradise
+    fore_name: Scott L
+    initials: SL
+    affiliation: U.S. Naval Hospital Guam, Agana Heights, Guam.
+  - last_name: Landis
+    fore_name: Corinne A
+    initials: CA
+    affiliation: U.S. Naval Hospital Guam, Agana Heights, Guam.
+  - last_name: Klein
+    fore_name: David A
+    initials: DA
+    affiliation: David Grant Medical Center, Travis Air Force Base, California.
+  journal_info:
+    title: American family physician
+    iso_abbreviation: Am Fam Physician
+    volume: '106'
+    issue: '3'
+  publication_info:
+    year: '2022'
+    month: 09
+    full_date: '2022-09-01'
+  article_ids: {}
+  mesh_terms:
+  - descriptor: Contraception, Postcoital
+    major_topic: true
+    qualifiers:
+    - qualifier: methods
+      major_topic: false
+  - descriptor: Contraceptives, Oral, Combined
+    major_topic: false
+  - descriptor: Contraceptives, Postcoital
+    major_topic: true
+  - descriptor: Female
+    major_topic: false
+  - descriptor: Gender Identity
+    major_topic: false
+  - descriptor: Humans
+    major_topic: false
+  - descriptor: Levonorgestrel
+    major_topic: false
+    qualifiers:
+    - qualifier: therapeutic use
+      major_topic: false
+  - descriptor: Male
+    major_topic: false
+  - descriptor: Medroxyprogesterone Acetate
+    major_topic: false
+  - descriptor: Pregnancy
+    major_topic: false
+  - descriptor: Testosterone
+    major_topic: false
+  - descriptor: United States
+    major_topic: false
+  publication_types: *id001
+related_articles:
+- pmid: '36126006'
+  title: 'Evidence-Based Contraception: Common Questions and Answers.'
+  authors:
+  - name: Paradise SL
+    authtype: Author
+    clusterid: ''
+  - name: Landis CA
+    authtype: Author
+    clusterid: ''
+  - name: Klein DA
+    authtype: Author
+    clusterid: ''
+  source: Am Fam Physician
+  pubdate: 2022 Sep
+- pmid: '26629725'
+  title: Canadian Contraception Consensus (Part 2 of 4).
+  authors:
+  - name: Black A
+    authtype: Author
+    clusterid: ''
+  - name: Guilbert E
+    authtype: Author
+    clusterid: ''
+  - name: Co-Authors
+    authtype: CollectiveName
+    clusterid: ''
+  - name: Costescu D
+    authtype: Author
+    clusterid: ''
+  - name: Dunn S
+    authtype: Author
+    clusterid: ''
+  - name: Fisher W
+    authtype: Author
+    clusterid: ''
+  - name: Kives S
+    authtype: Author
+    clusterid: ''
+  - name: Mirosh M
+    authtype: Author
+    clusterid: ''
+  - name: Norman WV
+    authtype: Author
+    clusterid: ''
+  - name: Pymar H
+    authtype: Author
+    clusterid: ''
+  - name: Reid R
+    authtype: Author
+    clusterid: ''
+  - name: Roy G
+    authtype: Author
+    clusterid: ''
+  - name: Varto H
+    authtype: Author
+    clusterid: ''
+  - name: Waddington A
+    authtype: Author
+    clusterid: ''
+  - name: Wagner MS
+    authtype: Author
+    clusterid: ''
+  - name: Whelan AM
+    authtype: Author
+    clusterid: ''
+  - name: Special Contributors
+    authtype: CollectiveName
+    clusterid: ''
+  - name: Ferguson C
+    authtype: Author
+    clusterid: ''
+  - name: Fortin C
+    authtype: Author
+    clusterid: ''
+  - name: Kielly M
+    authtype: Author
+    clusterid: ''
+  - name: Mansouri S
+    authtype: Author
+    clusterid: ''
+  - name: Todd N
+    authtype: Author
+    clusterid: ''
+  source: J Obstet Gynaecol Can
+  pubdate: 2015 Nov
+- pmid: '26606712'
+  title: Canadian Contraception Consensus (Part 1 of 4).
+  authors:
+  - name: Black A
+    authtype: Author
+    clusterid: ''
+  - name: Guilbert E
+    authtype: Author
+    clusterid: ''
+  - name: Co-Authors
+    authtype: CollectiveName
+    clusterid: ''
+  - name: Costescu D
+    authtype: Author
+    clusterid: ''
+  - name: Dunn S
+    authtype: Author
+    clusterid: ''
+  - name: Fisher W
+    authtype: Author
+    clusterid: ''
+  - name: Kives S
+    authtype: Author
+    clusterid: ''
+  - name: Mirosh M
+    authtype: Author
+    clusterid: ''
+  - name: Norman WV
+    authtype: Author
+    clusterid: ''
+  - name: Pymar H
+    authtype: Author
+    clusterid: ''
+  - name: Reid R
+    authtype: Author
+    clusterid: ''
+  - name: Roy G
+    authtype: Author
+    clusterid: ''
+  - name: Varto H
+    authtype: Author
+    clusterid: ''
+  - name: Waddington A
+    authtype: Author
+    clusterid: ''
+  - name: Wagner MS
+    authtype: Author
+    clusterid: ''
+  - name: Whelan AM
+    authtype: Author
+    clusterid: ''
+  - name: Special Contributors
+    authtype: CollectiveName
+    clusterid: ''
+  - name: Ferguson C
+    authtype: Author
+    clusterid: ''
+  - name: Fortin C
+    authtype: Author
+    clusterid: ''
+  - name: Kielly M
+    authtype: Author
+    clusterid: ''
+  - name: Mansouri S
+    authtype: Author
+    clusterid: ''
+  - name: Todd N
+    authtype: Author
+    clusterid: ''
+  - name: Society of Obstetricians and Gynaecologists of Canada
+    authtype: CollectiveName
+    clusterid: ''
+  source: J Obstet Gynaecol Can
+  pubdate: 2015 Oct
+- pmid: '29409847'
+  title: Cost-effectiveness of emergency contraception options over 1 year.
+  authors:
+  - name: Bellows BK
+    authtype: Author
+    clusterid: ''
+  - name: Tak CR
+    authtype: Author
+    clusterid: ''
+  - name: Sanders JN
+    authtype: Author
+    clusterid: ''
+  - name: Turok DK
+    authtype: Author
+    clusterid: ''
+  - name: Schwarz EB
+    authtype: Author
+    clusterid: ''
+  source: Am J Obstet Gynecol
+  pubdate: 2018 May
+- pmid: '7956209'
+  title: 'Emergency contraception: a review.'
+  authors:
+  - name: Haspels AA
+    authtype: Author
+    clusterid: ''
+  source: Contraception
+  pubdate: 1994 Aug
+---
+
+# Evidence-Based Contraception: Common Questions and Answers.
+
+**Authors:** Paradise, Scott L, Landis, Corinne A, Klein, David A
+
+**Published in:** American family physician | Vol. 106, No. 3 | 2022-09-01
+
+**Links:** [PubMed Entry](https://pubmed.ncbi.nlm.nih.gov/36126006/)
+
+## Abstract
+
+Primary care clinicians are uniquely situated to reduce unintended pregnancy in the context of a patient's medical comorbidities, social circumstance, and gender identity. New evidence regarding contraception use has emerged in recent years. The copper intrauterine device is the most effective option for emergency contraception, with similar effectiveness found for the levonorgestrel-releasing intrauterine system, 52 mg, and both offer extended future contraception. Ulipristal given within 120 hours after unprotected intercourse is the most effective oral emergency contraceptive. Oral levonorgestrel, 1.5 mg, is slightly less effective than ulipristal, and is less effective in patients with a body mass index of more than 30 kg per m2 and if administered after 72 hours. The Yuzpe method, which uses a combination of oral contraceptives, is less effective than ulipristal or oral levonorgestrel, 1.5 mg, and has high risk of nausea and vomiting. Contraception methods based on fertility awareness are safe and have similar effectiveness as condom use and the withdrawal method. Patients who have migraine with aura have a higher risk of ischemic stroke, and combined oral contraceptives appear to increase this risk. Therefore, the Centers for Disease Control and Prevention recommends avoiding their use in these patients. Studies support the extended use of the levonorgestrel-releasing intrauterine system, 52 mg, for seven years, the copper intrauterine device for 12 years, and the etonogestrel subdermal contraceptive implant for five years. One levonorgestrel-releasing intrauterine device, 52 mg, (Mirena) was recently approved by the U.S. Food and Drug Administration (FDA) for seven years of use to prevent pregnancy. However, the intervals for the copper intrauterine device and the etonogestrel subdermal contraceptive implant are longer than approved by the FDA, and patient-clinician shared decision-making should be used. Subcutaneous depot medroxyprogesterone acetate, 104 mg, a newer formulation with prefilled syringes, can be safely self-administered every 13 weeks. Because bone density loss appears to be reversible, the American College of Obstetricians and Gynecologists recommends considering use of depot medroxyprogesterone acetate beyond two years despite an FDA boxed warning about increased fracture risk. Testosterone does not prevent pregnancy but is safe to use with hormonal contraception; thus, transgender and gender-diverse patients with a uterus can be offered the full range of contraceptive options.
+
+## Clinical Information
+
+**Population:** Maternal | **Clinical Significance:** High
+
+## Topics & Specialties
+
+**Specialties:** Family Medicine
+
+**Topics:** Family Medicine, Pregnancy, Maternal Health, Obstetrics
+
+## MeSH Terms
+
+Contraception, Postcoital, Contraceptives, Oral, Combined, Contraceptives, Postcoital, Female, Gender Identity, Humans, Levonorgestrel, Male, Medroxyprogesterone Acetate, Pregnancy, Testosterone, United States
+
+## Article Content
+
+# Evidence-Based Contraception: Common Questions and Answers.
+**Authors:** Paradise, Scott L, Landis, Corinne A, Klein, David A
+**Published in:** American family physician | Vol. 106, No. 3 | 2022-09-01
+**Links:** [PubMed](https://pubmed.ncbi.nlm.nih.gov/36126006/)
+## Abstract
+## Clinical Information
+**Population:** Maternal | **Clinical Significance:** High
+## Topics & Specialties
+**Specialties:** Family Medicine
+**Topics:** Family Medicine, Pregnancy, Maternal Health, Obstetrics
+## MeSH Terms
+## Article Content
+
+## Evidence-Based Contraception: Common Questions and Answers
+
+Scott L. Paradise, Corinne A. Landis, David A. Klein
+
+Primary care clinicians are uniquely situated to provide holistic contraceptive care. This article addresses emergency contraception, fertility awareness methods of contraception, long-acting reversible contraception, and contraception options for transgender people with a...
+
+## Acute Headache in Adults: A Diagnostic Approach
+
+A detailed history and physical examination can distinguish between key features of benign primary headaches and concerning symptoms that warrant further evaluation for a secondary headache. Among primary headache disorders, tension-type is the most common, although migraine...
+
+## Malaria: Prevention, Diagnosis, and Treatment
+
+S. David Shahbodaghi, Nicholas A. Rathjen
+
+Malaria causes an estimated 500,000 deaths annually worldwide, with an estimated 2,000 cases occurring each year in the United States. All febrile travelers who have recently returned from a malarious area should be evaluated for malaria.
+
+## Thrombocytopenia: Evaluation and Management
+
+Robert L. Gauer, Daniel J. Whitaker
+
+Thrombocytopenia is defined as a platelet count less than 150 × 103 per μL and can occur from decreased platelet production, increased destruction, splenic sequestration, or dilution or clumping. Although thrombocytopenia is classically associated with bleeding, there are...
+
+## Chronic Constipation in Adults
+
+Kerry Sadler, Frank Arnold, Spencer Dean
+
+Evaluation of chronic constipation should distinguish primary from secondary constipation. First-line treatment for primary constipation includes fluid intake, dietary fiber, and osmotic laxatives. Second-line therapy includes a brief trial of stimulant laxatives followed by...
+
+## Tuberculosis: Common Questions and Answers
+
+Holly Hartman-Adams, Robert M. Gerbo, Saira George
+
+Latent tuberculosis (TB) infection is asymptomatic and not contagious, but without treatment it can progress to active TB disease. Individuals with symptoms of TB disease and those at increased risk of latent TB infection should be screened. This article discusses screening...
+
+## Contraception Recommendations: Updates for the Busy Clinician
+
+Elizabeth A. Clark, Kathryn M. Curtis
+
+Primary care clinicians are an important source of reproductive health care for their patients. Knowledge of contraception methods is essential to informed patient-centered decision-making about contraceptive options.
+
+## Incorporating Lifestyle Medicine Into Practice: A Prescription for Better Health
+
+The U.S. health care system’s focus on high-tech procedures and the latest pharmaceutical treatments is straining health budgets and worsening outcomes. The 10 leading causes of death in the United States can be directly impacted by lifestyle interventions.
+
+## Risk of Infection With Intravenous Iron Infusion
+
+Jarett Beaudoin, Daniel J. Frasca
+
+Learn more about the risk of infection with intravenous iron infusion.
+
+## Venous Thromboembolism, Thalassemia, Chlamydia and Gonorrhea, Menopause, PAD, Diabetes
+
+Key clinical questions and their evidence-based answers directly from the journal’s content, written by and for family physicians.
+
+## Oral Antihistamine/Analgesic/Decongestant Combinations for the Common Cold
+
+Karl T. Clebak, Michael T. Partin, Nathan Borrero
+
+Antihistamine/analgesic/decongestant combinations have some general benefit in adults and older children. However, these benefits must be weighed against the risk of adverse effects. There is no evidence of effectiveness in young children.
+
+## Lamotrigine in the Maintenance Treatment of Bipolar Disorder
+
+Compared with placebo, lamotrigine reduces the recurrence of manic symptoms at one year and the need for additional psychotropics necessitated by worsening clinical symptoms. The adverse effect profile of lamotrigine is similar to that of placebo.
+
+## Collaborative Care for Depression in Older Adults
+
+Alan Glaseroff, Ann Lindsay, Helen Haskell, John James
+
+A collaboration between AFP and the Lown Institute promotes a vision of delivering health care that is based on the evidence, balanced in its approach, and focused on the patient.
+
+## Recreational Cannabis and Emergency Department Visits
+
+Rebecca Mullen, Hannah Aho, Kristen DeSanto
+
+Legalization of recreational cannabis is associated with an increase in cannabis-related visits to the ED, especially in patients younger than 29 years.
+
+## Ibrexafungerp (Brexafemme) for the Treatment of Vulvovaginal Candidiasis
+
+Kelsea Woolfolk, Jonathan Hughes
+
+Compared with oral fluconazole, ibrexafungerp is a significantly more expensive treatment option for adolescent, adult, and postmenarchal patients with vulvovaginal candidiasis and has not been shown to be more effective to date.
+
+## Aspirin Use to Prevent Cardiovascular Disease
+
+The decision to initiate low-dose aspirin use for the primary prevention of CVD in adults aged 40 to 59 years who have a 10% or greater 10-year CVD risk should be an individual one. The USPSTF recommends against initiating low-dose aspirin use for the primary prevention of...
+
+## Aspirin Use to Prevent Cardiovascular Disease
+
+Howard Tracer, Caitlin N. Newhouse
+
+This PPIP quiz is based on the recommendations of the USPSTF.
+
+## Red, Tender Nodules in a Child With Cellulitis
+
+A six-year-old boy presented to the emergency department with a rash and fever three months after completing treatment for streptococcal pharyngitis.
+
+## Chronic, Nonhealing Wound
+
+Courtney Humphrey, Christina Julian
+
+An 81-year-old man presented with a wound above the medial malleolus, with surrounding erythema and pitting edema.
+
+## Procalcitonin for Diagnosis, Risk Assessment, and Prognosis of Respiratory Tract Infections
+
+Joseph R. Yancey, Madalyn D. Nelson, Nicholas J. Whalen
+
+Procalcitonin testing offers physicians a way to limit antibiotic therapy to adult inpatients with bacterial lower respiratory tract infection who are most likely to benefit. Using procalcitonin levels to aid decision-making for discontinuation of antibiotics in patients with...
+
+## Diagnosis of Urinary Tract Infection in Women
+
+How can signs, symptoms, and urine dipstick testing best be used for the diagnosis of urinary tract infection (UTI) in women?
+
+## Predicting and Preventing Preterm Birth: Recommendations From ACOG
+
+The American College of Obstetricians and Gynecologists (ACOG) has new recommendations for predicting and preventing preterm birth.
+
+## Management of Rheumatoid Arthritis: Update From ACR
+
+The American College of Rheumatology (ACR) published updated guidelines focused solely on medical treatment of rheumatoid arthritis.
+
+## Incorporating Music Therapy Into Primary Care
+
+Julie Schoonover, Susan E. Rubin
+
+## COVID-19 and Congenital Abnormalities in a Pregnant Woman
+
+Reply: Shiv Dallas, Michael Rausch, Rick Kellerman
+
+## Thrombocytopenia
+
+A platelet is a kind of blood cell. Platelets help your blood to clot after an injury, like when you scrape your knee. These clots help you stop bleeding.
+
+## Chronic Constipation in Adults
+
+Constipation is when you feel like you are not able to have a complete bowel movement. You can also have hard stool, stomach pain, bloating, or swelling.
+
+## Disclosure
+
+All editors in a position to control content for this activity, AFP journal, are required to disclose any relevant financial relationships. View disclosures.
+
+## Legend
+
+| CME | POC | FREE | Alg | DDx | PtEd |
+|---|---|---|---|---|---|
+| Continuing Medical Education Credit |
+| Point-of-Care Resource |
+| Free Access |
+| Algorithm |
+| Differential Diagnosis |
+| Patient Education |
+
+## Additional Resources
+
+- [PubMed Entry](https://pubmed.ncbi.nlm.nih.gov/36126006/) (reference)
+
+---
+
+*Processed: 2025-08-09* | *PubMed Enhanced: 2025-07-30*

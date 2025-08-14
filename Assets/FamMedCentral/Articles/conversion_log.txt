@@ -1,0 +1,40 @@
+=== Comprehensive PDF to Markdown Conversion ===
+PDF Directory: /Users/bhavenmurji/My Drive/Shared Ignite/temp_aafp_pdfs
+Markdown Directory: /Users/bhavenmurji/My Drive/Shared Ignite/MEDUCare/RapidResponseCentral/FamMedCentral/Articles
+=========================================
+Valid PDFs to convert:      585
+>>> Progress: 25/     585 | Success: 23 | Failed: 0 | Skipped: 2
+>>> Progress: 50/     585 | Success: 43 | Failed: 0 | Skipped: 7
+>>> Progress: 125/     585 | Success: 74 | Failed: 32 | Skipped: 19
+>>> Progress: 150/     585 | Success: 79 | Failed: 52 | Skipped: 19
+>>> Progress: 175/     585 | Success: 87 | Failed: 69 | Skipped: 19
+>>> Progress: 200/     585 | Success: 93 | Failed: 88 | Skipped: 19
+>>> Progress: 225/     585 | Success: 99 | Failed: 106 | Skipped: 20
+>>> Progress: 250/     585 | Success: 111 | Failed: 119 | Skipped: 20
+>>> Progress: 275/     585 | Success: 114 | Failed: 141 | Skipped: 20
+>>> Progress: 300/     585 | Success: 123 | Failed: 157 | Skipped: 20
+>>> Progress: 325/     585 | Success: 128 | Failed: 177 | Skipped: 20
+>>> Progress: 350/     585 | Success: 135 | Failed: 195 | Skipped: 20
+>>> Progress: 375/     585 | Success: 143 | Failed: 212 | Skipped: 20
+>>> Progress: 400/     585 | Success: 150 | Failed: 230 | Skipped: 20
+>>> Progress: 425/     585 | Success: 157 | Failed: 248 | Skipped: 20
+>>> Progress: 450/     585 | Success: 161 | Failed: 269 | Skipped: 20
+>>> Progress: 475/     585 | Success: 167 | Failed: 288 | Skipped: 20
+>>> Progress: 500/     585 | Success: 172 | Failed: 306 | Skipped: 22
+>>> Progress: 525/     585 | Success: 180 | Failed: 322 | Skipped: 23
+>>> Progress: 550/     585 | Success: 188 | Failed: 338 | Skipped: 24
+>>> Progress: 575/     585 | Success: 196 | Failed: 351 | Skipped: 28
+=========================================
+CONVERSION COMPLETE!
+Total PDFs processed: 0
+Successfully converted: 0
+Failed conversions: 0
+Skipped (existing): 0
+
+Total markdown files in directory:
+     264
+
+Articles by year:
+  2023:      119 articles
+  2024:      123 articles
+  2025:       22 articles

@@ -1,0 +1,29 @@
+{
+  "processing_summary": {
+    "start_time": "2025-08-09T16:21:15.454011",
+    "end_time": "2025-08-09T16:21:21.038363",
+    "processing_time_seconds": 5.584352,
+    "processing_time_human": "0:00:05.584352"
+  },
+  "statistics": {
+    "total_articles": 1060,
+    "processed_articles": 1060,
+    "pubmed_enriched": 1,
+    "content_extracted": 0,
+    "errors": 0,
+    "warnings": 0,
+    "start_time": "2025-08-09 16:21:15.454011",
+    "end_time": "2025-08-09 16:21:21.038363"
+  },
+  "quality_metrics": {
+    "success_rate": 100.0,
+    "pubmed_enrichment_rate": 0.09433962264150944,
+    "content_extraction_rate": 0.0
+  },
+  "errors": [],
+  "recommendations": [
+    "Consider manual review of articles without PubMed enrichment",
+    "Validate random sample of processed articles for quality assurance",
+    "Set up automated monitoring for new articles"
+  ]
+}
