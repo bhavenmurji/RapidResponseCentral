@@ -2,8 +2,84 @@
 
 
 
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## Build generated
+build/
+DerivedData/
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+## Other
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
 # Claude Flow generated files
 .claude/settings.local.json
+.claude-flow/
 .mcp.json
 claude-flow.config.json
 .swarm/
@@ -26,4 +102,57 @@ claude-flow
 claude-flow.bat
 claude-flow.ps1
 hive-mind-prompt-*.txt
-DerivedData/
+
+# Development tools and configs
+.vscode/
+.cursor/
+.roo/
+.bmad*/
+node_modules/
+package-lock.json
+
+# Test output and logs
+*.log
+test-results/
+test_output.log
+build.log
+performance_build.log
+buildServer.json
+
+# Screenshots and documentation
+Screenshots/
+UI_*.md
+PERFORMANCE_*.md
+COMPREHENSIVE_*.md
+IMPLEMENTATION_*.md
+DESIGN_*.md
+Clinical_*.md
+Dynamic_*.md
+PARALLEL_*.md
+REAL_TIME_*.md
+UNIFIED_*.md
+VISUAL_*.md
+XCODE_*.md
+QA_*.md
+README_TEMP.md
+
+# Scripts and automation
+*.sh
+*.py
+*.swift
+!RapidResponseCentralPackage/**/*.swift
+*.command
+
+# Personal notes
+CLAUDE.local.md
+.icon_state
+
+# Large asset directories
+Assets/TestingScreenShots/
+Assets/FamMedCentral/
+Big Test*/
+your-project/
+xcode-mcp-server/
+Figma-Context-MCP/
+claudecode-rule2hook/
+docs/

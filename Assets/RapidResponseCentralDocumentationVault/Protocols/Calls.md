@@ -18,7 +18,7 @@ From fever spikes to pneumothorax, every overnight call scenario optimized for r
 
 - [[Pneumothorax]] recognition and chest tube protocols
 - [[Acute Respiratory Failure]] with NIV initiation
-- [[Asthma & COPD exacerbation]] with bronchodilator protocols
+- [[COPD exacerbation]] with bronchodilator protocols
 
 **Gastrointestinal**
 

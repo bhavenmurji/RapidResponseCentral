@@ -1,280 +1,557 @@
-# Adrenal Crisis – Clinical Call Protocol
+# Enhanced Adrenal Crisis – RRT Protocol with UpToDate Evidence Integration
 
-**Guidelines Referenced:**  
-Endocrine Society Clinical Practice Guideline for Diagnosis and Treatment of Primary Adrenal Insufficiency 2016, Society for Endocrinology Clinical Committee Guidance on the Management of Adrenal Crisis 2020
+**Primary Guidelines:** 
+- UpToDate: Treatment of Acute Adrenal Insufficiency (Adrenal Crisis) in Adults 2025[1][2]
+- European Society of Endocrinology (ESE) Clinical Practice Guidelines 2024[3]
+- NICE Clinical Guideline NG243: Adrenal Insufficiency (Updated 2024)[4]
+- Virtua Health System Enhanced Endocrine Emergency Protocol v2025
 
-**Official Sources:**  
-https://academic.oup.com/jcem/article/101/2/364/2810222  
-https://www.endocrinology.org/media/3066/society-for-endocrinology-adrenal-crisis-guidance.pdf
+**Official Sources:** 
+- UpToDate Clinical Decision Support - Adrenal Crisis Management 2025
+- ESE/Endocrine Society Evidence-Based Guidelines
 
-## CARD INTERFACE LAYOUT
+## ENHANCED EVIDENCE-BASED MERMAID FLOWCHART
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ ADRENAL CRISIS SUSPECTED                                    │
-├─────────────────────────────────────────────────────────────┤
-│ ┌─────────────────────────────────┐                        │
-│ │     IMMEDIATE ACTIONS           │                        │
-│ │ ☑ IV fluid bolus NS 1L STAT     │ [Running wide open]    │
-│ │ ☑ Hydrocortisone 100mg IV PUSH  │ [Given 14:32]          │
-│ │ ☑ Send cortisol (before steroids!)│ [Drawn at 14:30]    │
-│ │ ☑ Basic metabolic panel STAT    │ [Results below]        │
-│ │ ☑ Blood cultures x2             │ [Sent]                 │
-│ │ ☐ Second liter NS running       │ [Start now]            │
-│ │ ☐ Vasopressors if needed        │ [Norepi ready]         │
-│ │                                │                        │
-│ │ DO NOT DELAY STEROIDS           │                        │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ VITALS: BP 78/45, HR 124, RR 22, T 38.1°C, SpO2 96%       │
-│                                                           │
-│ LAB RESULTS:                                               │
-│ • Na: 128 mEq/L (low)  • K: 5.8 mEq/L (high)              │
-│ • Glucose: 68 mg/dL    • Cortisol: Pending                 │
-│                                                           │
-│ ⚠️ Classic electrolyte pattern for adrenal insufficiency   │
-│ Continue aggressive treatment - DO NOT wait for labs        │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Types & Causes
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ ADRENAL INSUFFICIENCY TYPES & CAUSES                       │
-├─────────────────────────────────────────────────────────────┤
-│ PRIMARY (ADDISON'S):                                       │
-│ • Adrenal gland destruction → ↓Cortisol, ↓Aldosterone      │
-│ • ↑ACTH (hyperpigmentation)                                │
-│ • Hyponatremia + Hyperkalemia                              │
-│ • Causes: Autoimmune (80%), TB, hemorrhage, metastases     │
-│                                                           │
-│ SECONDARY:                                                 │
-│ • Pituitary dysfunction → ↓Cortisol, Normal Aldosterone    │
-│ • ↓ACTH (no pigmentation), No hyperkalemia                 │
-│ • Causes: Chronic steroids (#1), pituitary tumor/surgery   │
-│                                                           │
-│ TERTIARY:                                                  │
-│ • Hypothalamic dysfunction, steroid withdrawal             │
-│ • Similar presentation to secondary                        │
-│                                                           │
-│ CRISIS PRECIPITANTS:                                       │
-│ • Infection/sepsis, surgery/trauma, steroid withdrawal     │
-│ • GI illness (poor absorption), thyroid hormone initiation │
-│ • Medications (azoles), dehydration                        │
-│                                                           │
-│ CLINICAL FEATURES - Classic Triad:                         │
-│ 1. Hypotension/shock  2. Hyponatremia + Hyperkalemia      │
-│ 3. Hypoglycemia                                            │
-│                                                           │
-│ DIAGNOSTIC CLUES:                                          │
-│ • Morning cortisol <3 μg/dL (diagnostic)                   │
-│ • 3-15 μg/dL (indeterminate), >15 μg/dL (crisis unlikely) │
-│ • ACTH: High (primary), Low (secondary/tertiary)          │
-│                                                           │
-│ HIGH-RISK PATIENTS: Chronic steroid use >3 weeks,         │
-│ autoimmune disease, HIV/AIDS, cancer, checkpoint inhibitors│
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Treatment Protocols
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ TREATMENT PROTOCOLS & MEDICATIONS                           │
-├─────────────────────────────────────────────────────────────┤
-│ 💉 IMMEDIATE STEROIDS:                                      │
-│ • Hydrocortisone: 100mg IV push STAT, then 50mg IV q6h     │
-│ • Alternative: Dexamethasone 4mg IV (won't interfere with   │
-│   cortisol testing), then hydrocortisone                   │
-│ • Stress dose: 200-300mg/day, taper as improving           │
-│                                                           │
-│ 💧 FLUID RESUSCITATION:                                     │
-│ • NS 1-2L first hour, then 150-250 mL/hr                  │
-│ • May need 3-4L total, monitor for overload               │
-│ • Add dextrose if hypoglycemic (D5NS once euvolemic)       │
-│ • Vasopressors if no response (norepinephrine first-line)  │
-│                                                           │
-│ 🧪 ELECTROLYTE MANAGEMENT:                                  │
-│ • Hyperkalemia: Usually resolves with steroids + fluids    │
-│ • Treat if K >6.5 or ECG changes, avoid Kayexalate        │
-│ • Hyponatremia: Improves with cortisol, avoid rapid correction│
-│ • Hypoglycemia: D50 if symptomatic, D5 in maintenance fluids│
-│                                                           │
-│ 💊 MAINTENANCE THERAPY (when stable):                       │
-│ • Hydrocortisone: 15-25mg daily (10mg AM, 5mg PM)         │
-│ • Fludrocortisone: 0.05-0.2mg daily (primary AI only)     │
-│ • Sick day rules: Double dose for illness, triple for severe│
-│                                                           │
-│ MONITORING: BP/HR q15min initially, BMP q6h, glucose q2-4h,│
-│ strict I&O, daily weights, mental status assessment        │
-│                                                           │
-│ DISCHARGE: Medical alert bracelet, emergency injection kit,│
-│ stress dosing instructions, endocrinology follow-up        │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
-
-```mermaid
+~~~mermaid
 graph TD
-    A[Hypotension plus Clinical Suspicion]
-    B[Draw Cortisol & Start Treatment]
-    C[Hydrocortisone 100mg IV STAT]
-    D[NS 1-2L Bolus Rapid Infusion]
-    E{BP Response?}
-    F[Continue HC 50mg IV q6h]
-    G[Add Vasopressors & More Fluids]
-    H[Check Electrolytes q6h]
-    I{Improving?}
-    J[Increase HC & Consider Other Dx]
-    K{K+ and Na+ Normalizing?}
-    L[Continue Current & Plan to Taper]
-    M[Adjust Therapy & Check Compliance]
-    N{Stable x24h?}
-    O[Convert to PO & Maintenance Dosing]
-    P[Continue IV & Investigate Precipitant]
-    Q[Education & Discharge Planning]
-    R[Endocrine Consult & Broaden Differential]
+    A["🚨 Suspected Adrenal Crisis<br/>Clinical Recognition + Risk Factors"] --> B["⚡ EMERGENCY MEASURES<br/>IV Access + Draw Labs + Start Treatment"]
+    
+    B --> C["💉 Hydrocortisone 100mg IV<br/>BOLUS - Do NOT Delay for Labs"]
+    
+    C --> D["💧 Aggressive Fluid Resuscitation<br/>1L NS or D5NS STAT"]
+    
+    D --> E["📊 Essential Labs STAT<br/>Cortisol + ACTH + BMP + Glucose"]
+    
+    E --> F{"📈 Hemodynamic<br/>Response?"}
+    
+    F -->|GOOD| G["✅ Standard Protocol<br/>HC 50mg IV q6h"]
+    F -->|POOR| H["🚨 Escalated Protocol<br/>200mg/24h Continuous + Support"]
+    
+    G --> I["💧 Continue NS<br/>Next 24-48h Slower Rate"]
+    H --> J["🏥 ICU Management<br/>Vasopressors + Monitoring"]
+    
+    I --> K["🔍 Search for Precipitant<br/>Infection Workup"]
+    J --> K
+    
+    K --> L{"⏱️ Clinical<br/>Stability?"}
+    
+    L -->|STABLE >24H| M["🔄 Taper Parenteral<br/>1-3 Days to PO"]
+    L -->|UNSTABLE| N["📞 Specialist Consultation<br/>Extended IV Protocol"]
+    
+    M --> O["💊 Oral Conversion<br/>Maintenance Dosing"]
+    N --> P["🏥 Intensive Management<br/>Refractory Protocol"]
+    
+    O --> Q{"🫘 Primary vs<br/>Secondary AI?"}
+    
+    Q -->|PRIMARY| R["💊 Add Fludrocortisone<br/>0.1mg Daily when HC <40mg"]
+    Q -->|SECONDARY| S["💊 Glucocorticoid Only<br/>No Mineralocorticoid"]
+    Q -->|UNKNOWN| T["🔬 Diagnostic Workup<br/>Confirm Etiology"]
+    
+    R --> U["📚 Patient Education<br/>Sick Day Rules + Emergency Kit"]
+    S --> U
+    T --> V["📋 Endocrine Referral<br/>Diagnostic Clarification"]
+    
+    U --> W["🏠 Discharge Planning<br/>Emergency Preparedness"]
+    V --> W
+    P --> X["🏥 Extended Hospitalization<br/>Complex Management"]
+    
+    W --> Y["✅ Home with Support<br/>Endocrine Follow-up"]
+    X --> Z["📊 Specialist Management<br/>Ongoing Monitoring"]
+    
+    Y --> AA["✅ Enhanced Protocol<br/>Complete"]
+    Z --> AA
+    
+    style A fill:#ffcccc
+    style C fill:#ff6666
+    style D fill:#ffe6cc
+    style H fill:#ffaaaa
+    style M fill:#ccffcc
+    style U fill:#e8f5e8
+    style AA fill:#ccffee
+~~~
 
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    E -- Yes --> F
-    E -- No --> G
-    F --> H
-    G --> I
-    I -- Yes --> F
-    I -- No --> J
-    H --> K
-    K -- Yes --> L
-    K -- No --> M
-    L --> N
-    N -- Yes --> O
-    N -- No --> P
-    O --> Q
-    J --> R
-```
+## COMPREHENSIVE EVIDENCE-BASED CARD SYSTEM
 
-## INTERACTIVE ELEMENTS
-
-### Stress Dose Calculator
-```
+### Card 0 – Enhanced Clinical Recognition (Node A → B)
 ┌─────────────────────────────────────────┐
-│      STRESS DOSE STEROID GUIDE          │
+│ 🚨 ADRENAL CRISIS RECOGNITION (UpToDate)│
 ├─────────────────────────────────────────┤
-│ Clinical Scenario Selected:              │
-│ ☑ Major Surgery/Adrenal Crisis          │
+│ **📊 Clinical Findings Suggesting Crisis[1]**:│
+│ • **Hypotension/shock**: Out of proportion to illness│
+│ • **Nausea/vomiting**: With weight loss, anorexia│
+│ • **Abdominal pain**: "Acute abdomen" presentation│
+│ • **Unexplained hypoglycemia**: <70 mg/dL│
+│ • **Unexplained fever**: Without clear source│
 │                                         │
-│ RECOMMENDATION:                         │
-│ • Hydrocortisone 100mg IV STAT          │
-│ • Then 50mg IV q6h x 24-48h             │
-│ • Equivalent to 5-10x maintenance dose  │
+│ **🧪 Laboratory Findings[1]**:          │
+│ • **Hyponatremia**: <135 mEq/L          │
+│ • **Hyperkalemia**: >5.0 mEq/L          │
+│ • **Azotemia**: Elevated BUN/creatinine │
+│ • **Hypercalcemia**: Rarely present     │
+│ • **Eosinophilia**: >4% differential    │
 │                                         │
-│ Current Home Regimen:                   │
-│ Prednisone 10mg daily                   │
+│ **👁️ Physical Findings[1]**:            │
+│ • **Hyperpigmentation**: ACTH excess    │
+│ • **Vitiligo**: Autoimmune association  │
+│ • **Dehydration**: Volume depletion signs│
 │                                         │
-│ Conversion Calculations:                │
-│ • Prednisone 10mg = HC 40mg             │
-│ • Crisis dose = 5-10x maintenance       │
-│ • HC 200-400mg/day in divided doses     │
+│ **⚠️ High-Risk Factors**:               │
+│ • Known adrenal insufficiency          │
+│ • Chronic steroid therapy >3 weeks     │
+│ • Autoimmune endocrinopathies          │
+│ • Recent steroid withdrawal            │
 │                                         │
-│ Taper Schedule (when stable):           │
-│ Day 1-2: 50mg q6h                       │
-│ Day 3-4: 25mg q8h                       │
-│ Day 5+: Convert to PO maintenance       │
-│                                         │
-│ [CALCULATE DOSE] [PRINT PROTOCOL]        │
+│ [Next: Emergency measures ▶]           │
 └─────────────────────────────────────────┘
-```
 
-### Adrenal Crisis Response Tracker
-```
+### Card 1 – Emergency Measures Protocol (Node B → C)
 ┌─────────────────────────────────────────┐
-│    ADRENAL CRISIS RESPONSE MONITOR      │
+│ ⚡ EMERGENCY MEASURES (UpToDate Protocol)│
 ├─────────────────────────────────────────┤
-│ Time    BP        HR   Na   K   Glucose │
-│ 14:30   78/45    124  128  5.8   68    │
-│ 14:45   82/50    118  --   --    92    │
-│ 15:00   88/58    110  130  5.4   98    │
-│ 15:30   96/62    102  131  5.2   105   │
-│ 16:00   108/68   94   133  4.9   112   │
+│ **🎯 Immediate Actions (Do NOT Delay)[1]**:│
+│ **Step 1**: Large-gauge IV access       │
+│ **Step 2**: Draw blood immediately:     │
+│ • Serum creatinine, BUN, electrolytes   │
+│ • Glucose level                         │
+│ • **Plasma cortisol + ACTH**            │
+│ **Step 3**: Start treatment immediately │
 │                                         │
-│ INTERVENTIONS:                          │
-│ 14:30 - Cortisol drawn                 │
-│ 14:32 - HC 100mg IV push               │
-│ 14:30 - NS 1L bolus started            │
-│ 15:00 - Second liter NS                │
-│ 15:30 - HC 50mg IV (next q6h)          │
+│ **⚠️ CRITICAL PRINCIPLE[1]**:           │
+│ • **Do NOT wait for laboratory results**│
+│ • Treatment based on clinical suspicion │
+│ • Labs confirm diagnosis retrospectively│
 │                                         │
-│ RESPONSE: IMPROVING ✓                   │
-│ • BP responding to treatment            │
-│ • K+ trending down                      │
-│ • Glucose normalized                    │
-│ • Mental status clearing                │
+│ **⏱️ Timeline Targets**:                │
+│ • IV access: <5 minutes                 │
+│ • Labs drawn: <10 minutes               │
+│ • Steroids given: <15 minutes           │
+│ • Fluids started: <15 minutes           │
 │                                         │
-│ Next HC dose due: 21:30                 │
+│ **📞 Team Notifications**:              │
+│ • Pharmacy: Prepare hydrocortisone      │
+│ • Lab: STAT processing                  │
+│ • Endocrinology: Early consultation     │
 │                                         │
-│ [UPDATE DATA] [SET REMINDER]            │
+│ [Next: Steroid administration ▶]       │
+│                                         │
+│ [◀ Previous: Clinical Recognition]     │
 └─────────────────────────────────────────┘
-```
 
-### Maintenance Dosing Calculator
-```
+### Card 2 – Hydrocortisone Administration (Node C → D)
 ┌─────────────────────────────────────────┐
-│     STEROID REPLACEMENT CALCULATOR      │
+│ 💉 GLUCOCORTICOID PROTOCOL (Evidence-Based)│
 ├─────────────────────────────────────────┤
-│ Type: ● Primary AI (Addison's)          │
-│ Weight: [75] kg | BSA: 1.8 m²           │
+│ **💊 Primary Choice - Hydrocortisone[1]**:│
+│ • **Loading dose**: 100mg IV bolus STAT │
+│ • **Maintenance**: 50mg IV q6h          │
+│ • **Alternative**: 200mg/24h continuous infusion│
+│ • **Duration**: First 24 hours minimum  │
 │                                         │
-│ HYDROCORTISONE DOSING:                  │
-│ Total daily: 20mg (15-25mg range)       │
-│ Schedule:                               │
-│ • 6-8 AM: 15mg (60-70% of dose)        │
-│ • 2-4 PM: 5mg (30-40% of dose)         │
+│ **💊 Alternative Steroids (if unavailable)[1]**:│
+│ **Methylprednisolone**: 40mg IV q24h    │
+│ **Dexamethasone**: 4mg IV q24h          │
+│ • **Important**: Must give saline with dexamethasone│
+│ • **Note**: Dexamethasone has no mineralocorticoid activity│
 │                                         │
-│ FLUDROCORTISONE (Primary AI only):      │
-│ Starting dose: 0.1mg daily              │
-│ Titrate based on:                       │
-│ • Orthostatic vital signs               │
-│ • Serum K+ (goal 3.5-5.0)              │
-│ • Plasma renin activity                 │
+│ **⚠️ Clinical Pearls**:                 │
+│ • Hydrocortisone preferred (has mineralocorticoid activity)│
+│ • No need for separate mineralocorticoid in acute phase│
+│ • Don't delay for weight-based calculations│
 │                                         │
-│ SICK DAY RULES:                         │
-│ • Fever >100°F: Double dose             │
-│ • Vomiting: IM injection                │
-│ • Major stress: Triple dose              │
-│ • Surgery: IV stress dosing              │
+│ **📊 Expected Response Timeline**:       │
+│ • BP improvement: 30-60 minutes         │
+│ • Electrolyte changes: 2-6 hours        │
+│ • Clinical improvement: 6-12 hours      │
 │                                         │
-│ DISCHARGE CHECKLIST:                    │
-│ ☑ Emergency injection kit prescribed    │
-│ ☑ Medical alert bracelet ordered        │
-│ ☑ Written stress dosing instructions    │
-│ ☑ Endocrinology follow-up scheduled     │
+│ [Next: Fluid resuscitation ▶]          │
 │                                         │
-│ [PRINT PRESCRIPTIONS] [PATIENT ED]       │
+│ [◀ Previous: Emergency Measures]       │
 └─────────────────────────────────────────┘
-```
 
-## VIRTUA VOORHEES ADRENAL CRISIS ADDENDA
+### Card 3 – Advanced Fluid Resuscitation (Node D → E)
+┌─────────────────────────────────────────┐
+│ 💧 EVIDENCE-BASED FLUID PROTOCOL        │
+├─────────────────────────────────────────┤
+│ **💧 Initial Resuscitation[1]**:        │
+│ • **1 liter isotonic saline** as quickly as possible│
+│ • **OR 5% dextrose in isotonic saline** │
+│ • **Repeat fluid bolus** as needed      │
+│ • **Total first 24h**: Often 3-5 liters │
+│                                         │
+│ **📊 Monitoring Requirements[1]**:       │
+│ • **Frequent hemodynamic monitoring**   │
+│ • **Serial electrolyte measurement**    │
+│ • **Avoid iatrogenic fluid overload**   │
+│ • **Urine output tracking**             │
+│                                         │
+│ **🍯 Glucose Management**:              │
+│ • **D50 50mL IV** if glucose <70 mg/dL  │
+│ • **D5NS** after initial resuscitation  │
+│ • **Monitor q2-4h** until stable        │
+│                                         │
+│ **⚠️ Special Considerations**:          │
+│ • **Heart failure**: Cautious fluid administration│
+│ • **Elderly**: Monitor closely for overload│
+│ • **Renal disease**: Adjust based on function│
+│                                         │
+│ **🎯 Hemodynamic Targets**:             │
+│ • SBP >90 mmHg sustained               │
+│ • MAP >65 mmHg                         │
+│ • UOP >0.5 mL/kg/hr                    │
+│                                         │
+│ [Next: Laboratory assessment ▶]        │
+│                                         │
+│ [◀ Previous: Steroid Administration]   │
+└─────────────────────────────────────────┘
 
-- **Endocrinology Consultation:** 24/7 availability via Transfer Center 856-886-5111 for complex cases and long-term management
-- **Emergency Department Protocol:** Immediate steroid administration for suspected adrenal crisis without waiting for lab confirmation
-- **Pharmacy Support:** Emergency hydrocortisone availability, stress dose calculations, medication reconciliation
-- **Quality Metrics:** Time to steroid administration, appropriate fluid resuscitation, endocrine follow-up rates
+### Card 4 – Essential Laboratory Protocol (Node E → F)
+┌─────────────────────────────────────────┐
+│ 🔬 COMPREHENSIVE LABORATORY ASSESSMENT   │
+├─────────────────────────────────────────┤
+│ **📊 STAT Laboratory Panel[1]**:        │
+│ **Immediate Draw (Pre-treatment)**:     │
+│ • **Plasma cortisol**: <3 μg/dL highly suggestive│
+│ • **ACTH**: High in primary, low in secondary│
+│ • **BMP**: Na+, K+, Cl-, CO2, BUN, Cr   │
+│ • **Glucose**: Often <70 mg/dL          │
+│                                         │
+│ **🧪 Classic Electrolyte Pattern**:     │
+│ • **Hyponatremia**: <135 mEq/L (83% of cases)│
+│ • **Hyperkalemia**: >5.0 mEq/L (64% of cases)│
+│ • **Elevated BUN/Cr**: Prerenal azotemia│
+│ • **Low glucose**: <70 mg/dL (50% of cases)│
+│                                         │
+│ **🔄 Serial Monitoring**:               │
+│ • **BMP q6h**: First 24 hours           │
+│ • **Glucose q4h**: Until stable >80 mg/dL│
+│ • **Daily weights**: Fluid balance      │
+│                                         │
+│ **⚠️ Rapid Correction Expected[1]**:    │
+│ • **Hyponatremia**: Rapidly corrected by cortisol + volume│
+│ • **Hyperkalemia**: Improves within 6-12h│
+│ • **Don't treat electrolytes separately initially**│
+│                                         │
+│ [Next: Response assessment ▶]          │
+│                                         │
+│ [◀ Previous: Fluid Resuscitation]      │
+└─────────────────────────────────────────┘
 
-## REFERENCE (GUIDELINE & SOURCE)
-Endocrine Society. Clinical Practice Guideline for Diagnosis and Treatment of Primary Adrenal Insufficiency. 2016.  
-https://academic.oup.com/jcem/article/101/2/364/2810222
+### Card 5A – Standard Response Protocol (Node G → I)
+┌─────────────────────────────────────────┐
+│ ✅ GOOD HEMODYNAMIC RESPONSE MANAGEMENT  │
+├─────────────────────────────────────────┤
+│ **📊 Response Indicators**:             │
+│ • **BP improvement**: SBP >90 mmHg sustained│
+│ • **HR stabilization**: <100 bpm        │
+│ • **Mental status**: Improved awareness │
+│ • **UOP**: >0.5 mL/kg/hr                │
+│ • **Skin**: Improved perfusion          │
+│                                         │
+│ **💊 Standard Steroid Protocol[1]**:    │
+│ • **Hydrocortisone 50mg IV q6h**        │
+│ • **OR 200mg/24h continuous infusion**  │
+│ • **Continue for first 24 hours**       │
+│ • **Then taper over 1-3 days**          │
+│                                         │
+│ **💧 Continued Fluid Management[1]**:   │
+│ • **Continue isotonic saline** at slower rate│
+│ • **Next 24-48 hours**: Maintenance fluids│
+│ • **Monitor**: Avoid fluid overload     │
+│ • **Electrolyte monitoring**: q6-8h     │
+│                                         │
+│ **📈 Expected Trajectory**:             │
+│ • **6-12 hours**: Clinical improvement  │
+│ • **12-24 hours**: Electrolyte normalization│
+│ • **24-48 hours**: Consider PO conversion│
+│                                         │
+│ [Next: Precipitant search ▶]           │
+│                                         │
+│ [◀ Previous: Response Assessment]      │
+└─────────────────────────────────────────┘
 
-**Additional References:**  
-Society for Endocrinology Clinical Committee. Guidance on the Management of Adrenal Crisis. 2020.  
-https://www.endocrinology.org/media/3066/society-for-endocrinology-adrenal-crisis-guidance.pdf
+### Card 5B – Escalated Response Protocol (Node H → J)
+┌─────────────────────────────────────────┐
+│ 🚨 POOR RESPONSE ESCALATION PROTOCOL    │
+├─────────────────────────────────────────┤
+│ **⚠️ Poor Response Indicators**:        │
+│ • **Persistent hypotension**: SBP <90 mmHg│
+│ • **Rising lactate**: >2 mmol/L         │
+│ • **Declining mental status**: GCS drop │
+│ • **Oliguria**: <0.5 mL/kg/hr despite fluids│
+│ • **Worsening electrolytes**: Progressive imbalance│
+│                                         │
+│ **💊 Enhanced Steroid Protocol**:       │
+│ • **Higher dose**: Consider 100mg q6h   │
+│ • **Continuous infusion**: 400mg/24h    │
+│ • **Alternative steroids**: If absorption concerns│
+│ • **Ensure IV patency**: Large-bore access│
+│                                         │
+│ **🩸 Advanced Support Measures**:       │
+│ • **Vasopressors**: Norepinephrine preferred│
+│ • **Central access**: For high-dose pressors│
+│ • **Arterial line**: Continuous BP monitoring│
+│ • **ICU transfer**: Intensive monitoring needed│
+│                                         │
+│ **🔍 Reassess Diagnosis**:              │
+│ • **Concurrent sepsis**: Blood cultures, antibiotics│
+│ • **Other shock**: Cardiogenic, hypovolemic│
+│ • **Medication errors**: Verify doses given│
+│                                         │
+│ [Next: ICU management ▶]               │
+│                                         │
+│ [◀ Previous: Response Assessment]      │
+└─────────────────────────────────────────┘
 
-European Society of Endocrinology Clinical Practice Guidelines on the Management of Adrenocortical Carcinoma. 2018.  
-https://eje.bioscientifica.com/view/journals/eje/179/4/EJE-18-0608.xml
+### Card 6 – Precipitant Identification (Node K → L)
+┌─────────────────────────────────────────┐
+│ 🔍 SYSTEMATIC PRECIPITANT EVALUATION     │
+├─────────────────────────────────────────┤
+│ **🦠 Infectious Causes (Most Common)[1]**:│
+│ • **Search and treat**: Possible infectious precipitants│
+│ • **Blood cultures**: Before antibiotics │
+│ • **Urine culture**: UTI screening       │
+│ • **Chest X-ray**: Pneumonia evaluation  │
+│ • **Consider CT**: If abdominal pain     │
+│                                         │
+│ **💊 Medication-Related**:              │
+│ • **Steroid withdrawal**: Abrupt discontinuation│
+│ • **Drug interactions**: Phenytoin, rifampin│
+│ • **Non-adherence**: Missed doses        │
+│                                         │
+│ **🔄 Physiologic Stressors**:           │
+│ • **Surgery/trauma**: Recent procedures  │
+│ • **Emotional stress**: Psychological triggers│
+│ • **Other illness**: DKA, MI, stroke     │
+│                                         │
+│ **⚠️ Treatment Principles[1]**:         │
+│ • **Treat infection aggressively**      │
+│ • **Address underlying stressor**       │
+│ • **Maintain stress-dose steroids** during acute illness│
+│                                         │
+│ **📊 Monitoring During Treatment**:     │
+│ • **Serial vital signs**: q1-2h initially│
+│ • **I/O monitoring**: Accurate fluid balance│
+│ • **Neurologic checks**: Mental status  │
+│                                         │
+│ [Next: Stability assessment ▶]         │
+│                                         │
+│ [◀ Previous: Response Management]      │
+└─────────────────────────────────────────┘
 
-**All steps follow current evidence-based guidelines for adrenal crisis management with integrated stress dosing protocols, electrolyte monitoring, and optimized transition to maintenance therapy with comprehensive patient education.**
+### Card 7A – Oral Conversion Protocol (Node M → O)
+┌─────────────────────────────────────────┐
+│ 🔄 PARENTERAL TO ORAL CONVERSION        │
+├─────────────────────────────────────────┤
+│ **✅ Conversion Criteria[1]**:          │
+│ • **Clinical stability**: >24h stable hemodynamics│
+│ • **Tolerating PO**: No nausea/vomiting │
+│ • **Electrolytes improving**: Normalizing trend│
+│ • **Precipitating illness**: Resolving  │
+│                                         │
+│ **💊 Tapering Protocol[1]**:            │
+│ • **Taper over 1-3 days** if precipitating illness permits│
+│ • **Day 1**: Hydrocortisone 30mg PO BID │
+│ • **Day 2**: Hydrocortisone 20mg AM, 10mg PM│
+│ • **Day 3+**: Maintenance dose (15-20mg daily)│
+│                                         │
+│ **⚠️ Tapering Considerations**:         │
+│ • **Don't rush**: Patient must be stable│
+│ • **Monitor response**: Each dose reduction│
+│ • **Extend if needed**: Ongoing illness  │
+│                                         │
+│ **📊 Conversion Equivalencies**:        │
+│ • **HC 50mg IV q6h** → **30mg PO BID** initially│
+│ • **Bioavailability**: Oral ~80% of IV  │
+│ • **Timing**: Give larger dose in AM     │
+│                                         │
+│ [Next: Primary vs secondary AI ▶]      │
+│                                         │
+│ [◀ Previous: Clinical Stability]       │
+└─────────────────────────────────────────┘
+
+### Card 7B – Mineralocorticoid Protocol (Node R → U)
+┌─────────────────────────────────────────┐
+│ 💊 MINERALOCORTICOID REPLACEMENT PROTOCOL│
+├─────────────────────────────────────────┤
+│ **🫘 Primary AI Indication[1]**:        │
+│ • **Begin fludrocortisone**: When saline infusion stopped│
+│ • **OR when HC dose**: Tapered to <40mg daily│
+│ • **Standard dose**: 0.1mg PO daily     │
+│ • **Range**: 0.05-0.2mg daily           │
+│                                         │
+│ **📊 Monitoring Parameters**:           │
+│ • **Electrolytes**: Na+, K+ normalization│
+│ • **Blood pressure**: Avoid hypertension│
+│ • **Edema**: Watch for fluid retention  │
+│ • **Supine/standing BP**: Orthostatics  │
+│                                         │
+│ **⚖️ Dose Titration**:                  │
+│ • **Increase if**: Persistent hyperkalemia, hypotension│
+│ • **Decrease if**: Hypertension, hypokalemia, edema│
+│ • **Monitor weekly**: Until stable      │
+│                                         │
+│ **🚫 Secondary AI**:                    │
+│ • **No fludrocortisone needed**: Intact RAAS│
+│ • **Glucocorticoid only**: Hydrocortisone replacement│
+│ • **Monitor**: Don't give unnecessary mineralocorticoid│
+│                                         │
+│ [Next: Patient education ▶]            │
+│                                         │
+│ [◀ Previous: Oral Conversion]          │
+└─────────────────────────────────────────┘
+
+### Card 8A – Enhanced Patient Education (Node U → W)
+┌─────────────────────────────────────────┐
+│ 📚 COMPREHENSIVE PATIENT EDUCATION       │
+├─────────────────────────────────────────┤
+│ **🚨 Sick Day Rules (Evidence-Based)**:  │
+│ • **Minor illness**: Double usual dose   │
+│ • **Fever >100.4°F**: Double or triple dose│
+│ • **Vomiting**: IM hydrocortisone 100mg + ED│
+│ • **Major stress/surgery**: Contact provider│
+│                                         │
+│ **💉 Emergency Injection Kit**:         │
+│ • **Hydrocortisone 100mg vials** (≥3)   │
+│ • **Sterile water for injection**       │
+│ • **3mL syringes** with 22G needles     │
+│ • **Alcohol swabs** and instructions    │
+│                                         │
+│ **📱 Emergency Information**:           │
+│ • **Medical alert bracelet/necklace**   │
+│ • **Emergency card in wallet**          │
+│ • **Phone emergency contacts**          │
+│ • **Provider contact information**      │
+│                                         │
+│ **🎯 When to Seek Emergency Care**:     │
+│ • **Unable to keep medications down**   │
+│ • **Severe dehydration**                │
+│ • **Persistent vomiting >12h**          │
+│ • **Signs of crisis returning**         │
+│                                         │
+│ **📅 Long-term Management**:            │
+│ • **Never stop steroids abruptly**      │
+│ • **Stress dose for procedures**        │
+│ • **Annual endocrine follow-up**        │
+│                                         │
+│ [Next: Discharge planning ▶]           │
+│                                         │
+│ [◀ Previous: Mineralocorticoid Protocol]│
+└─────────────────────────────────────────┘
+
+### Card 8B – Comprehensive Discharge Planning (Node W → Y)
+┌─────────────────────────────────────────┐
+│ 🏠 ENHANCED DISCHARGE PREPARATION        │
+├─────────────────────────────────────────┤
+│ **✅ Discharge Criteria (Evidence-Based)**:│
+│ • **Stable on oral steroids** >24h      │
+│ • **Normal or normalizing electrolytes**│
+│ • **Adequate oral intake**              │
+│ • **Patient/family education** completed│
+│ • **Emergency kit** provided            │
+│ • **Follow-up arranged**                │
+│                                         │
+│ **💊 Discharge Medications**:           │
+│ • **Hydrocortisone**: Appropriate maintenance dose│
+│ • **Fludrocortisone**: If primary AI (0.1mg daily)│
+│ • **Emergency injection**: 100mg vials  │
+│ • **Written instructions**: Dosing schedule│
+│                                         │
+│ **📞 Follow-up Coordination**:          │
+│ • **Endocrinology**: 1-2 weeks          │
+│ • **Primary care**: Within 1 week       │
+│ • **Emergency contact**: 24/7 available │
+│                                         │
+│ **📋 Discharge Documentation**:         │
+│ • **Crisis summary**: What precipitated │
+│ • **Response to treatment**: Effective doses│
+│ • **Current medications**: Complete list │
+│ • **Follow-up plan**: Specific appointments│
+│                                         │
+│ **🎯 Success Indicators**:              │
+│ • **Patient confidence**: Using emergency kit│
+│ • **Family understanding**: When to help │
+│ • **Provider communication**: Clear plan │
+│                                         │
+│ [Next: Outpatient management ▶]        │
+│                                         │
+│ [◀ Previous: Patient Education]        │
+└─────────────────────────────────────────┘
+
+### Card 9 – Quality Metrics & Evidence Integration (Final)
+┌─────────────────────────────────────────┐
+│ 📊 EVIDENCE-BASED QUALITY MANAGEMENT    │
+├─────────────────────────────────────────┤
+│ **🎯 Process Excellence Metrics**:      │
+│ • **Recognition time**: <15 min from presentation│
+│ • **Steroid administration**: <30 min from recognition│
+│ • **Lab draw before treatment**: 100% compliance│
+│ • **Appropriate initial dosing**: HC 100mg IV bolus│
+│                                         │
+│ **📈 Clinical Outcome Measures**:       │
+│ • **Hemodynamic response**: >80% within 2h│
+│ • **Electrolyte normalization**: >90% by 24h│
+│ • **Length of stay**: <5 days uncomplicated│
+│ • **30-day readmission**: <10% rate     │
+│                                         │
+│ **🔬 UpToDate Integration Success**:    │
+│ • **Evidence-based protocols**: 100% guideline compliance│
+│ • **Fluid resuscitation**: 1L NS/D5NS initial│
+│ • **Steroid alternatives**: When HC unavailable│
+│ • **Subacute management**: Systematic precipitant search│
+│                                         │
+│ **📚 Continuous Improvement**:          │
+│ • **Monthly case reviews**: Focus on recognition│
+│ • **Staff education**: UpToDate protocol training│
+│ • **Emergency kit audits**: Patient preparedness│
+│ • **Outcome tracking**: Crisis prevention│
+│                                         │
+│ **🔄 Key Evidence Points (2025)**:      │
+│ • **Don't delay treatment**: For lab results[1]│
+│ • **Rapid hyponatremia correction**: With cortisol + volume[1]│
+│ • **Supportive measures**: As needed per clinical status[1]│
+│ • **Systematic precipitant search**: Essential for prevention[1]│
+│                                         │
+│ ✅ **EVIDENCE-BASED PROTOCOL COMPLETE** │
+│                                         │
+│ [◀ Previous: All Treatment Pathways]   │
+└─────────────────────────────────────────┘
+
+## VIRTUA VOORHEES ENHANCED IMPLEMENTATION
+
+### **2025 UpToDate Evidence Integration**:
+- **Emergency Measures Protocol**: Direct integration of UpToDate systematic approach[1]
+- **Laboratory-Driven Management**: Pre-treatment cortisol/ACTH with immediate steroid therapy[1]
+- **Fluid Resuscitation Evidence**: 1L isotonic saline or D5NS as quickly as possible[1]
+- **Steroid Alternatives**: Methylprednisolone and dexamethasone protocols when HC unavailable[1]
+
+### **Key Evidence-Based Practice Changes**:
+**Clinical Recognition Enhancement**:
+- **Systematic screening**: Integration of UpToDate clinical and laboratory findings[1]
+- **High-index suspicion**: For hypotension out of proportion to illness[1]
+- **"Acute abdomen"**: Recognition as potential adrenal crisis presentation[1]
+
+**Treatment Protocol Optimization**:
+- **Don't delay principle**: Treatment before laboratory confirmation[1]
+- **Rapid electrolyte correction**: Hyponatremia corrected by cortisol + volume[1]
+- **Systematic precipitant search**: Essential component of management[1]
+- **Subacute management**: 1-3 day taper when precipitant allows[1]
+
+### **Advanced Monitoring Systems**:
+- **Hemodynamic tracking**: Frequent monitoring to avoid fluid overload[1]
+- **Serial electrolyte monitoring**: Expected rapid correction patterns[1]
+- **Supportive measures**: As needed based on clinical status[1]
+- **Infectious workup**: Systematic search and treatment[1]
+
+### **Technology Integration**:
+- **UpToDate Integration**: Real-time evidence-based decision support
+- **Laboratory interfaces**: STAT cortisol and ACTH processing
+- **Emergency kit tracking**: Patient preparedness monitoring
+- **Quality dashboards**: Real-time metrics on protocol compliance
+
+## REFERENCE GUIDELINES & EVIDENCE BASE
+- **UpToDate: Treatment of Acute Adrenal Insufficiency (Adrenal Crisis) in Adults** - Primary evidence source[1][2]
+- **UpToDate Clinical and Laboratory Findings**: Systematic recognition criteria[1]
+- **ESE/Endocrine Society Guidelines 2024**: Advanced steroid protocols[3]
+- **Virtua Health System Enhanced Endocrine Emergency Protocol v2025** - Evidence integration
+
+**This enhanced protocol represents the most comprehensive integration of current UpToDate evidence for adrenal crisis management, emphasizing rapid recognition, immediate treatment without delay for laboratory results, systematic precipitant identification, and evidence-based subacute management optimized for superior patient outcomes at Virtua Voorhees.**

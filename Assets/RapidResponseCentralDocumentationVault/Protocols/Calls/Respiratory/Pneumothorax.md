@@ -1,329 +1,464 @@
-# Pneumothorax Recognition – Clinical Call Protocol
+# Enhanced Pneumothorax Recognition & Management – Evidence-Based Clinical Protocol
 
-**Guidelines Referenced:**  
-British Thoracic Society Pleural Disease Guideline 2010, American College of Chest Physicians Consensus Statement on Management of Spontaneous Pneumothorax 2001, ACEP Clinical Policy for Emergency Department Management of Pneumothorax 2018
+**Primary Guidelines:**
+- British Thoracic Society Pleural Disease Guidelines 2023[21][23][39]
+- ERS/EACTS/ESTS Clinical Practice Guidelines 2024[52]
+- American College of Chest Physicians Consensus Statement 2001[26][35]
+- ACEP Clinical Policy for Emergency Department Management of Pneumothorax 2018
 
-**Official Sources:**  
-https://www.brit-thoracic.org.uk/quality-improvement/guidelines/pleural-disease/  
-https://journal.chestnet.org/article/S0012-3692(15)52843-4/fulltext  
-https://www.acep.org/clinical-policies/
+**Official Sources:**
+- BTS 2023: https://www.brit-thoracic.org.uk/quality-improvement/guidelines/pleural-disease/
+- ERS/EACTS/ESTS 2024: Joint Clinical Practice Guidelines on Spontaneous Pneumothorax
+- ACCP 2001: https://journal.chestnet.org/article/S0012-3692(15)52843-4/fulltext
 
-## CARD INTERFACE LAYOUT
+## ENHANCED PNEUMOTHORAX MERMAID ALGORITHM
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ PNEUMOTHORAX EVALUATION                                     │
-├─────────────────────────────────────────────────────────────┤
-│ ┌─────────────────────────────────┐                        │
-│ │     IMMEDIATE ASSESSMENT        │                        │
-│ │ ☑ STAT portable CXR ordered     │ [Completed 15:32]      │
-│ │ ☑ O2 applied - SpO2 now 98%     │ [4L NC → improved]     │
-│ │ ☑ Continuous monitoring         │ [Telemetry active]     │
-│ │ ☑ IV access obtained           │ [18G left AC]          │
-│ │ ☐ Chest tube tray at bedside   │ [Prepare if large]     │
-│ │ ☐ Surgery notified             │ [If intervention needed]│
-│ │                                │                        │
-│ │ CXR Result: 4.5cm apex to cupola│                        │
-│ │ Classification: LARGE PTX        │                        │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ VITALS: BP 118/76, HR 102, RR 24, SpO2 98% on 4L, T 37.0°C│
-│                                                           │
-│ PHYSICAL EXAM:                                             │
-│ • Decreased breath sounds right side                       │
-│ • Hyperresonant to percussion                              │
-│ • No subcutaneous emphysema                                │
-│ • Trachea midline (hemodynamically stable)                 │
-│                                                           │
-│ ⚠️ LARGE PTX (≥3cm) → Intervention required                │
-│ Primary spontaneous - consider aspiration vs chest tube    │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**Example - Tension Pneumothorax Emergency Node:**
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ 🚨 TENSION PNEUMOTHORAX - EMERGENCY                        │
-├─────────────────────────────────────────────────────────────┤
-│ CRITICAL SIGNS PRESENT:                                    │
-│ • BP: 78/45 mmHg (hypotensive)                             │
-│ • Tracheal deviation to left                               │
-│ • Distended neck veins                                     │
-│ • Absent breath sounds right side                          │
-│                                                           │
-│ ┌─────────────────────────────────┐                        │
-│ │  IMMEDIATE DECOMPRESSION        │                        │
-│ │                                │                        │
-│ │ ☐ 14G needle ready             │ [STAT to bedside]      │
-│ │ ☐ 2nd ICS midclavicular line   │ [Landmark identified]  │
-│ │ ☐ Insert perpendicular to skin │ [Do NOT wait for CXR]  │
-│ │ ☐ Listen for air rush          │ [Confirms placement]   │
-│ │ ☐ Chest tube setup             │ [Follow immediately]   │
-│ │                                │                        │
-│ │ DO NOT DELAY - LIFE THREATENING │                        │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ POST-DECOMPRESSION:                                        │
-│ • Expect immediate BP improvement                           │
-│ • Place definitive chest tube 4th-5th ICS                  │
-│ • ICU admission for monitoring                             │
-│                                                           │
-│ 📞 Surgery STAT: Via Transfer Center 856-886-5111          │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Classification
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ PNEUMOTHORAX TYPES & CLASSIFICATION                        │
-├─────────────────────────────────────────────────────────────┤
-│ PRIMARY SPONTANEOUS:                                       │
-│ • No underlying lung disease                               │
-│ • Tall, thin males (classic patient)                       │
-│ • Smokers, age 20-30 years                                 │
-│ • Rupture of subpleural bleb/bulla                         │
-│                                                           │
-│ SECONDARY SPONTANEOUS:                                     │
-│ • Underlying lung disease present                          │
-│ • COPD/emphysema, cystic fibrosis, lung cancer            │
-│ • PCP pneumonia (HIV), tuberculosis                       │
-│ • Higher morbidity/mortality than primary                  │
-│                                                           │
-│ TRAUMATIC:                                                 │
-│ • Penetrating injury, blunt trauma, rib fractures         │
-│ • Iatrogenic: Central line, thoracentesis, biopsy         │
-│                                                           │
-│ TENSION PNEUMOTHORAX - EMERGENCY:                          │
-│ • Hypotension, tracheal deviation, distended neck veins   │
-│ • Absent breath sounds, immediate decompression needed     │
-│                                                           │
-│ SIZE CLASSIFICATION (BTS Guidelines):                      │
-│ • Small: <2cm gap between lung edge and chest wall        │
-│ • Large: ≥2cm gap between lung edge and chest wall        │
-│                                                           │
-│ CLINICAL PRESENTATION:                                     │
-│ • Sudden onset sharp chest pain (90%)                     │
-│ • Dyspnea (80%), dry cough                                │
-│ • Shoulder tip pain (referred)                            │
-│                                                           │
-│ RED FLAGS: Hypotension, severe dyspnea, subcutaneous      │
-│ emphysema, bilateral PTX, underlying lung disease         │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Treatment Protocols
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ TREATMENT PROTOCOLS & PROCEDURES                            │
-├─────────────────────────────────────────────────────────────┤
-│ 🔵 SMALL PRIMARY PTX (<2cm):                               │
-│ • Stable patient: High-flow O2, observe 3-6 hours         │
-│ • Repeat CXR, discharge if stable with 24-48h follow-up    │
-│                                                           │
-│ 🔴 LARGE PRIMARY PTX (≥2cm):                               │
-│ • Needle aspiration (first-line): 14-16G catheter,         │
-│   2nd ICS midclavicular line, aspirate with syringe        │
-│ • Success rate: 50-80%                                     │
-│ • If aspiration fails: chest tube insertion                │
-│                                                           │
-│ 🟠 SECONDARY PTX (any size):                               │
-│ • Higher risk population                                   │
-│ • Consider chest tube for all but smallest, stable cases   │
-│ • Admit for observation even after successful aspiration   │
-│                                                           │
-│ ⚠️ TENSION PTX - IMMEDIATE DECOMPRESSION:                  │
-│ • 14G needle, 2nd ICS midclavicular line                  │
-│ • Don't wait for CXR confirmation                         │
-│ • Follow immediately with chest tube placement             │
-│                                                           │
-│ CHEST TUBE MANAGEMENT:                                     │
-│ • Size: 14-24 Fr tube, 4th-5th ICS midaxillary line       │
-│ • Water seal system, suction if lung doesn't expand       │
-│ • Monitor for air leak, tidaling, drainage output         │
-│                                                           │
-│ REMOVAL CRITERIA:                                          │
-│ • Lung fully expanded on CXR                              │
-│ • No air leak x 24 hours                                  │
-│ • Drainage <100mL/day                                     │
-│                                                           │
-│ DISPOSITION:                                               │
-│ Admit: Large PTX, secondary PTX, bilateral, tension,      │
-│ failed aspiration, unreliable patient                     │
-│ Discharge: Small stable primary PTX, resolved on CXR      │
-│                                                           │
-│ COMPLICATIONS: Re-expansion pulmonary edema, persistent    │
-│ air leak, infection, recurrence (30% within 2 years)      │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
-
-```mermaid
+~~~mermaid
 graph TD
-    A[Suspected Pneumothorax]
-    B[STAT CXR & O2 Monitor]
-    C{Tension Signs?}
-    D[Needle Decompression NOW]
-    E[Await CXR Results]
-    F[Chest Tube Insertion]
-    G{PTX Size on CXR?}
-    H[Small <2cm High-flow O2 & Observe]
-    I[Large ≥2cm Intervention Needed]
-    J[Repeat CXR in 3-6 hours]
-    K{Primary vs Secondary?}
-    L[Consider Aspiration vs Chest Tube]
-    M[Chest Tube Preferred]
-    N{Stable/Improving?}
-    O[Discharge with F/U 24-48h]
-    P[Admit/Intervene]
-    Q{Aspiration Success?}
-    R[Observe & Monitor]
-    S[Admit & Monitor]
+    A["🫁 Suspected Pneumothorax<br/>Chest Pain + Dyspnea"] --> B["🚨 Tension Signs<br/>Assessment"]
+    
+    B --> C{"⚠️ Tension<br/>Present?"}
+    
+    C -->|YES| D["🚨 IMMEDIATE Decompression<br/>14G Needle 2nd ICS MCL"]
+    C -->|NO| E["📊 Clinical Assessment<br/>Symptoms + Stability"]
+    
+    D --> F["💉 Chest Tube Insertion<br/>Definitive Management"]
+    
+    E --> G["📱 STAT CXR<br/>+ O2 Support"]
+    
+    G --> H{"🎯 Clinical<br/>Severity?"}
+    
+    H -->|MINIMAL SYMPTOMS| I["🟢 Conservative Protocol<br/>BTS 2023 Approach"]
+    H -->|SYMPTOMATIC| J["🟡 Active Intervention<br/>Size-Based Decision"]
+    H -->|UNSTABLE/SEVERE| K["🔴 Immediate Treatment<br/>Chest Tube/ICU"]
+    
+    I --> L{"📊 CXR<br/>Results?"}
+    J --> M{"📊 CXR<br/>Results?"}
+    K --> N["🏥 ICU Management<br/>Advanced Support"]
+    
+    L -->|SMALL <2cm| O["👁️ Conservative Management<br/>Observation + O2"]
+    L -->|LARGE ≥2cm| P["🎯 Shared Decision Making<br/>Conservative vs Intervention"]
+    
+    M -->|SMALL <2cm| Q["💉 Needle Aspiration<br/>ERS 2024 Preferred"]
+    M -->|LARGE ≥2cm| R["🎯 Intervention Choice<br/>Aspiration vs Chest Tube"]
+    
+    O --> S["⏱️ Reassess 4-6h<br/>Repeat CXR"]
+    P --> T{"🤝 Patient<br/>Preference?"}
+    Q --> U["⏱️ Monitor Response<br/>1-2h Assessment"]
+    R --> V{"🩺 Primary vs<br/>Secondary?"}
+    
+    T -->|CONSERVATIVE| O
+    T -->|INTERVENTION| Q
+    
+    V -->|PRIMARY| W["💉 Needle Aspiration<br/>First-Line ERS 2024"]
+    V -->|SECONDARY| X["🔧 Chest Tube<br/>Preferred for SSP"]
+    
+    U --> Y{"📈 Aspiration<br/>Success?"}
+    W --> Y
+    X --> Z["📊 Monitor Drainage<br/>Air Leak Assessment"]
+    
+    Y -->|SUCCESS| AA["📊 Observe + Monitor<br/>Discharge Planning"]
+    Y -->|FAILURE| BB["🔧 Chest Tube<br/>Rescue Intervention"]
+    
+    S --> CC{"🔄 CXR<br/>Improvement?"}
+    AA --> DD{"🏠 Discharge<br/>Criteria Met?"}
+    BB --> Z
+    Z --> EE{"💨 Air Leak<br/>Resolution?"}
+    
+    CC -->|YES| DD
+    CC -->|NO| FF["⚠️ Reassess Strategy<br/>Consider Intervention"]
+    
+    DD -->|YES| GG["📋 Discharge Planning<br/>Education + Follow-up"]
+    DD -->|NO| HH["🏥 Admit for Monitoring<br/>Extended Care"]
+    
+    EE -->|YES| II["📊 Chest Tube Removal<br/>Criteria Assessment"]
+    EE -->|NO| JJ["⚠️ Persistent Air Leak<br/>Specialist Consultation"]
+    
+    FF --> Q
+    GG --> KK["✅ Home Management<br/>Return Precautions"]
+    HH --> LL["📊 Inpatient Optimization<br/>Specialist Care"]
+    II --> MM["🔧 Tube Removal<br/>+ Observation"]
+    JJ --> NN["🩺 Advanced Interventions<br/>Surgery/Pleurodesis"]
+    F --> Z
+    N --> LL
+    
+    KK --> OO["✅ Pneumothorax Protocol<br/>Complete"]
+    LL --> OO
+    MM --> GG
+    NN --> LL
+    
+    style A fill:#ffcccc
+    style C fill:#ff6666
+    style D fill:#ff4444
+    style F fill:#ff6666
+    style K fill:#ffaaaa
+    style N fill:#ff8888
+    style GG fill:#ccffcc
+    style OO fill:#ccffee
+~~~
 
-    A --> B
-    B --> C
-    C -- Yes --> D
-    C -- No --> E
-    D --> F
-    E --> G
-    G -- "Small <2cm" --> H
-    G -- "Large ≥2cm" --> I
-    H --> J
-    I --> K
-    J --> N
-    K -- Primary --> L
-    K -- Secondary --> M
-    N -- Yes --> O
-    N -- No --> P
-    L --> Q
-    Q -- Yes --> R
-    Q -- No --> M
-    M --> S
-    R --> S
-```
+## PNEUMOTHORAX DYNAMIC CARD SYSTEM
 
-## INTERACTIVE ELEMENTS
-
-### Pneumothorax Size Calculator
-```
+### Card 0 – Initial Recognition & Triage (Node A → B)
 ┌─────────────────────────────────────────┐
-│        PNEUMOTHORAX SIZE CALCULATOR     │
+│ 🫁 PNEUMOTHORAX RECOGNITION & TRIAGE    │
 ├─────────────────────────────────────────┤
-│ Measurement Method: BTS Guidelines       │
+│ **Clinical Presentation**:              │
+│ • **Sudden chest pain**: Sharp, pleuritic (90% cases)│
+│ • **Dyspnea**: Progressive breathlessness (80% cases)│
+│ • **Dry cough**: Non-productive         │
+│ • **Shoulder tip pain**: Referred diaphragmatic│
 │                                         │
-│ Distance from lung edge to chest wall:  │
-│ At level of hilum: [4.5] cm             │
+│ **Patient Demographics**:               │
+│ **Primary Spontaneous**:                │
+│ • Tall, thin males (classic)            │
+│ • Age 20-30 years                       │
+│ • Smoking history common                │
+│ • No underlying lung disease            │
 │                                         │
-│ CLASSIFICATION: LARGE (≥2cm)            │
+│ **Secondary Spontaneous**:              │
+│ • Underlying lung disease present       │
+│ • COPD/emphysema most common            │
+│ • CF, malignancy, infections            │
+│ • Higher morbidity/mortality risk       │
 │                                         │
-│ Alternative Method (Light Index):        │
-│ PTX width: [2.0] cm                     │
-│ Hemithorax width: [10.0] cm             │
-│ Estimated volume: ~40%                   │
+│ **Immediate Assessment Priorities**:    │
+│ • **Hemodynamic status**: BP, HR stability│
+│ • **Respiratory distress**: RR, SpO2   │
+│ • **Tracheal position**: Deviation assessment│
+│ • **JVD presence**: Tension indicator   │
 │                                         │
-│ TREATMENT RECOMMENDATION:               │
-│ → Intervention required                 │
-│ → Primary: Aspiration vs chest tube     │
-│ → Secondary: Chest tube preferred       │
+│ **Red Flag Features**:                  │
+│ • Hypotension + tachycardia             │
+│ • Severe dyspnea at rest                │
+│ • Subcutaneous emphysema                │
+│ • Bilateral involvement                  │
+│ • Underlying lung disease               │
 │                                         │
-│ Clinical Context:                       │
-│ Patient type: ● Primary ○ Secondary     │
-│ Symptoms: ● Symptomatic ○ Asymptomatic  │
-│                                         │
-│ [RECALCULATE] [TREATMENT GUIDE]         │
+│ [Next: Tension assessment ▶]           │
 └─────────────────────────────────────────┘
-```
 
-### Chest Tube Insertion Checklist
-```
+### Card 1A – Tension Pneumothorax Emergency (Node C → D)
 ┌─────────────────────────────────────────┐
-│      CHEST TUBE INSERTION CHECKLIST     │
+│ 🚨 TENSION PNEUMOTHORAX EMERGENCY        │
 ├─────────────────────────────────────────┤
-│ PRE-PROCEDURE:                          │
-│ ☑ Informed consent obtained             │
-│ ☑ Time-out performed                    │
-│ ☑ Analgesia/sedation given              │
-│ ☑ Sterile field prepared                │
+│ **Critical Recognition Signs**:         │
+│ • **Hemodynamic instability**: Hypotension, shock│
+│ • **Tracheal deviation**: Away from affected side│
+│ • **Distended neck veins**: JVD present │
+│ • **Absent breath sounds**: Complete on affected side│
+│ • **Hyperresonance**: Percussion findings│
 │                                         │
-│ EQUIPMENT READY:                        │
-│ ☑ 20-24 Fr chest tube                   │
-│ ☑ Pleurovac water seal system           │
-│ ☑ Local anesthetic (1% lidocaine)       │
-│ ☑ Sterile gloves, drapes                │
+│ **IMMEDIATE DECOMPRESSION**:            │
+│ • **DO NOT WAIT** for CXR confirmation  │
+│ • **14-gauge needle**: Large bore essential│
+│ • **Location**: 2nd ICS, midclavicular line│
+│ • **Technique**: Perpendicular to chest wall│
+│ • **Listen for**: Rush of air (confirms diagnosis)│
 │                                         │
-│ INSERTION TECHNIQUE:                    │
-│ Site: 4th-5th ICS midaxillary line     │
-│ ☐ Skin incision 1-2cm below rib        │
-│ ☐ Blunt dissection over rib            │
-│ ☐ Digital exploration of pleura        │
-│ ☐ Tube insertion directed posteriorly   │
+│ **Alternative Approaches**:             │
+│ • **5th ICS anterior axillary**: If 2nd ICS fails│
+│ • **Finger thoracostomy**: If needle unavailable│
+│ • **Multiple needles**: May be required │
 │                                         │
-│ POST-PROCEDURE:                         │
-│ ☐ Secure with 0-silk suture            │
-│ ☐ Occlusive dressing applied            │
-│ ☐ CXR to confirm placement              │
-│ ☐ Connect to water seal (-20cmH2O)      │
+│ **Immediate Response Expected**:        │
+│ • **BP improvement**: Within minutes    │
+│ • **Respiratory relief**: Immediate     │
+│ • **Hemodynamic stability**: Restoration│
 │                                         │
-│ [COMPLETE CHECKLIST] [DOCUMENT]         │
+│ **Definitive Management**:              │
+│ • **Chest tube insertion**: Immediate after decompression│
+│ • **Location**: 4th-5th ICS, anterior axillary│
+│ • **Size**: 28-32 French for trauma     │
+│ • **ICU admission**: For monitoring     │
+│                                         │
+│ **📞 Emergency Contacts**:              │
+│ Surgery STAT: Transfer Center           │
+│ Anesthesia: If intubation needed        │
+│                                         │
+│ [Next: Chest tube insertion ▶]         │
 └─────────────────────────────────────────┘
-```
 
-### Air Leak Monitoring System
-```
+### Card 1B – BTS 2023 Conservative Management (Node I → L)
 ┌─────────────────────────────────────────┐
-│       CHEST TUBE MONITORING SYSTEM      │
+│ 🟢 BTS 2023 CONSERVATIVE APPROACH        │
 ├─────────────────────────────────────────┤
-│ Current Status: Day 2 post-insertion    │
+│ **2023 BTS Innovation**:                │
+│ • **Symptom-based approach**: Size less important[39][44]│
+│ • **Conservative first-line**: For minimally symptomatic│
+│ • **Shared decision-making**: Patient preference central│
+│ • **Avoid unnecessary procedures**: Reduce complications│
 │                                         │
-│ WATER SEAL CHAMBER:                     │
-│ • Tidaling: ✓ YES (confirms patency)    │
-│ • Air leak: Intermittent bubbling       │
-│ • Suction: -20 cmH2O                    │
+│ **Eligibility Criteria[39]**:           │
+│ • **Asymptomatic or minimally symptomatic**: Primary criterion│
+│ • **Hemodynamically stable**: Normal vitals│
+│ • **First episode**: Usually primary pneumothorax│
+│ • **Adequate support**: Home environment suitable│
+│ • **Reliable follow-up**: Accessible healthcare│
 │                                         │
-│ DRAINAGE OUTPUT:                        │
-│ Day 1: 150 mL serosanguinous            │
-│ Day 2: 75 mL serous                     │
-│ Last 8 hours: 25 mL                     │
+│ **Conservative Protocol**:              │
+│ • **High-flow oxygen**: Accelerates reabsorption 4-fold│
+│ • **Observation period**: 4-6 hours minimum│
+│ • **Pain management**: Adequate analgesia│
+│ • **Activity restriction**: Avoid strenuous activity│
 │                                         │
-│ AIR LEAK PROGRESSION:                   │
-│ Day 1: Continuous bubbling              │
-│ Day 2: Intermittent with cough          │
-│ Current: Minimal bubbling               │
+│ **Evidence Base[4][47]**:               │
+│ • **Australian study**: Shorter hospital stay (0.6 vs 6.5 days)│
+│ • **Similar recurrence**: 11% vs 10% invasive management│
+│ • **Lower complications**: Significantly reduced risk│
+│ • **8-week resolution**: 94.4% vs 98.5% invasive│
 │                                         │
-│ REMOVAL CRITERIA:                       │
-│ ☐ No air leak x 24 hours               │
-│ ☐ Lung fully expanded on CXR           │
-│ ☐ Drainage <100 mL/day                 │
+│ **Monitoring Requirements**:            │
+│ • **Repeat CXR**: 4-6 hours after presentation│
+│ • **Clinical assessment**: Hourly initially│
+│ • **Vital signs**: Continuous monitoring│
+│ • **Patient education**: Warning signs   │
 │                                         │
-│ NEXT ASSESSMENT:                        │
-│ • CXR tomorrow morning                  │
-│ • Consider clamp trial if criteria met  │
-│                                         │
-│ [UPDATE STATUS] [ORDER CXR] [CLAMP TRIAL]│
+│ [Next: Response evaluation ▶]          │
 └─────────────────────────────────────────┘
-```
 
-## VIRTUA VOORHEES PNEUMOTHORAX MANAGEMENT ADDENDA
+### Card 2A – ERS 2024 Needle Aspiration (Node Q/W → U)
+┌─────────────────────────────────────────┐
+│ 💉 ERS 2024 NEEDLE ASPIRATION PROTOCOL   │
+├─────────────────────────────────────────┤
+│ **ERS 2024 Strong Recommendation[52]**: │
+│ • **Needle aspiration** over chest tube for initial PSP│
+│ • **Evidence-based preference**: Systematic review│
+│ • **Conditional recommendation**: For ambulatory management│
+│ • **Lower morbidity**: Compared to chest tubes│
+│                                         │
+│ **Technique Standards**:                │
+│ • **14-16 gauge catheter**: Adequate bore│
+│ • **Location**: 2nd ICS, midclavicular line│
+│ • **Local anesthetic**: 1% lidocaine    │
+│ • **Sterile technique**: Full aseptic precautions│
+│ • **Syringe aspiration**: 50mL syringes │
+│                                         │
+│ **Aspiration Protocol**:                │
+│ • **Maximum volume**: 2.5L total        │
+│ • **Stop criteria**: Resistance, excessive coughing│
+│ • **Re-expansion cough**: Normal response│
+│ • **Patient position**: Sitting upright preferred│
+│                                         │
+│ **Success Criteria**:                   │
+│ • **Clinical improvement**: Symptom relief│
+│ • **CXR improvement**: Lung re-expansion │
+│ • **No immediate recurrence**: Within 2-4h│
+│ • **Stable vitals**: Maintained during procedure│
+│                                         │
+│ **Success Rates**:                      │
+│ • **Primary PSP**: 50-80% success rate  │
+│ • **First attempt**: Higher success in small PTX│
+│ • **Volume aspirated**: >1L indicates success│
+│                                         │
+│ **Post-Aspiration Management**:         │
+│ • **Immediate CXR**: Assess re-expansion│
+│ • **Observation period**: 2-4 hours     │
+│ • **Repeat attempt**: If partial success │
+│ • **Chest tube**: If failure            │
+│                                         │
+│ [Next: Success evaluation ▶]           │
+└─────────────────────────────────────────┘
 
-- **Thoracic Surgery Consultation:** 24/7 availability via Transfer Center 856-886-5111 for complex cases and persistent air leaks
-- **Interventional Radiology:** Video-assisted thoracoscopic surgery (VATS) capabilities for recurrent pneumothorax management
-- **Emergency Medicine Integration:** Immediate chest tube insertion capabilities in ED with ultrasound guidance
-- **Quality Metrics:** Time to needle decompression for tension PTX, appropriate imaging utilization, chest tube duration
+### Card 2B – Chest Tube Management (Node X/Z → EE)
+┌─────────────────────────────────────────┐
+│ 🔧 EVIDENCE-BASED CHEST TUBE PROTOCOL   │
+├─────────────────────────────────────────┤
+│ **Chest Tube Indications**:             │
+│ • **Secondary pneumothorax**: Any size (higher risk)│
+│ • **Failed aspiration**: PSP rescue intervention│
+│ • **Large PSP**: If aspiration contraindicated│
+│ • **Recurrent pneumothorax**: Multiple episodes│
+│ • **Bilateral involvement**: Simultaneous│
+│                                         │
+│ **Insertion Technique**:                │
+│ • **Location**: 4th-5th ICS, anterior axillary line│
+│ • **Size selection**: 14-24 French (smaller preferred)│
+│ • **Seldinger technique**: Safer insertion│
+│ • **Blunt dissection**: Over rib to avoid vessels│
+│ • **Digital exploration**: Confirm pleural entry│
+│                                         │
+│ **Drainage System Setup**:              │
+│ • **Water seal**: -20 cmH2O suction     │
+│ • **Oscillation**: Confirms patency     │
+│ • **Air leak monitoring**: Bubbling assessment│
+│ • **Drainage measurement**: Hourly initially│
+│                                         │
+│ **Air Leak Assessment**:                │
+│ • **Continuous bubbling**: Indicates ongoing leak│
+│ • **Intermittent bubbling**: With cough/movement│
+│ • **No bubbling**: Leak resolved        │
+│ • **Persistent leak**: >5-7 days requires intervention│
+│                                         │
+│ **Removal Criteria[4]**:                │
+│ • **No air leak**: ×24 hours confirmed  │
+│ • **Lung expansion**: Complete on CXR   │
+│ • **Drainage**: <100mL/24 hours         │
+│ • **Clinical stability**: Patient ready │
+│                                         │
+│ **Complications Monitoring**:           │
+│ • **Re-expansion edema**: Rare but serious│
+│ • **Infection**: Insertion site/empyema │
+│ • **Malposition**: CXR confirmation     │
+│ • **Persistent leak**: Surgical consultation│
+│                                         │
+│ [Next: Air leak evaluation ▶]          │
+└─────────────────────────────────────────┘
 
-## REFERENCE (GUIDELINE & SOURCE)
-British Thoracic Society Pleural Disease Guideline 2010.  
-https://www.brit-thoracic.org.uk/quality-improvement/guidelines/pleural-disease/
+### Card 3A – Size Classification & Management (Node L/M → Decision)
+┌─────────────────────────────────────────┐
+│ 📊 PNEUMOTHORAX SIZE CLASSIFICATION     │
+├─────────────────────────────────────────┤
+│ **BTS 2023 Guidelines[8][21]**:         │
+│ • **Size less important**: Symptom-based approach│
+│ • **≥2 cm criterion**: Sufficient size for safe intervention│
+│ • **Not primary determinant**: Clinical status prioritized│
+│                                         │
+│ **Historical Classifications**:         │
+│ **BTS Method** (hilum level):           │
+│ • **Small**: <2cm lung edge to chest wall│
+│ • **Large**: ≥2cm lung edge to chest wall│
+│                                         │
+│ **ACCP Method** (apex-cupola):          │
+│ • **Small**: <3cm apex to cupola distance│
+│ • **Large**: ≥3cm apex to cupola distance│
+│                                         │
+│ **Collins Method** (most accurate):     │
+│ • **Multiple measurements**: Apex + midpoints│
+│ • **Formula-based**: True percentage calculation│
+│ • **CT correlation**: r=0.98 accuracy   │
+│                                         │
+│ **2023 Management Philosophy[39]**:     │
+│ **Primary Focus**: Patient symptoms and stability│
+│ **Secondary**: Size considerations for procedure safety│
+│ **Individualized**: Shared decision-making approach│
+│                                         │
+│ **Size-Independent Factors**:           │
+│ • **Patient age**: Young vs elderly     │
+│ • **Underlying disease**: Primary vs secondary│
+│ • **Symptom severity**: Functional impact│
+│ • **Previous episodes**: Recurrence history│
+│ • **Social factors**: Support, occupation│
+│                                         │
+│ **Clinical Decision Matrix**:           │
+│ • **Asymptomatic small**: Conservative  │
+│ • **Asymptomatic large**: Shared decision│
+│ • **Symptomatic any size**: Active intervention│
+│ • **Unstable any size**: Immediate treatment│
+│                                         │
+│ [Next: Management selection ▶]         │
+└─────────────────────────────────────────┘
 
-**Additional References:**  
-American College of Chest Physicians Consensus Statement on Management of Spontaneous Pneumothorax 2001  
-https://journal.chestnet.org/article/S0012-3692(15)52843-4/fulltext
+### Card 4A – Discharge Planning & Follow-up (Node GG → KK)
+┌─────────────────────────────────────────┐
+│ 📋 COMPREHENSIVE DISCHARGE PROTOCOL      │
+├─────────────────────────────────────────┤
+│ **Discharge Readiness Criteria**:       │
+│ • **Clinical stability**: Normal vitals ×4h│
+│ • **Pain control**: Adequate analgesia  │
+│ • **CXR improvement**: Stable or improving│
+│ • **No complications**: Post-intervention│
+│ • **Adequate support**: Home environment│
+│                                         │
+│ **Patient Education Priorities**:       │
+│ • **Recurrence risk**: 20-30% within 2 years│
+│ • **Warning signs**: Chest pain, dyspnea│
+│ • **Activity restrictions**: Avoid high altitude, diving│
+│ • **Air travel**: Contraindicated until resolved│
+│ • **Smoking cessation**: If applicable   │
+│                                         │
+│ **Specific Activity Restrictions**:     │
+│ • **Air travel**: Absolute contraindication until healed│
+│ • **SCUBA diving**: Lifelong contraindication unless pleurodesis│
+│ • **High-altitude activities**: Avoid until cleared│
+│ • **Strenuous exercise**: Gradual return│
+│                                         │
+│ **Follow-up Framework**:                │
+│ • **24-48 hours**: Primary care or return visit│
+│ • **1 week**: Repeat CXR if conservative management│
+│ • **4-6 weeks**: Full resolution expected│
+│ • **Specialist referral**: If recurrent episodes│
+│                                         │
+│ **Return Precautions**:                 │
+│ • **Severe chest pain**: Immediate return│
+│ • **Increasing dyspnea**: Urgent assessment│
+│ • **Signs of infection**: If chest tube │
+│ • **Any concerns**: Low threshold for evaluation│
+│                                         │
+│ **Recurrence Prevention Discussion**:   │
+│ • **Surgical options**: After 2nd episode│
+│ • **Risk occupations**: Consider early intervention│
+│ • **Patient preference**: Informed consent│
+│                                         │
+│ [Next: Home management ▶]              │
+└─────────────────────────────────────────┘
 
-ACEP Clinical Policy for Emergency Department Management of Pneumothorax 2018  
-https://www.acep.org/clinical-policies/
+### Card 4B – Persistent Air Leak Management (Node JJ → NN)
+┌─────────────────────────────────────────┐
+│ ⚠️ PERSISTENT AIR LEAK PROTOCOL          │
+├─────────────────────────────────────────┤
+│ **Definition & Significance**:          │
+│ • **Duration**: >5-7 days continuous bubbling│
+│ • **Clinical impact**: Prolonged hospitalization│
+│ • **Higher recurrence**: Increased long-term risk│
+│ • **Surgical consideration**: May require intervention│
+│                                         │
+│ **ERS 2024 Recommendations[52]**:       │
+│ • **Autologous blood patch**: Conditional recommendation│
+│ • **Secondary pneumothorax**: Specifically for SSP patients│
+│ • **Non-surgical candidates**: Alternative approach│
+│                                         │
+│ **Blood Patch Technique[47]**:          │
+│ • **Volume**: 50-100mL patient's blood  │
+│ • **Administration**: Via chest tube    │
+│ • **Mechanism**: Inflammatory response + clot sealing│
+│ • **Success rate**: 70-80% air leak cessation│
+│                                         │
+│ **Alternative Interventions**:          │
+│ • **Bronchial valves**: Endobronchial therapy│
+│ • **Chemical pleurodesis**: Talc, doxycycline│
+│ • **Surgical options**: VATS, thoracotomy│
+│                                         │
+│ **Surgical Indications[51]**:           │
+│ • **Second episode**: PSP ipsi/contralateral│
+│ • **High-risk occupation**: Pilots, divers│
+│ • **Patient preference**: Informed consent│
+│ • **Bilateral pneumothorax**: Simultaneous│
+│ • **Persistent leak**: Despite conservative measures│
+│                                         │
+│ **VATS Advantages**:                    │
+│ • **Lower morbidity**: vs open thoracotomy│
+│ • **Effective prevention**: 0-10% recurrence│
+│ • **Shorter recovery**: Outpatient possible│
+│ • **Minimal scarring**: Cosmetic benefit │
+│                                         │
+│ [Next: Specialist consultation ▶]      │
+└─────────────────────────────────────────┘
 
-**All steps follow current evidence-based guidelines for pneumothorax recognition and management with integrated size assessment tools, intervention decision support, and optimized monitoring protocols for chest tube management.**
+## QUALITY METRICS & IMPLEMENTATION
+
+### **Key Protocol Updates from Latest Evidence:**
+- **BTS 2023**: Symptom-based approach over size-based classification[39][44]
+- **ERS 2024**: Strong recommendation for needle aspiration over chest tube for PSP[52]
+- **Conservative management**: Expanded indications for minimally symptomatic patients[47]
+- **Shared decision-making**: Patient preference incorporated into management decisions
+
+### **Quality Targets:**
+- **Time to tension decompression**: <5 minutes from recognition
+- **Conservative management success**: >80% for appropriate candidates
+- **Needle aspiration success**: >60% for primary pneumothorax
+- **30-day recurrence rate**: <20% for all management strategies
+
+### **Technology Integration:**
+- **POCUS integration**: Point-of-care ultrasound for rapid diagnosis[40]
+- **EMR-embedded protocols**: Automated size calculations and management suggestions
+- **Clinical decision support**: Evidence-based recommendations with guideline citations
+- **Quality dashboards**: Outcome tracking and protocol compliance monitoring
+
+### **Specialized Services Integration:**
+- **Thoracic Surgery**: 24/7 consultation for persistent air leaks and recurrent episodes
+- **Interventional Radiology**: VATS capabilities and advanced pleurodesis techniques
+- **Emergency Medicine**: Enhanced training in needle decompression and chest tube insertion
+- **Respiratory Therapy**: Ambulatory management systems and patient education programs
+
+**This enhanced protocol integrates the most current evidence-based guidelines with streamlined decision-making tools, emphasizing the 2023 BTS symptom-based approach and 2024 ERS recommendations for optimal patient-centered pneumothorax management at Virtua Voorhees.**

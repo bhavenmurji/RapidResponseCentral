@@ -7,13 +7,14 @@ public struct FlowchartView: View {
     let onNodeSelect: (String) -> Void
     
     // Zoom and pan state
-    @State private var zoomScale: CGFloat = 1.0
+    @State private var zoomScale: CGFloat = 0.75  // Reduced initial zoom for better fit
     @State private var panOffset: CGSize = .zero
     @State private var lastPanValue: CGSize = .zero
+    @State private var hasInitialized = false
     
     // Zoom limits
     private let minZoom: CGFloat = 0.5
-    private let maxZoom: CGFloat = 3.0
+    private let maxZoom: CGFloat = 2.0  // Reduced max zoom for better control
     
     public init(
         algorithm: ProtocolAlgorithm,
@@ -28,19 +29,40 @@ public struct FlowchartView: View {
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Background
-                Color(red: 0.98, green: 0.98, blue: 1.0)
+                // Enhanced background with subtle medical pattern
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.98, green: 0.98, blue: 1.0),
+                        Color(red: 0.96, green: 0.97, blue: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+                .overlay(
+                    GeometryReader { _ in
+                        // Subtle medical grid pattern
+                        Path { path in
+                            let spacing: CGFloat = 50
+                            for i in stride(from: 0, to: 2000, by: spacing) {
+                                path.move(to: CGPoint(x: CGFloat(i), y: 0))
+                                path.addLine(to: CGPoint(x: CGFloat(i), y: 2000))
+                                path.move(to: CGPoint(x: 0, y: CGFloat(i)))
+                                path.addLine(to: CGPoint(x: 2000, y: CGFloat(i)))
+                            }
+                        }
+                        .stroke(Color.blue.opacity(0.03), lineWidth: 0.5)
+                    }
                     .ignoresSafeArea()
+                )
                 
-                // Scrollable and zoomable content
-                ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                // VERTICAL-ONLY scrolling - NO horizontal scroll allowed
+                ScrollView(.vertical, showsIndicators: true) {
                     flowchartContent
-                        .scaleEffect(zoomScale)
+                        .scaleEffect(zoomScale, anchor: .center)  // Changed to center anchor for better alignment
                         .offset(panOffset)
-                        .frame(
-                            minWidth: max(geometry.size.width, calculateContentWidth() * zoomScale),
-                            minHeight: max(geometry.size.height, calculateContentHeight() * zoomScale)
-                        )
+                        .frame(width: geometry.size.width) // Fixed width to prevent horizontal expansion
+                        .frame(minHeight: calculateContentHeight() * zoomScale)
                 }
                 .clipped()
                 .simultaneousGesture(panGesture)
@@ -59,33 +81,61 @@ public struct FlowchartView: View {
             }
         }
         .onAppear {
-            // Center on first node if available
-            centerOnSelectedNode()
-        }
-        .onChange(of: selectedNodeId) { _, _ in
-            centerOnSelectedNode()
-        }
-    }
-    
-    // MARK: - Flowchart Content
-    private var flowchartContent: some View {
-        LazyVStack(alignment: .leading, spacing: 20) {
-            ForEach(Array(algorithm.nodes.enumerated()), id: \.element.id) { index, node in
-                EnhancedNodeView(
-                    node: node,
-                    isSelected: selectedNodeId == node.id,
-                    onTap: { onNodeSelect(node.id) }
-                )
-                .padding(.horizontal, 20)
-                
-                // Connection indicator
-                if !node.connections.isEmpty {
-                    connectionIndicator
+            // Initialize zoom and center on first node
+            if !hasInitialized {
+                hasInitialized = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    centerOnFirstNode()
                 }
             }
         }
-        .frame(minWidth: 350)
-        .padding(.vertical, 20)
+        .onChange(of: selectedNodeId) { oldValue, newValue in
+            if oldValue != newValue {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    // Subtle zoom adjustment when selecting nodes
+                    if newValue != nil {
+                        zoomScale = min(zoomScale * 1.05, 1.0)
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Flowchart Content - Fixed Width, Vertical Only
+    private var flowchartContent: some View {
+        GeometryReader { geometry in
+            let screenWidth = geometry.size.width
+            let nodeWidth = min(screenWidth - 40, 380) // Adjusted padding and increased max width
+            
+            VStack(alignment: .center, spacing: 24) {  // Increased spacing for better readability
+                ForEach(Array(algorithm.nodes.enumerated()), id: \.element.id) { index, node in
+                    EnhancedNodeView(
+                        node: node,
+                        isSelected: selectedNodeId == node.id,
+                        onTap: { onNodeSelect(node.id) },
+                        width: nodeWidth
+                    )
+                    
+                    // Enhanced branching connection system - DEBUG VISIBLE
+                    if !node.connections.isEmpty {
+                        BranchingConnectionView(
+                            node: node,
+                            connections: node.connections,
+                            allNodes: algorithm.nodes,
+                            isActive: selectedNodeId == node.id,
+                            containerWidth: nodeWidth
+                        )
+                        .frame(height: node.connections.count > 1 ? 80 : 40) // INCREASED HEIGHT
+                        .padding(.vertical, 8) // INCREASED PADDING
+                        .background(Color.blue.opacity(0.1)) // DEBUG BACKGROUND
+                    }
+                }
+            }
+            .padding(.horizontal, 20)  // Adjusted horizontal padding for better fit
+            .padding(.vertical, 20)
+            .frame(width: screenWidth)  // Use full width with padding
+            .frame(maxWidth: .infinity, alignment: .center) // Center content
+        }
     }
     
     // MARK: - Connection Indicator
@@ -177,104 +227,106 @@ public struct FlowchartView: View {
     
     private func resetZoom() {
         withAnimation(.easeInOut(duration: 0.5)) {
-            zoomScale = 1.0
+            zoomScale = 0.75  // Reset to default zoom that fits content better
             panOffset = .zero
         }
     }
     
     // MARK: - Helper Methods
     private func calculateContentWidth() -> CGFloat {
-        return 350 // Minimum width for nodes
+        return UIScreen.main.bounds.width  // Use screen width
     }
     
     private func calculateContentHeight() -> CGFloat {
-        let nodeHeight: CGFloat = 80
-        let spacing: CGFloat = 20
-        let connectionHeight: CGFloat = 20
+        let nodeHeight: CGFloat = 100  // Increased for better readability
+        let spacing: CGFloat = 24
+        let connectionHeight: CGFloat = 28  // Space for arrows
         
         let nodesWithConnections = algorithm.nodes.filter { !$0.connections.isEmpty }.count
         return CGFloat(algorithm.nodes.count) * (nodeHeight + spacing) + 
-               CGFloat(nodesWithConnections) * connectionHeight + 40
+               CGFloat(nodesWithConnections) * connectionHeight + 80  // Extra padding
+    }
+    private func centerOnSelectedNode() {
+        guard let nodeId = selectedNodeId,
+              let nodeIndex = algorithm.nodes.firstIndex(where: { $0.id == nodeId }) else { return }
+        
+        // Calculate vertical position of the selected node
+        let nodeHeight: CGFloat = 100
+        let spacing: CGFloat = 44  // Total spacing including arrows
+        let nodePosition = CGFloat(nodeIndex) * (nodeHeight + spacing) + 50
+        
+        // Center the node vertically in view
+        withAnimation(.easeInOut(duration: 0.3)) {
+            panOffset.height = -nodePosition * zoomScale + 200  // Offset to center in view
+        }
     }
     
-    private func centerOnSelectedNode() {
-        // Optional: Center the view on the selected node
-        // Implementation could calculate the position of the selected node
-        // and adjust panOffset to center it
+    private func centerOnFirstNode() {
+        // Center on the first node when the view appears
+        withAnimation(.easeInOut(duration: 0.5)) {
+            zoomScale = 0.75  // Optimal zoom to see multiple nodes
+            panOffset = CGSize(width: 0, height: 20)  // Slight offset for better initial view
+        }
     }
 }
 
-// MARK: - Enhanced Node View
+// MARK: - Enhanced Node View with Modern Medical UI Patterns
 private struct EnhancedNodeView: View {
     let node: AlgorithmNode
     let isSelected: Bool
     let onTap: () -> Void
+    let width: CGFloat
     
     @State private var isPressed = false
+    @State private var shimmerOffset: CGFloat = -1
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 12) {
-                // Header with icon and title
+                // Header with title only
                 HStack(spacing: 12) {
-                    // Enhanced node icon
-                    ZStack {
-                        RoundedRectangle(cornerRadius: iconCornerRadius)
-                            .fill(backgroundColorForNode(node))
-                            .frame(width: 36, height: 36)
-                            .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
-                        
-                        Image(systemName: iconForNodeType(node.nodeType))
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.white)
-                    }
                     
                     VStack(alignment: .leading, spacing: 4) {
                         Text(node.title)
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
                             .foregroundColor(.primary)
                             .multilineTextAlignment(.leading)
                             .lineLimit(2)
                         
-                        // Node type badge
-                        Text(nodeTypeName(node.nodeType))
-                            .font(.caption2)
-                            .fontWeight(.medium)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(
-                                Capsule()
-                                    .fill(backgroundColorForNode(node).opacity(0.2))
-                            )
-                            .foregroundColor(backgroundColorForNode(node))
+                        // Minimal type indicator
+                        if node.critical {
+                            Text("CRITICAL")
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.red)
+                        }
                     }
                     
                     Spacer()
                     
-                    // Critical indicator
-                    if node.critical {
-                        VStack {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.system(size: 16))
-                                .foregroundColor(.red)
-                                .padding(6)
-                                .background(
-                                    Circle()
-                                        .fill(.red.opacity(0.1))
-                                )
-                            Spacer()
-                        }
+                    // Connection indicator only
+                    if !node.connections.isEmpty {
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.blue)
                     }
                 }
                 
                 // Content
                 if !node.content.isEmpty {
                     Text(node.content)
-                        .font(.system(size: 14))
+                        .font(.system(size: 14, weight: .medium, design: .default))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
                         .lineLimit(4)
                         .fixedSize(horizontal: false, vertical: true)
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.gray.opacity(0.08))
+                        )
                 }
                 
                 // Connections info
@@ -307,20 +359,90 @@ private struct EnhancedNodeView: View {
                     .padding(.top, 4)
                 }
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .frame(width: width, alignment: .leading)
             .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(.regularMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(strokeColor, lineWidth: strokeWidth)
-                    )
-                    .shadow(
-                        color: shadowColor,
-                        radius: shadowRadius,
-                        y: shadowOffsetY
-                    )
+                ZStack {
+                    // Base gradient background
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(
+                            LinearGradient(
+                                colors: backgroundGradient,
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    
+                    // Glass morphism layer
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(
+                            Material.ultraThinMaterial
+                                .opacity(colorScheme == .dark ? 0.85 : 0.92)
+                        )
+                    
+                    // Top highlight for depth
+                    VStack {
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(isSelected ? 0.15 : 0.08),
+                                Color.white.opacity(0)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: 30)
+                        .mask(RoundedRectangle(cornerRadius: 18))
+                        Spacer()
+                    }
+                    
+                    // Critical pulse effect
+                    if node.critical {
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Color.red.opacity(0.6),
+                                        Color.orange.opacity(0.4)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
+                            .opacity(isSelected ? 1.0 : 0.7)
+                            .animation(
+                                Animation.easeInOut(duration: 1.5)
+                                    .repeatForever(autoreverses: true),
+                                value: node.critical
+                            )
+                    }
+                    
+                    // Selection border
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(
+                            isSelected ?
+                            LinearGradient(
+                                colors: [
+                                    Color.blue.opacity(0.8),
+                                    Color.purple.opacity(0.6)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ) :
+                            LinearGradient(
+                                colors: [strokeColor.opacity(0.5), strokeColor.opacity(0.3)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: isSelected ? 2.5 : strokeWidth
+                        )
+                }
+                .shadow(
+                    color: shadowColor.opacity(isSelected ? 0.4 : 0.25),
+                    radius: isSelected ? 12 : shadowRadius,
+                    x: 0,
+                    y: isSelected ? 6 : shadowOffsetY
+                )
             )
         }
         .buttonStyle(.plain)
@@ -340,6 +462,23 @@ private struct EnhancedNodeView: View {
         case .decision: return 8
         case .endpoint: return 18
         default: return 6
+        }
+    }
+    
+    private var backgroundGradient: [Color] {
+        switch node.nodeType {
+        case .decision:
+            return [Color.blue.opacity(0.1), Color.blue.opacity(0.05)]
+        case .assessment:
+            return [Color.purple.opacity(0.1), Color.purple.opacity(0.05)]
+        case .intervention:
+            return [Color.green.opacity(0.1), Color.green.opacity(0.05)]
+        case .medication:
+            return [Color.orange.opacity(0.1), Color.orange.opacity(0.05)]
+        case .endpoint:
+            return [Color.red.opacity(0.1), Color.red.opacity(0.05)]
+        case .action:
+            return [Color.teal.opacity(0.1), Color.teal.opacity(0.05)]
         }
     }
     
@@ -436,6 +575,226 @@ private struct EnhancedNodeView: View {
         }
     }
 }
+
+// MARK: - Directional Arrow Component - Omnichart Professional Style
+
+public struct DirectionalArrow: View {
+    let isActive: Bool
+    let hasConnection: Bool
+    let nodeType: NodeType
+    
+    public var body: some View {
+        VStack(spacing: 2) {
+            // Clean connection line with proper thickness
+            Rectangle()
+                .fill(arrowColor)
+                .frame(width: strokeWidth, height: arrowHeight)
+            
+            // Sharp directional arrow head
+            Image(systemName: arrowHeadIcon)
+                .font(.system(size: arrowHeadSize, weight: .bold))
+                .foregroundColor(arrowColor)
+                .scaleEffect(isActive ? 1.2 : 1.0)
+        }
+        .opacity(hasConnection ? 1.0 : 0.5)
+        .animation(.spring(response: 0.2, dampingFraction: 0.8), value: isActive)
+    }
+    
+    private var arrowColor: Color {
+        if isActive {
+            return .blue
+        }
+        switch nodeType {
+        case .decision: return .blue.opacity(0.8)
+        case .assessment: return .orange.opacity(0.8)
+        case .intervention, .action: return .green.opacity(0.8)
+        case .medication: return .purple.opacity(0.8)
+        case .endpoint: return .gray.opacity(0.8)
+        }
+    }
+    
+    private var strokeWidth: CGFloat {
+        isActive ? 8 : 6  // MUCH THICKER arrows
+    }
+    
+    private var arrowHeight: CGFloat {
+        24  // MUCH Taller arrow shaft
+    }
+    
+    private var arrowHeadSize: CGFloat {
+        isActive ? 20 : 16  // MUCH LARGER arrow heads
+    }
+    
+    private var arrowHeadIcon: String {
+        "arrowtriangle.down.fill"
+    }
+}
+
+// MARK: - Enhanced Branching Connection View
+
+public struct BranchingConnectionView: View {
+    let node: AlgorithmNode
+    let connections: [String]
+    let allNodes: [AlgorithmNode]
+    let isActive: Bool
+    let containerWidth: CGFloat
+    
+    public var body: some View {
+        VStack(spacing: 0) {
+            if connections.count == 1 {
+                // Single connection - straight arrow
+                SingleConnectionArrow(isActive: isActive, nodeType: node.nodeType)
+            } else if connections.count > 1 {
+                // Multiple connections - branching arrows
+                BranchingArrows(
+                    connections: connections,
+                    allNodes: allNodes,
+                    isActive: isActive,
+                    nodeType: node.nodeType,
+                    containerWidth: containerWidth
+                )
+            }
+        }
+    }
+}
+
+// MARK: - Single Connection Arrow
+struct SingleConnectionArrow: View {
+    let isActive: Bool
+    let nodeType: NodeType
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Rectangle()
+                .fill(arrowColor)
+                .frame(width: isActive ? 8 : 6, height: 24) // MUCH THICKER AND TALLER
+            
+            Image(systemName: "arrowtriangle.down.fill")
+                .font(.system(size: isActive ? 20 : 16, weight: .bold)) // MUCH LARGER
+                .foregroundColor(arrowColor)
+                .scaleEffect(isActive ? 1.3 : 1.1) // BIGGER SCALE
+        }
+        .animation(.spring(response: 0.2, dampingFraction: 0.8), value: isActive)
+    }
+    
+    private var arrowColor: Color {
+        if isActive {
+            return .blue
+        }
+        switch nodeType {
+        case .decision: return .blue.opacity(0.8)
+        case .assessment: return .orange.opacity(0.8)
+        case .intervention, .action: return .green.opacity(0.8)
+        case .medication: return .purple.opacity(0.8)
+        case .endpoint: return .gray.opacity(0.8)
+        }
+    }
+}
+
+// MARK: - Branching Arrows
+struct BranchingArrows: View {
+    let connections: [String]
+    let allNodes: [AlgorithmNode]
+    let isActive: Bool
+    let nodeType: NodeType
+    let containerWidth: CGFloat
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Main stem - MUCH THICKER
+            Rectangle()
+                .fill(arrowColor)
+                .frame(width: isActive ? 8 : 6, height: 20)
+            
+            // Branching section
+            HStack(spacing: 0) {
+                ForEach(Array(connections.enumerated()), id: \.offset) { index, connectionId in
+                    let targetNode = allNodes.first(where: { $0.id == connectionId })
+                    let branchWidth = containerWidth / CGFloat(connections.count)
+                    
+                    VStack(spacing: 4) {
+                        // Horizontal branch line
+                        HStack(spacing: 0) {
+                            if index > 0 {
+                                Rectangle()
+                                    .fill(arrowColor)
+                                    .frame(width: branchWidth * 0.4, height: 4) // THICKER
+                            }
+                            
+                            // Vertical drop - THICKER
+                            Rectangle()
+                                .fill(arrowColor)
+                                .frame(width: 4, height: 28) // MUCH THICKER AND TALLER
+                            
+                            if index < connections.count - 1 {
+                                Rectangle()
+                                    .fill(arrowColor)
+                                    .frame(width: branchWidth * 0.4, height: 4) // THICKER
+                            }
+                        }
+                        
+                        // Arrow head with label
+                        VStack(spacing: 2) {
+                            Image(systemName: "arrowtriangle.down.fill")
+                                .font(.system(size: isActive ? 18 : 14, weight: .bold)) // MUCH LARGER
+                                .foregroundColor(branchColor(for: targetNode))
+                            
+                            if let targetNode = targetNode {
+                                Text(truncatedTitle(targetNode.title))
+                                    .font(.system(size: 8, weight: .medium))
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(1)
+                                    .frame(width: branchWidth * 0.8)
+                            }
+                        }
+                    }
+                    .frame(width: branchWidth)
+                }
+            }
+            .frame(width: containerWidth)
+        }
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isActive)
+    }
+    
+    private var arrowColor: Color {
+        if isActive {
+            return .blue
+        }
+        switch nodeType {
+        case .decision: return .blue.opacity(0.8)
+        case .assessment: return .orange.opacity(0.8)
+        case .intervention, .action: return .green.opacity(0.8)
+        case .medication: return .purple.opacity(0.8)
+        case .endpoint: return .gray.opacity(0.8)
+        }
+    }
+    
+    private func branchColor(for node: AlgorithmNode?) -> Color {
+        guard let node = node else { return .gray }
+        
+        if node.critical {
+            return .red
+        }
+        
+        switch node.nodeType {
+        case .decision: return .blue
+        case .assessment: return .orange
+        case .intervention, .action: return .green
+        case .medication: return .purple
+        case .endpoint: return .gray
+        }
+    }
+    
+    private func truncatedTitle(_ title: String) -> String {
+        let maxLength = 12
+        if title.count > maxLength {
+            return String(title.prefix(maxLength - 1)) + "…"
+        }
+        return title
+    }
+}
+
+// MARK: - Preview
 
 #Preview {
     FlowchartView(

@@ -1,0 +1,253 @@
+{
+  "unifiedAgentSystem": {
+    "name": "RapidResponseCentral-Parallel-Agents",
+    "version": "1.0.0",
+    "description": "Unified parallel agent system integrating BMAD method, Claude-flow, and Contains Studio agents for SwiftUI development",
+    
+    "integration": {
+      "bmadMethod": {
+        "enabled": true,
+        "phases": ["brainstorm", "map", "act", "decide"],
+        "parallelExecution": true,
+        "coordinationProtocol": "hierarchical"
+      },
+      "claudeFlow": {
+        "enabled": true,
+        "swarmName": "SwiftUI-Parallel-Swarm",
+        "maxAgents": 12,
+        "topology": "hierarchical",
+        "memorySharing": true
+      },
+      "containsStudio": {
+        "enabled": true,
+        "agentDirectory": "agents/",
+        "autoLoad": true,
+        "parallelInvocation": true
+      }
+    },
+
+    "agentRoles": {
+      "bmadBrainstorm": {
+        "system-architect": {
+          "role": "BMAD-Brainstorm-Architect",
+          "specialization": "SwiftUI architecture patterns, MVVM, Clean Architecture",
+          "phase": "brainstorm",
+          "parallel": true
+        },
+        "ui-designer": {
+          "role": "BMAD-Brainstorm-Designer", 
+          "specialization": "SwiftUI design patterns, accessibility, responsive layouts",
+          "phase": "brainstorm",
+          "parallel": true
+        },
+        "trend-researcher": {
+          "role": "BMAD-Brainstorm-Researcher",
+          "specialization": "iOS trends, medical app patterns, user experience research",
+          "phase": "brainstorm", 
+          "parallel": true
+        }
+      },
+      
+      "bmadMap": {
+        "backend-architect": {
+          "role": "BMAD-Map-DataArchitect",
+          "specialization": "Core Data, SwiftData, JSON models, protocol services",
+          "phase": "map",
+          "parallel": true
+        },
+        "devops-automator": {
+          "role": "BMAD-Map-DevOps",
+          "specialization": "Xcode automation, CI/CD, build optimization",
+          "phase": "map",
+          "parallel": true
+        }
+      },
+      
+      "bmadAct": {
+        "coder": {
+          "role": "BMAD-Act-SwiftDeveloper",
+          "specialization": "Swift 5.5+, SwiftUI, Combine, async/await",
+          "phase": "act",
+          "parallel": true
+        },
+        "rapid-prototyper": {
+          "role": "BMAD-Act-Prototyper",
+          "specialization": "Rapid SwiftUI prototyping, MVPs, iterative development",
+          "phase": "act",
+          "parallel": true
+        },
+        "mobile-app-builder": {
+          "role": "BMAD-Act-MobileBuilder",
+          "specialization": "iOS app development, native features, performance optimization",
+          "phase": "act",
+          "parallel": true
+        }
+      },
+      
+      "bmadDecide": {
+        "tester": {
+          "role": "BMAD-Decide-Tester",
+          "specialization": "XCTest, UI Testing, TDD, test automation",
+          "phase": "decide",
+          "parallel": true
+        },
+        "performance-benchmarker": {
+          "role": "BMAD-Decide-Performance",
+          "specialization": "SwiftUI performance, memory profiling, optimization",
+          "phase": "decide",
+          "parallel": true
+        },
+        "production-validator": {
+          "role": "BMAD-Decide-Validator",
+          "specialization": "Xcode builds, simulator testing, deployment validation",
+          "phase": "decide",
+          "parallel": true
+        }
+      },
+      
+      "studioAgents": {
+        "brand-guardian": {
+          "role": "Studio-BrandGuardian",
+          "specialization": "Medical app branding, visual consistency, design system",
+          "parallel": true
+        },
+        "feedback-synthesizer": {
+          "role": "Studio-FeedbackSynthesizer", 
+          "specialization": "User feedback analysis, feature prioritization, improvement suggestions",
+          "parallel": true
+        },
+        "sprint-prioritizer": {
+          "role": "Studio-SprintPrioritizer",
+          "specialization": "Task prioritization, sprint planning, value delivery",
+          "parallel": true
+        }
+      },
+      
+      "coordinator": {
+        "task-orchestrator": {
+          "role": "BMAD-Coordinator",
+          "specialization": "BMAD method coordination, parallel task management, progress tracking",
+          "phase": "coordinate",
+          "parallel": false
+        }
+      }
+    },
+
+    "workflowPatterns": {
+      "swiftuiFeatureDevelopment": {
+        "name": "SwiftUI Feature Development",
+        "pattern": "parallel-bmad",
+        "agents": [
+          "BMAD-Brainstorm-Architect",
+          "BMAD-Brainstorm-Designer", 
+          "BMAD-Map-DataArchitect",
+          "BMAD-Act-SwiftDeveloper",
+          "BMAD-Decide-Tester",
+          "Studio-BrandGuardian"
+        ],
+        "phases": ["brainstorm", "map", "act", "decide"],
+        "parallelExecution": true,
+        "memoryKeys": [
+          "swiftui/architecture-improvements",
+          "swiftui/ui-enhancements", 
+          "swiftui/performance-optimizations",
+          "swiftui/test-results",
+          "swiftui/build-validation"
+        ]
+      },
+      
+      "emergencyProtocolEnhancement": {
+        "name": "Emergency Protocol Enhancement",
+        "pattern": "parallel-bmad",
+        "agents": [
+          "BMAD-Brainstorm-Architect",
+          "BMAD-Brainstorm-Designer",
+          "BMAD-Map-DataArchitect", 
+          "BMAD-Act-SwiftDeveloper",
+          "BMAD-Act-Prototyper",
+          "BMAD-Decide-Tester",
+          "BMAD-Decide-Performance",
+          "BMAD-Decide-Validator"
+        ],
+        "phases": ["brainstorm", "map", "act", "decide"],
+        "parallelExecution": true,
+        "memoryKeys": [
+          "emergency-protocol/architecture-improvements",
+          "emergency-protocol/ui-enhancements",
+          "emergency-protocol/performance-optimizations", 
+          "emergency-protocol/test-results",
+          "emergency-protocol/build-validation"
+        ]
+      }
+    },
+
+    "memoryCoordination": {
+      "sharedMemory": {
+        "architecture": {
+          "key": "swiftui/architecture-patterns",
+          "value": {
+            "navigation": "TabView",
+            "stateManagement": "ObservableObject", 
+            "dataFlow": "MVVM",
+            "concurrency": "async/await"
+          }
+        },
+        "projectStructure": {
+          "key": "swiftui/project-structure",
+          "value": {
+            "appShell": "RapidResponseCentral/",
+            "featureCode": "RapidResponseCentralPackage/Sources/RapidResponseCentralFeature/",
+            "config": "Config/"
+          }
+        },
+        "medicalProtocols": {
+          "key": "swiftui/medical-protocols",
+          "value": {
+            "emergency": ["Code Blue", "Code Stroke", "Code STEMI"],
+            "rrt": ["Sepsis", "Respiratory Distress"],
+            "calls": ["Acute HF", "DKA"],
+            "labs": ["Anemia", "Coagulopathy"]
+          }
+        }
+      },
+      
+      "coordinationProtocol": {
+        "beforeTask": ["pre-task", "session-restore", "memory-sync"],
+        "duringTask": ["post-edit", "notify", "progress-update"],
+        "afterTask": ["post-task", "session-end", "memory-update"]
+      }
+    },
+
+    "performance": {
+      "maxParallelTasks": 12,
+      "executionStrategy": "parallel",
+      "tokenOptimization": true,
+      "cacheEnabled": true,
+      "telemetryLevel": "detailed",
+      "bottleneckAnalysis": true,
+      "selfHealingWorkflows": true
+    },
+
+    "claudeCodeIntegration": {
+      "parallelInvocationPattern": "single-message-multiple-tasks",
+      "coordinationKeywords": ["parallel", "simultaneous", "concurrent"],
+      "memorySharing": true,
+      "conflictResolution": "discussion-based",
+      "progressTracking": true
+    },
+
+    "projectSpecific": {
+      "swiftuiApp": "RapidResponseCentral",
+      "targetFeatures": [
+        "Emergency Protocols",
+        "RRT Protocols", 
+        "Clinical Calls",
+        "Laboratory Management",
+        "Educational Resources"
+      ],
+      "architecture": "MVVM with SwiftUI",
+      "deploymentTarget": "iOS 18.0",
+      "buildSystem": "Swift Package Manager"
+    }
+  }
+} 

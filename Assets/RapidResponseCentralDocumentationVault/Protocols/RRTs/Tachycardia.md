@@ -1,301 +1,480 @@
 # Tachycardia – RRT Protocol with Virtua Voorhees Addenda
 
-**Guideline Used:**  
-American Heart Association/American College of Cardiology (AHA/ACC) 2020 Advanced Cardiovascular Life Support (ACLS) Guidelines, 2019 AHA/ACC/HRS Guideline for the Management of Patients with Atrial Fibrillation  
-**Official Sources:**  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000916  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000665
+**Primary Guideline:** American Heart Association (AHA) Advanced Cardiovascular Life Support (ACLS) 2020 Guidelines (Current through 2025)
+**Official Source:** https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-cardiovascular-life-support
+**Supporting Guidelines:**
+- 2019 AHA/ACC/HRS Guideline for the Management of Patients with Atrial Fibrillation
+- 2017 AHA/ACC/HRS Guideline for the Management of Patients with Ventricular Arrhythmias
 
-## CARD INTERFACE LAYOUT
+## ENHANCED MERMAID FLOWCHART ALGORITHM
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ TACHYCARDIA RRT ACTIVATED                                   │
-├─────────────────────────────────────────────────────────────┤
-│ ⏱️ TIME OF ONSET: 30 minutes ago                           │
-│ Duration: Continuous | Character: Palpitations with SOB    │
-│                                                           │
-│ ┌─────────────────────────────────┐                        │
-│ │     IMMEDIATE ACTIONS           │                        │
-│ │ ☑ 12-lead ECG obtained          │ [Completed 15:32]      │
-│ │ ☑ Continuous telemetry          │ [Monitoring active]    │
-│ │ ☑ IV access x2                 │ [18G bilateral]        │
-│ │ ☑ Defibrillator at bedside     │ [Ready, pads on]       │
-│ │ ☐ Adenosine ready (if SVT)     │ [6mg drawn up]         │
-│ │ ☐ Diltiazem drawn up           │ [Rate control]         │
-│ │ ☐ Synchronized cardioversion   │ [Setup if unstable]    │
-│ │                                │                        │
-│ │ Rhythm: Atrial Fibrillation RVR │                        │
-│ │ QRS: Narrow (<120ms)            │                        │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ VITALS: HR 148 irregular, BP 108/72, RR 24, SpO2 94% 2L   │
-│                                                           │
-│ STABILITY ASSESSMENT:                                      │
-│ ☐ Chest pain/pressure  ☐ Altered mental status            │
-│ ☐ Signs of shock       ☑ Mild dyspnea                     │
-│                                                           │
-│ PATIENT STABLE → Proceed with rate control                 │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Differential
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ TACHYCARDIA DIFFERENTIAL & CAUSES                           │
-├─────────────────────────────────────────────────────────────┤
-│ 🔴 NARROW COMPLEX (<120ms):                                │
-│ • Regular: Sinus tachycardia, SVT (AVNRT/AVRT), A-flutter  │
-│ • Irregular: Atrial fibrillation, A-flutter variable block │
-│                                                           │
-│ 🔴 WIDE COMPLEX (≥120ms):                                  │
-│ • Regular: VT (until proven otherwise), SVT with aberrancy │
-│ • Irregular: A-fib with aberrancy, polymorphic VT         │
-│                                                           │
-│ UNDERLYING CAUSES:                                         │
-│ • Cardiac: Acute MI, heart failure, valvular disease       │
-│ • Metabolic: Hyperthyroidism, electrolyte abnormalities    │
-│ • Drugs/Toxins: Sympathomimetics, anticholinergics        │
-│ • Other: PE, hypoxia, anemia, pain/anxiety, fever/sepsis   │
-│                                                           │
-│ STABILITY CRITERIA (UNSTABLE if ANY present):              │
-│ • Hypotension (SBP <90 mmHg)                              │
-│ • Acutely altered mental status                            │
-│ • Signs of shock (poor perfusion, cool extremities)        │
-│ • Ischemic chest discomfort                                │
-│ • Acute heart failure                                      │
-│                                                           │
-│ CRITICAL DECISION POINTS:                                  │
-│ Wide vs narrow QRS, regular vs irregular rhythm,          │
-│ stable vs unstable hemodynamics, underlying cause          │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Physical Exam/Medications
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ PHYSICAL EXAM & MEDICATIONS                                 │
-├─────────────────────────────────────────────────────────────┤
-│ HEMODYNAMIC ASSESSMENT:                                    │
-│ • BP: Check for hypotension, pulse pressure               │
-│ • Perfusion: Mental status, skin temp, capillary refill   │
-│ • Volume: JVD, lung sounds, peripheral edema              │
-│ • Cardiac: Regular vs irregular, S3/S4, murmurs           │
-│                                                           │
-│ 💊 NARROW COMPLEX REGULAR (SVT):                           │
-│ • Vagal maneuvers: Valsalva, carotid massage, ice water   │
-│ • Adenosine: 6mg rapid IV push, then 12mg if no response  │
-│ • Beta-blockers: Metoprolol 2.5-5mg IV q5min (max 15mg)   │
-│ • CCB: Diltiazem 0.25mg/kg IV, then 0.35mg/kg if needed   │
-│                                                           │
-│ 💊 ATRIAL FIBRILLATION RATE CONTROL:                       │
-│ • Diltiazem preferred if normal EF: Above dosing, then     │
-│   5-15mg/hr infusion                                       │
-│ • Metoprolol if CAD: Above dosing, caution in acute HF    │
-│ • Amiodarone if low EF: 150mg IV over 10min, then infusion│
-│                                                           │
-│ 💊 WIDE COMPLEX STABLE VT:                                 │
-│ • Amiodarone: 150mg IV over 10min, may repeat x1          │
-│ • Procainamide: 20-50mg/min IV (max 17mg/kg)              │
-│                                                           │
-│ 💊 UNSTABLE TACHYCARDIA:                                   │
-│ • Synchronized cardioversion: 100-200J biphasic           │
-│ • Sedation if conscious: Midazolam 2-5mg IV               │
-│                                                           │
-│ MEDICATION ALERTS: No adenosine in WPW+AF, no AV blockers  │
-│ in wide QRS, check electrolytes, consider dig toxicity     │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
-
-```mermaid
+~~~mermaid
 graph TD
-    A[Tachycardia Recognition 12-lead ECG]
-    B{Stable vs Unstable?}
-    C[Synchronized Cardioversion]
-    D{QRS Width?}
-    E[Sedate if conscious 100-200J biphasic]
-    F{Regular or Irregular?}
-    G[Assume VT Until Proven Otherwise]
-    H[Vagal Maneuvers then Adenosine]
-    I[AF/Flutter Rate Control]
-    J{Stable?}
-    K[Amiodarone or Procainamide]
-    L{Converts?}
-    M[Identify and Treat Underlying Cause]
-    N[Beta-blocker or CCB]
-    O[Diltiazem/Metoprolol Consider Anticoag]
-    P[Continue Monitoring and Treatment]
+    A["Tachycardia Recognition<br/>HR >150 bpm + Symptoms"] --> B{"Patient<br/>Stable?"}
+    
+    B -->|UNSTABLE| C["Synchronized Cardioversion<br/>Sedate if Conscious"]
+    B -->|STABLE| D["12-Lead ECG Analysis<br/>Identify Rhythm"]
+    
+    C --> E["Post-Cardioversion<br/>Monitor & Evaluate"]
+    D --> F{"QRS Width<br/>Assessment?"}
+    
+    F -->|"NARROW <120ms"| G{"Rhythm<br/>Regularity?"}
+    F -->|"WIDE ≥120ms"| H["Assume VT Until<br/>Proven Otherwise"]
+    
+    G -->|REGULAR| I["Vagal Maneuvers<br/>+ Adenosine 6-12mg"]
+    G -->|IRREGULAR| J["Atrial Fibrillation<br/>Rate Control"]
+    
+    H --> K["Stable VT<br/>Antiarrhythmic Therapy"]
+    
+    I --> L{"SVT<br/>Converted?"}
+    J --> M["Diltiazem/Metoprolol<br/>Target HR <110"]
+    K --> N["Amiodarone 150mg<br/>or Procainamide"]
+    
+    L -->|YES| O["Monitor & Treat<br/>Underlying Cause"]
+    L -->|NO| P["Beta-Blocker or<br/>Calcium Channel Blocker"]
+    
+    M --> Q["Consider Anticoagulation<br/>CHA2DS2-VASc Score"]
+    N --> R["Assess Response<br/>& Stability"]
+    P --> O
+    
+    E --> O
+    O --> S["Disposition<br/>Telemetry/ICU"]
+    Q --> S
+    R --> S
+    
+    style A fill:#ffcccc
+    style B fill:#ffe6cc
+    style C fill:#ffaaaa
+    style I fill:#fff2cc
+    style J fill:#ccffcc
+    style K fill:#e6ccff
+    style S fill:#ccffee
+~~~
 
-    A --> B
-    B -- Unstable --> C
-    B -- Stable --> D
-    C --> E
-    D -- "Narrow <120ms" --> F
-    D -- "Wide ≥120ms" --> G
-    F -- Regular --> H
-    F -- Irregular --> I
-    G --> J
-    J -- Yes --> K
-    J -- No --> C
-    H --> L
-    L -- Yes --> M
-    L -- No --> N
-    I --> O
-    K --> P
-    N --> P
-    O --> P
-    M --> P
-```
+## STREAMLINED DYNAMIC CARD SYSTEM
 
-## NODE-TO-DYNAMIC CARD PROMPT MAPPING (WITH INTERACTIVES)
-
-| **Step (Node)**                    | **Dynamic Card Prompt/Question**                                                                 | **Interactive Components**                                        |
-|-------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
-| Tachycardia Recognition             | "Tachycardia identified on monitor/ECG. Obtain 12-lead ECG and assess stability?"              | [ECG Acquisition], [HR Monitor], [Rhythm Analysis]                |
-| Stability Assessment                | "Evaluate for signs of hemodynamic instability requiring immediate cardioversion?"              | [Stability Checklist], [BP Monitor], [Mental Status Check]        |
-| Synchronized Cardioversion          | "Patient unstable with tachycardia. Prepare for immediate synchronized cardioversion?"          | [Cardioversion Setup], [Sedation Protocol], [Energy Selection]    |
-| QRS Width Determination             | "Patient stable. Analyze QRS width: narrow (<120ms) or wide (≥120ms)?"                         | [QRS Measurement], [Rhythm Classification], [Lead Analysis]        |
-| Regular vs Irregular Assessment     | "Narrow complex tachycardia identified. Is the rhythm regular or irregular?"                   | [Rhythm Regularity], [R-R Interval], [Pattern Recognition]        |
-| Wide Complex Evaluation             | "Wide complex tachycardia present. Assume VT until proven otherwise. Assess stability?"        | [VT Criteria], [Stability Reassessment], [Antiarrhythmic Prep]    |
-| Vagal Maneuvers and Adenosine       | "Regular narrow complex tachycardia. Attempt vagal maneuvers, then adenosine?"                 | [Vagal Techniques], [Adenosine Administration], [Response Monitor] |
-| Atrial Fibrillation Management      | "Irregular narrow complex confirmed as A-fib. Initiate rate control strategy?"                 | [Rate Control Options], [Anticoagulation Risk], [Drug Selection]  |
-| SVT Conversion Assessment           | "Adenosine administered for SVT. Did the rhythm convert to sinus?"                             | [Rhythm Conversion], [Post-Conversion Care], [Underlying Cause]    |
-| Alternative Rate Control            | "SVT did not convert with adenosine. Consider beta-blocker or calcium channel blocker?"        | [Metoprolol Protocol], [Diltiazem Protocol], [Contraindications]  |
-| Stable VT Treatment                 | "Stable wide complex VT confirmed. Administer antiarrhythmic medication?"                      | [Amiodarone Protocol], [Procainamide Option], [Response Monitor]  |
-| A-fib Rate Control Implementation   | "A-fib rate control initiated. Monitor response and consider anticoagulation?"                 | [Diltiazem Infusion], [Rate Monitoring], [CHA2DS2-VASc Score]     |
-| Underlying Cause Investigation      | "Rhythm converted successfully. Investigate and treat underlying precipitating factors?"        | [Cause Checklist], [Lab Orders], [Further Testing]               |
-| Continued Monitoring                | "Tachycardia controlled with appropriate therapy. Continue monitoring and supportive care?"     | [Telemetry Monitoring], [Medication Titration], [Disposition]     |
-
-**Interactive Highlights:**  
-- Rate control calculator: weight-based dosing with real-time HR trending
-- Rhythm identification tool: step-by-step analysis with differential diagnosis
-- Cardioversion energy selector: rhythm-specific energy recommendations
-- CHA2DS2-VASc calculator: stroke risk assessment for A-fib anticoagulation
-- Adenosine administration tracker: timing and response monitoring
-
-## INTERACTIVE ELEMENTS
-
-### Rate Control Calculator
-```
+### Card 0 – Tachycardia Recognition & Stability Assessment (Node A → B)
 ┌─────────────────────────────────────────┐
-│      RATE CONTROL CALCULATOR            │
+│ 🚨 TACHYCARDIA RRT ACTIVATION            │
 ├─────────────────────────────────────────┤
-│ Current HR: 148 bpm                     │
-│ Target HR: <110 bpm (rest)              │
-│ Patient Weight: [80] kg                 │
+│ 📊 Recognition criteria:                │
+│ • Heart rate >150 bpm (sustained)      │
+│ • Associated symptoms present           │
+│ • Hemodynamic compromise possible       │
 │                                         │
-│ DILTIAZEM PROTOCOL:                     │
-│ Initial Bolus: 20mg (0.25mg/kg)        │
-│ Time: 15:30 | Response: HR→132 (↓16)    │
+│ 🚨 Instability indicators (ANY = unstable):│
+│ • Hypotension (SBP <90 mmHg)           │
+│ • Altered mental status                │
+│ • Signs of shock (poor perfusion)      │
+│ • Ischemic chest discomfort            │
+│ • Acute heart failure                  │
 │                                         │
-│ Second Bolus: 28mg (0.35mg/kg)         │
-│ Available at: 15:45 if HR >110          │
+│ 🚀 Immediate actions:                   │
+│ • 12-lead ECG                          │
+│ • IV access × 2                        │
+│ • Continuous monitoring                │
+│ • Defibrillator at bedside             │
 │                                         │
-│ Continuous Infusion:                    │
-│ Start: 10 mg/hr [▲▼ Adjust]            │
-│ Range: 5-15 mg/hr                       │
+│ ❓ Patient hemodynamically stable?      │
 │                                         │
-│ RESPONSE TRACKING:                      │
-│ 15:30: 148 bpm (baseline)               │
-│ 15:45: 132 bpm (after bolus)           │
-│ 16:00: 118 bpm (on infusion)           │
-│ 16:15: 108 bpm ✓ Target achieved        │
+│ 🔘 YES → Rhythm analysis               │
+│ 🔘 NO → Immediate cardioversion        │
 │                                         │
-│ [CALCULATE DOSE] [TREND HR] [TITRATE]   │
+│ [Next: Based on Selection ▶]            │
 └─────────────────────────────────────────┘
-```
 
-### Rhythm Identification Tool
-```
+### Card 1A – Synchronized Cardioversion (Node C → E)
 ┌─────────────────────────────────────────┐
-│      RHYTHM IDENTIFICATION AID          │
+│ ⚡ SYNCHRONIZED CARDIOVERSION            │
 ├─────────────────────────────────────────┤
-│ Step-by-step Analysis:                  │
+│ 🚨 Unstable tachycardia protocol:       │
+│ • Immediate intervention required       │
+│ • Do not delay for medication trials   │
 │                                         │
-│ 1. RATE: [148] bpm ● Tachycardia       │
+│ 💊 Pre-cardioversion sedation:          │
+│ • Midazolam 2-5mg IV if conscious      │
+│ • Propofol 0.5-1mg/kg if available     │
+│ • Maintain airway support              │
 │                                         │
-│ 2. QRS WIDTH:                           │
-│    ● Narrow (<120ms)                    │
-│    ○ Wide (≥120ms)                     │
+│ ⚡ Energy recommendations:               │
+│ • Narrow regular: 50-100J              │
+│ • Narrow irregular (A-fib): 120-200J   │
+│ • Wide complex: 100J, then 150J, 200J  │
 │                                         │
-│ 3. RHYTHM REGULARITY:                   │
-│    ○ Regular                            │
-│    ● Irregularly irregular              │
+│ 🔧 Procedure checklist:                 │
+│ • Sync mode ON                         │
+│ • Proper pad placement                 │
+│ • "Clear" before shock                 │
 │                                         │
-│ 4. P WAVES:                             │
-│    ○ Present and consistent             │
-│    ● Absent/not clearly visible        │
-│    ○ Flutter waves                      │
+│ [Next: Post-cardioversion care ▶]      │
 │                                         │
-│ 5. AV RELATIONSHIP:                     │
-│    ○ 1:1 conduction                     │
-│    ● Variable/no relationship           │
-│                                         │
-│ DIAGNOSIS: Atrial Fibrillation with RVR │
-│                                         │
-│ Confidence: 95% | [VIEW ECG STRIPS]     │
-│                                         │
-│ [CONFIRM DIAGNOSIS] [TREATMENT GUIDE]    │
+│ [◀ Previous: Stability Assessment]     │
 └─────────────────────────────────────────┘
-```
 
-### Cardioversion Energy Guide
-```
+### Card 1B – Rhythm Analysis (Node D → F)
 ┌─────────────────────────────────────────┐
-│    SYNCHRONIZED CARDIOVERSION GUIDE     │
+│ 📊 12-LEAD ECG RHYTHM ANALYSIS          │
 ├─────────────────────────────────────────┤
-│ Rhythm: Atrial Fibrillation             │
-│ Patient Weight: 80 kg                   │
+│ 🔍 Systematic approach:                 │
+│ • Rate: >150 bpm confirmed             │
+│ • Rhythm: Regular vs irregular          │
+│ • QRS width: <120ms vs ≥120ms          │
+│ • P waves: Present, absent, or abnormal│
 │                                         │
-│ ENERGY RECOMMENDATIONS:                 │
+│ 📋 Classification system:               │
+│ • Narrow complex + regular = SVT       │
+│ • Narrow complex + irregular = A-fib   │
+│ • Wide complex = VT until proven otherwise│
 │                                         │
-│ A-fib/A-flutter:                        │
-│ • Initial: 120-200J biphasic            │
-│ • If unsuccessful: 200J                 │
-│ • Max: 200J biphasic                    │
+│ ❓ QRS width measurement?               │
 │                                         │
-│ SVT (if refractory to meds):            │
-│ • Initial: 50-100J biphasic             │
-│ • Escalate: 100-200J                    │
+│ 🔘 NARROW (<120ms) → Assess regularity │
+│ 🔘 WIDE (≥120ms) → Assume VT           │
 │                                         │
-│ VT (stable, conscious):                 │
-│ • Initial: 100J biphasic                │
-│ • Escalate: 150J, then 200J             │
-│                                         │
-│ PRE-CARDIOVERSION CHECKLIST:           │
-│ ☐ Synchronized mode ON                  │
-│ ☐ Sedation administered                 │
-│ ☐ Airway equipment ready                │
-│ ☐ Team briefed                          │
-│                                         │
-│ Recommended: 150J biphasic               │
-│                                         │
-│ [PREPARE CARDIOVERSION] [SEDATE]         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
 └─────────────────────────────────────────┘
-```
 
-## VIRTUA VOORHEES TACHYCARDIA MANAGEMENT ADDENDA
+### Card 2A – SVT Management (Node I → L)
+┌─────────────────────────────────────────┐
+│ 🫀 SUPRAVENTRICULAR TACHYCARDIA         │
+├─────────────────────────────────────────┤
+│ 🎯 Narrow complex regular tachycardia:  │
+│ • AVNRT (most common)                  │
+│ • AVRT (accessory pathway)             │
+│ • Atrial flutter with 2:1 conduction   │
+│                                         │
+│ 🤲 Vagal maneuvers (try first):        │
+│ • Valsalva maneuver (15 seconds)       │
+│ • Carotid sinus massage (if no bruit)  │
+│ • Ice water immersion                  │
+│                                         │
+│ 💉 Adenosine protocol:                  │
+│ • First dose: 6mg rapid IV push        │
+│ • Second dose: 12mg if no response     │
+│ • Third dose: 12mg if needed           │
+│ • Give through large-bore peripheral IV│
+│                                         │
+│ ⚠️ Contraindications:                   │
+│ • Known WPW with A-fib                 │
+│ • Asthma (relative)                    │
+│ • Heart transplant recipients          │
+│                                         │
+│ [Next: Conversion assessment ▶]        │
+│                                         │
+│ [◀ Previous: QRS Analysis]             │
+└─────────────────────────────────────────┘
 
-- **Cardiology Consultation:** 24/7 access via Transfer Center 856-886-5111 for complex arrhythmias and refractory cases
-- **Electrophysiology Services:** Advanced EP studies and ablation procedures available with subspecialty referral
-- **Anticoagulation Management:** Pharmacy-driven protocols for stroke prevention in atrial fibrillation patients
-- **Quality Metrics:** Time to rate control, cardioversion success rates, appropriate anticoagulation initiation
+### Card 2B – Atrial Fibrillation Management (Node J → M)
+┌─────────────────────────────────────────┐
+│ 🫀 ATRIAL FIBRILLATION WITH RVR         │
+├─────────────────────────────────────────┤
+│ 🎯 Rate control strategy:               │
+│ • Target: <110 bpm at rest             │
+│ • Avoid aggressive rate control        │
+│ • Monitor for conversion to NSR        │
+│                                         │
+│ 💊 First-line agents:                   │
+│                                         │
+│ 🔸 Diltiazem (preferred):               │
+│ • Loading: 0.25mg/kg IV over 2 min     │
+│ • Second dose: 0.35mg/kg if needed     │
+│ • Infusion: 5-15mg/hr                  │
+│                                         │
+│ 🔸 Metoprolol:                          │
+│ • 2.5-5mg IV every 5 minutes           │
+│ • Maximum: 15mg total                  │
+│ • Avoid in acute heart failure         │
+│                                         │
+│ 🔸 Amiodarone (low EF):                 │
+│ • 150mg IV over 10 minutes             │
+│ • Then 1mg/min × 6hr, then 0.5mg/min  │
+│                                         │
+│ [Next: Anticoagulation assessment ▶]   │
+│                                         │
+│ [◀ Previous: QRS Analysis]             │
+└─────────────────────────────────────────┘
 
-## REFERENCE (GUIDELINE & SOURCE)
-American Heart Association/American College of Cardiology. 2020 ACLS Guidelines.  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000916
+### Card 2C – Wide Complex Tachycardia (Node K → N)
+┌─────────────────────────────────────────┐
+│ ⚡ WIDE COMPLEX TACHYCARDIA (VT)        │
+├─────────────────────────────────────────┤
+│ 🚨 Assume VT until proven otherwise:    │
+│ • Most wide complex tachycardia is VT  │
+│ • Don't waste time on differential     │
+│ • Treat aggressively                   │
+│                                         │
+│ 💊 Antiarrhythmic therapy:              │
+│                                         │
+│ 🔸 Amiodarone (first-line):             │
+│ • 150mg IV over 10-20 minutes          │
+│ • May repeat × 1 if needed             │
+│ • Then maintenance infusion            │
+│                                         │
+│ 🔸 Procainamide (alternative):          │
+│ • 20-50mg/min IV infusion              │
+│ • Maximum: 17mg/kg total dose          │
+│ • Monitor for hypotension              │
+│                                         │
+│ ⚠️ Avoid these in VT:                   │
+│ • Adenosine                            │
+│ • Calcium channel blockers             │
+│ • Beta-blockers                        │
+│                                         │
+│ [Next: Response assessment ▶]          │
+│                                         │
+│ [◀ Previous: QRS Analysis]             │
+└─────────────────────────────────────────┘
 
-**Additional References:**  
-2019 AHA/ACC/HRS Guideline for the Management of Patients with Atrial Fibrillation  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000665
+### Card 3A – SVT Conversion Assessment (Node L)
+┌─────────────────────────────────────────┐
+│ 🔄 SVT CONVERSION EVALUATION            │
+├─────────────────────────────────────────┤
+│ 📊 Success indicators:                  │
+│ • Abrupt termination to sinus rhythm   │
+│ • Heart rate <100 bpm                  │
+│ • Symptom resolution                   │
+│                                         │
+│ 📈 Failure indicators:                  │
+│ • Persistent tachycardia               │
+│ • Rate unchanged after adenosine       │
+│ • Continued symptoms                   │
+│                                         │
+│ ❓ SVT successfully converted?          │
+│                                         │
+│ 🔘 YES → Investigate underlying cause  │
+│ 🔘 NO → Alternative rate control agents│
+│                                         │
+│ 💡 If unsuccessful:                     │
+│ • Consider beta-blocker                │
+│ • Consider calcium channel blocker     │
+│ • Reassess for atrial flutter          │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
 
-2017 AHA/ACC/HRS Guideline for the Management of Patients with Ventricular Arrhythmias  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000549
+### Card 3B – Alternative Rate Control (Node P → O)
+┌─────────────────────────────────────────┐
+│ 💊 ALTERNATIVE RATE CONTROL             │
+├─────────────────────────────────────────┤
+│ 🔸 Metoprolol protocol:                 │
+│ • 5mg IV every 5 minutes               │
+│ • Maximum: 15mg total                  │
+│ • Monitor BP and signs of CHF          │
+│                                         │
+│ 🔸 Diltiazem protocol:                  │
+│ • 0.25mg/kg IV over 2 minutes          │
+│ • May repeat 0.35mg/kg in 15 minutes   │
+│ • Start infusion 5-15mg/hr             │
+│                                         │
+│ ⚠️ Contraindications:                   │
+│ • Hypotension                          │
+│ • Severe heart failure                 │
+│ • Heart block                          │
+│ • WPW syndrome                         │
+│                                         │
+│ [Next: Monitor response ▶]             │
+│                                         │
+│ [◀ Previous: SVT Conversion]           │
+└─────────────────────────────────────────┘
 
-**All steps follow current AHA/ACC ACLS guidelines for tachycardia management with integrated rhythm analysis tools and optimized for rapid identification of unstable patients requiring immediate electrical cardioversion.**
+### Card 4A – Anticoagulation Assessment (Node Q → S)
+┌─────────────────────────────────────────┐
+│ 🩸 ANTICOAGULATION EVALUATION           │
+├─────────────────────────────────────────┤
+│ 📊 CHA2DS2-VASc Score calculation:      │
+│ • Congestive heart failure (1 pt)      │
+│ • Hypertension (1 pt)                  │
+│ • Age ≥75 years (2 pts)                │
+│ • Diabetes mellitus (1 pt)             │
+│ • Stroke/TIA history (2 pts)           │
+│ • Vascular disease (1 pt)              │
+│ • Age 65-74 years (1 pt)               │
+│ • Sex category (female = 1 pt)         │
+│                                         │
+│ 🎯 Anticoagulation recommendations:     │
+│ • Score 0 (males) or 1 (females): None │
+│ • Score 1 (males): Consider            │
+│ • Score ≥2: Recommended                │
+│                                         │
+│ 💊 Anticoagulation options:             │
+│ • Warfarin (INR 2-3)                   │
+│ • Direct oral anticoagulants (DOACs)   │
+│ • Consider bleeding risk (HAS-BLED)    │
+│                                         │
+│ [Next: Disposition planning ▶]         │
+│                                         │
+│ [◀ Previous: A-fib Management]         │
+└─────────────────────────────────────────┘
+
+### Card 5A – VT Response Assessment (Node R → S)
+┌─────────────────────────────────────────┐
+│ 📊 VT TREATMENT RESPONSE                │
+├─────────────────────────────────────────┤
+│ ✅ Successful treatment indicators:      │
+│ • Conversion to sinus rhythm           │
+│ • Significant rate reduction           │
+│ • Hemodynamic improvement              │
+│ • Symptom resolution                   │
+│                                         │
+│ ⚠️ Treatment failure indicators:         │
+│ • Persistent wide complex tachycardia  │
+│ • Hemodynamic deterioration            │
+│ • Recurrent episodes                   │
+│                                         │
+│ 🚨 If treatment fails:                  │
+│ • Consider synchronized cardioversion  │
+│ • Reassess stability                   │
+│ • Alternative antiarrhythmic agents    │
+│ • Cardiology consultation              │
+│                                         │
+│ [Next: Disposition planning ▶]         │
+│                                         │
+│ [◀ Previous: VT Management]            │
+└─────────────────────────────────────────┘
+
+### Card 6 – Underlying Cause Investigation (Node O → S)
+┌─────────────────────────────────────────┐
+│ 🔍 UNDERLYING CAUSE EVALUATION          │
+├─────────────────────────────────────────┤
+│ 🩺 Common precipitating factors:        │
+│ • Acute coronary syndrome              │
+│ • Electrolyte abnormalities            │
+│ • Hyperthyroidism                      │
+│ • Pulmonary embolism                   │
+│ • Medication effects                   │
+│                                         │
+│ 📊 Diagnostic workup:                   │
+│ • Basic metabolic panel                │
+│ • Thyroid function tests               │
+│ • Cardiac enzymes/troponins            │
+│ • Chest X-ray                          │
+│ • Echocardiogram if indicated          │
+│                                         │
+│ 💊 Address reversible causes:           │
+│ • Correct electrolyte abnormalities    │
+│ • Treat underlying conditions          │
+│ • Adjust medications                   │
+│                                         │
+│ [Next: Disposition planning ▶]         │
+│                                         │
+│ [◀ Previous: Treatment Pathways]       │
+└─────────────────────────────────────────┘
+
+### Card 7 – Disposition & Monitoring (Node S - Final)
+┌─────────────────────────────────────────┐
+│ 🏥 DISPOSITION & FOLLOW-UP              │
+├─────────────────────────────────────────┤
+│ 📍 Disposition options:                 │
+│                                         │
+│ 🔴 ICU admission:                       │
+│ • Unstable tachycardia requiring cardioversion│
+│ • Antiarrhythmic infusions             │
+│ • Hemodynamic monitoring needed        │
+│                                         │
+│ 🟡 Telemetry monitoring:                │
+│ • Stable arrhythmias                   │
+│ • New-onset atrial fibrillation        │
+│ • Medication titration                 │
+│                                         │
+│ 🟢 Medical floor:                       │
+│ • Well-controlled atrial fibrillation  │
+│ • Converted SVT with known trigger     │
+│ • Stable after treatment               │
+│                                         │
+│ 📋 Follow-up coordination:              │
+│ • Cardiology: 1-2 weeks for new onset │
+│ • Primary care: 1 week                 │
+│ • Electrophysiology if recurrent       │
+│                                         │
+│ ✅ DISPOSITION PROTOCOL COMPLETE       │
+│                                         │
+│ [◀ Previous: Treatment Completion]     │
+└─────────────────────────────────────────┘
+
+## VIRTUA VOORHEES TACHYCARDIA ADDENDA
+
+### **Enhanced RRT Response Program:**
+- **Rapid Response Team:** Immediate multidisciplinary activation including critical care and cardiology
+- **Equipment Availability:** Defibrillators with cardioversion capability on all RRT carts
+- **Pharmacy Support:** Pre-drawn emergency medications (adenosine, diltiazem, amiodarone)
+- **Quality Metrics:** Time to rhythm identification, cardioversion success rates, complications
+
+### **Updated ACLS Integration:**
+**Adenosine Administration Updates:**
+- **Rapid push technique:** Give through most proximal port followed by immediate saline flush
+- **Half-life awareness:** <10 seconds, effects seen within 15-30 seconds
+- **Monitoring:** Continuous telemetry during administration
+
+**Rate Control Optimization:**
+- **Diltiazem preferred:** Better efficacy and safety profile than verapamil
+- **Weight-based dosing:** 0.25mg/kg then 0.35mg/kg with infusion titration
+- **Avoid in WPW:** Can accelerate ventricular response in pre-excited A-fib
+
+### **Advanced Monitoring Capabilities:**
+- **Continuous telemetry:** Real-time rhythm analysis with arrhythmia detection
+- **12-lead ECG integration:** Automatic rhythm interpretation with alerts
+- **Hemodynamic monitoring:** Blood pressure trending during rate control
+- **Drug response tracking:** Medication effectiveness documentation
+
+### **Cardiology Integration:**
+**24/7 Availability:**
+- **General cardiology:** For complex arrhythmia management
+- **Electrophysiology:** For refractory cases and ablation candidates
+- **Transfer Center:** 856-886-5111 for specialized interventions
+
+**Anticoagulation Program:**
+- **Pharmacy-driven protocols:** CHA2DS2-VASc and HAS-BLED score integration
+- **DOAC preferred:** Unless contraindicated or patient preference
+- **Bridging protocols:** For procedures in anticoagulated patients
+
+### **Special Population Considerations:**
+**Wolff-Parkinson-White Syndrome:**
+- **Recognize pre-excitation:** Delta waves, short PR interval
+- **Avoid AV nodal blockers:** Can precipitate VF in A-fib with WPW
+- **Procainamide preferred:** For wide complex tachycardia in WPW
+
+**Heart Failure Patients:**
+- **Amiodarone preferred:** Rate and rhythm control with minimal negative inotropic effect
+- **Avoid beta-blockers:** In acute decompensated heart failure
+- **Digoxin consideration:** For rate control in chronic heart failure
+
+**Post-Cardiac Surgery:**
+- **Amiodarone first-line:** Due to high efficacy in post-operative A-fib
+- **Electrolyte optimization:** Magnesium and potassium repletion
+- **Temporary pacing:** Available for bradycardia post-cardioversion
+
+### **Interactive Decision Support Tools:**
+**Rate Control Calculator:**
+- **Weight-based dosing:** Automatic calculation for diltiazem and metoprolol
+- **Titration guidance:** Based on heart rate response and hemodynamics
+- **Safety alerts:** For contraindications and drug interactions
+
+**CHA2DS2-VASc Calculator:**
+- **Automated scoring:** Based on patient history and demographics
+- **Risk stratification:** Color-coded recommendations for anticoagulation
+- **HAS-BLED integration:** Bleeding risk assessment
+
+**Rhythm Analysis Aid:**
+- **Differential diagnosis:** Step-by-step rhythm identification
+- **Treatment recommendations:** Algorithm-based therapeutic suggestions
+- **Consultation triggers:** Automatic alerts for complex cases
+
+### **Quality Improvement Metrics:**
+- **Recognition time:** Goal <5 minutes from RRT activation to rhythm identification
+- **Adenosine administration:** Goal <10 minutes for appropriate SVT
+- **Rate control:** Goal heart rate <110 bpm within 30 minutes
+- **Cardioversion success:** >90% success rate for appropriate indications
+
+### **Medication Safety Program:**
+- **Double verification:** For all high-risk medications (adenosine, amiodarone)
+- **Allergy checking:** Automated screening for drug allergies
+- **Interaction alerts:** Real-time monitoring for drug-drug interactions
+- **Dosing verification:** Weight-based calculations with pharmacist oversight
+
+## REFERENCE GUIDELINES
+- **2020 AHA Guidelines for CPR and Emergency Cardiovascular Care**
+- **2019 AHA/ACC/HRS Guideline for the Management of Patients with Atrial Fibrillation**
+- **2017 AHA/ACC/HRS Guideline for the Management of Patients with Ventricular Arrhythmias**
+- **Virtua Health System Tachycardia Protocol v2025**
+
+**This protocol reflects current evidence-based ACLS and arrhythmia management guidelines optimized for rapid recognition, appropriate intervention, and excellent patient outcomes in the Virtua Voorhees RRT setting.**

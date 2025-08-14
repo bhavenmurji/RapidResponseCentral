@@ -31,6 +31,11 @@ public final class ProtocolSession: ObservableObject, Identifiable {
         self.startTime = Date()
     }
     
+    public func start() {
+        self.isActive = true
+        self.endTime = nil
+    }
+    
     public func endSession() {
         self.endTime = Date()
         self.isActive = false

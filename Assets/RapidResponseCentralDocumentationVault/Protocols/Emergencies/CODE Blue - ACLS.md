@@ -1,119 +1,366 @@
 # Code Blue – Adult Cardiac Arrest (ACLS 2025) with Virtua Voorhees Addenda
 
-**Guideline Used:**  
-American Heart Association (AHA) Advanced Cardiovascular Life Support (ACLS) 2020 Guidelines (current as of July 2025)  
-**Official Source:**  
-https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-cardiovascular-life-support
+**Primary Guideline:** American Heart Association (AHA) Advanced Cardiovascular Life Support (ACLS) 2020 Guidelines (Current through 2025)
+**Official Source:** https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-cardiovascular-life-support
+**Supporting Evidence:** 2023 AHA Focused Update on Adult Advanced Cardiovascular Life Support
 
-## CARD INTERFACE LAYOUT
+## ENHANCED MERMAID FLOWCHART ALGORITHM
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ [NODE TITLE: e.g. VF/PULSELESS VT]                         │
-├─────────────────────────────────────────────────────────────┤
-│ IMMEDIATE ACTIONS:                                         │
-│ - [Node-specific: Start CPR, Charge, Shock, Admin Meds]    │
-│                                                           │
-│ CPR TIMER    SHOCK COUNTER   COMPRESSION RATE              │
-│  02:00         Shocks: 1      Rate: 112 BPM   🟢 GOOD      │
-│ [START/STOP]  Next: 200J     (Live feedback/metronome)     │
-│                                                           │
-│ ☑ Checked actions  ☐ Pending   [Tap to mark]              │
-│ [Meds: e.g. □ Epi after 2nd shock, □ Amio 300mg after 3rd] │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Differential
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ CAUSES & DIFFERENTIAL (H's & T's)                          │
-├─────────────────────────────────────────────────────────────┤
-│ 🩸 Hypovolemia  🫁 Hypoxia   💧 Hypo/Hyper-K+                │
-│ 🧊 Hypothermia  🪒 H+        ⚡ Thrombosis (MI/PE)            │
-│ 💉 Toxins       💓 Tamponade 🫁 Tension Pneumothorax         │
-│                                                           │
-│ HISTORY: Witnessed? Bystander CPR? DNR? Initial rhythm?    │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Physical Exam/Medication
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ PHYSICAL EXAM & MEDICATIONS                                 │
-├─────────────────────────────────────────────────────────────┤
-│ ABCDE, airway/breath sounds/ETCO2/SpO2, pulse checks        │
-│                                                           │
-│ 💊 EPI 1mg IV/IO q3–5min  | 💡 AMIO 300mg > 150mg           │
-│ 🔢 LIDOCAINE: 1–1.5mg/kg IV/IO (if no amio available)       │
-│                                                           │
-│ CONTRAINDICATIONS: None in arrest, benefit > risk           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
 
 ```mermaid
 graph TD
-    A[Unresponsive, no normal breathing]
-    B[Code Blue Activated & High-Quality CPR Started]
-    C[Attach Pads and Analyze Rhythm]
-    D{Shockable Rhythm?}
-    E[Shock 200J then Immediate CPR 2 min]
-    F[CPR 2 min with Epinephrine for PEA or Asystole]
-    G[CPR Timer & Rotate Compressor]
-    H[Re-check Rhythm]
-    I[Post-ROSC Care TTM and ICU Transfer]
-
-    A --> B
-    B --> C
-    C --> D
-    D -- Yes --> E
-    D -- No  --> F
-    E --> G
-    F --> G
+    A["Unresponsive Patient<br/>No Normal Breathing"] --> B{"Cardiac Arrest<br/>Confirmed?"}
+    
+    B -->|YES| C["CODE BLUE ACTIVATED<br/>Start High-Quality CPR<br/>Attach Monitor/Defibrillator"]
+    B -->|NO| Z["Other Emergency<br/>Protocols"]
+    
+    C --> D["Analyze Rhythm<br/>≤10 seconds"]
+    
+    D --> E{"Shockable<br/>Rhythm?"}
+    
+    E -->|"VF/Pulseless VT"| F["SHOCK<br/>Biphasic 200J<br/>Resume CPR Immediately"]
+    E -->|"PEA/Asystole"| G["CPR + EPINEPHRINE<br/>1mg IV/IO<br/>Continue CPR"]
+    
+    F --> H["High-Quality CPR<br/>2 Minutes<br/>Rotate Compressor"]
     G --> H
-    H -- "No ROSC" --> D
-    H -- "ROSC Achieved" --> I
+    
+    H --> I["Rhythm & Pulse Check<br/>≤10 seconds"]
+    
+    I --> J{"Status?"}
+    
+    J -->|ROSC| K["POST-CARDIAC ARREST CARE<br/>Airway, Breathing, Circulation<br/>TTM 32-36°C if comatose"]
+    
+    J -->|"VF/pVT Persists"| L{"After Multiple<br/>Shocks?"}
+    J -->|"PEA/Asystole"| M["Continue CPR<br/>Epinephrine q3-5min<br/>Address H's & T's"]
+    
+    L -->|YES| N["ANTIARRHYTHMICS<br/>Amiodarone 300mg IV/IO<br/>or Lidocaine 1-1.5mg/kg"]
+    L -->|NO| F
+    
+    N --> O["Shock + CPR 2min<br/>Consider Reversible Causes"]
+    M --> P["Assess H's & T's<br/>Hypovolemia, Hypoxia<br/>Hyper/Hypokalemia<br/>Hypothermia, H+ acidosis<br/>Toxins, Tamponade<br/>Tension Pneumo, Thrombosis"]
+    
+    O --> I
+    P --> I
+    
+    style A fill:#ffcccc
+    style C fill:#ffe6cc
+    style F fill:#fff2cc
+    style K fill:#ccffcc
+    style N fill:#e6ccff
+    style P fill:#cce6ff
 ```
 
-## NODE-TO-DYNAMIC CARD PROMPT MAPPING (WITH INTERACTIVES)
+## STREAMLINED DYNAMIC CARD SYSTEM
 
-| **Step (Node)**                    | **Dynamic Card Prompt/Question**                                                                 | **Interactive Components**                                        |
-|-------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
-| Initial Assessment                  | "Is the patient unresponsive, with no normal breathing or only gasping?"                         | [Yes/No] button                                                   |
-| Activate Code / Start CPR           | "Begin high-quality CPR. Activate Code Blue team?"                                               | [Start CPR], [Activate Code], [Start Timer]                       |
-| Attach Pads – Rhythm Check          | "Attach defibrillator/AED. Is a shockable rhythm detected (VF/pulseless VT)?"                    | [Analyze Rhythm], [Shockable/Non-shockable toggle]                |
-| Shock Delivered (if shockable)      | "Deliver shock at 200J biphasic. Immediately resume CPR for 2min. Was shock delivered?"          | [Shock Delivered], [Resume CPR], [Shock Counter]                  |
-| Non-Shockable Rhythm (PEA/Asystole) | "No shock advised. Resume CPR for 2min. Administer epinephrine 1mg IV/IO?"                       | [Epi Given], [Timer], [Dose Tracker]                              |
-| CPR Cycle Timer                     | "Continue CPR. 2-min timer started. Rotate compressor at next cycle?"                             | [Timer], [Compressor Rotated]                                     |
-| Rhythm Recheck (post-cycle)         | "Pause compressions <10 sec. Recheck rhythm: shockable or not?"                                  | [Rhythm Check], [Resume CPR], [Shock Delivered]                   |
-| Administer Epinephrine              | "Give epinephrine 1mg IV/IO every 3–5min as soon as possible for non-shockable rhythm?"          | [Mark Dose Given], [Medication Countdown]                         |
-| Advanced Airway / ETCO2 Monitoring  | "Consider advanced airway. Confirm with ETCO₂. Continue compressions?"                           | [Airway Placed], [ETCO2 Value Entry]                              |
-| Refractory VF/pulseless VT          | "Still in VF/pulseless VT after multiple shocks? Give amiodarone 300mg IV/IO (then 150mg)?"      | [Mark Amio Given], [Medication Tracker]                           |
-| Reversible Causes (H's & T's)       | "Evaluate/treat reversible causes (H's & T's): Hypoxia? Hypovolemia? Hyper-K+? Tamponade? MI?"   | [Expand H's/T's], [Checklist for probable causes]                 |
-| ROSC Achieved                       | "Has return of spontaneous circulation (ROSC) been achieved?"                                    | [ROSC Yes/No], [Timer Stop], [Start Post-ROSC Workflow]           |
-| Post-Cardiac Arrest Care            | "Begin post–cardiac arrest care: manage airway, oxygenate, initiate hypothermia protocol (TTM)?" | [Begin TTM], [Show Post-ROSC Steps], [Initiate ICU Transfer]      |
-| Virtua ICU Transfer Criteria        | "Patient stable for Virtua Voorhees ICU? Initiate transfer protocols and continuous monitoring?" | [Initiate Transfer], [ICU Criteria Checklist], [Bed Request]      |
+### Card 0 – Unresponsive Patient Assessment (Node A → B)
+┌─────────────────────────────────────────┐
+│ 🚨 UNRESPONSIVE PATIENT                 │
+├─────────────────────────────────────────┤
+│ 📊 Initial assessment:                  │
+│ • Check responsiveness                  │
+│ • Look for normal breathing (not gasping)│
+│ • Check pulse (≤10 seconds)            │
+│                                         │
+│ 🚀 If cardiac arrest confirmed:         │
+│ • Activate Code Blue team              │
+│ • Start high-quality CPR immediately   │
+│                                         │
+│ ❓ Cardiac arrest confirmed?            │
+│                                         │
+│ 🔘 YES → Start CPR & attach monitor    │
+│ 🔘 NO → Assess for other emergencies   │
+│                                         │
+│ [Next: Based on Selection ▶]            │
+└─────────────────────────────────────────┘
 
-**Interactive Highlights:**  
-- Compression rate: tap to record, color/feedback
-- Shock delivered: tap to increment
-- CPR cycle timer: start/stop/reset, rotate compressor prompt
-- Medication: tap to mark as given, timers
-- H's & T's: expand/collapse, checklist
+### Card 1A – Start CPR & Monitor (Node C → D)
+┌─────────────────────────────────────────┐
+│ 💓 HIGH-QUALITY CPR INITIATED           │
+├─────────────────────────────────────────┤
+│ ⚙️ CPR parameters:                      │
+│ • Rate: 100-120/min                    │
+│ • Depth: 2-2.4 inches (5-6 cm)        │
+│ • Complete recoil between compressions │
+│ • Minimize interruptions (<10 seconds) │
+│                                         │
+│ 🔌 Attach monitor/defibrillator         │
+│ 🫁 Give oxygen, establish IV/IO access  │
+│                                         │
+│ [Next: Rhythm analysis ▶]              │
+│                                         │
+│ [◀ Previous: Initial Assessment]       │
+└─────────────────────────────────────────┘
 
-## VIRTUA VOORHEES ICU/TTM ADDENDA
+### Card 1B – Other Emergencies (Node Z - Final)
+┌─────────────────────────────────────────┐
+│ 🔍 NON-CARDIAC ARREST EMERGENCY         │
+├─────────────────────────────────────────┤
+│ 🎯 Assess for:                          │
+│ • Respiratory distress/failure         │
+│ • Severe bradycardia or tachycardia    │
+│ • Shock states                         │
+│ • Other medical emergencies            │
+│                                         │
+│ 📋 Follow appropriate protocols:        │
+│ • Bradycardia algorithm if HR <60      │
+│ • Tachycardia algorithm if HR >150     │
+│ • Airway management as needed          │
+│                                         │
+│ ✅ ALTERNATIVE PROTOCOL ACTIVE         │
+│                                         │
+│ [◀ Previous: Initial Assessment]       │
+└─────────────────────────────────────────┘
 
-- **Post-ROSC Care:** Targeted temperature management 32–36°C as rapidly as feasible, per guideline.
-- **Virtua ICU Admission:** Initiate transfer when stable, TTM and telemetry en route.
-- **Quality Metrics:** Track time to first shock, CPR duration, medication timing, ROSC.
+### Card 2A – Rhythm Analysis (Node D → E)
+┌─────────────────────────────────────────┐
+│ 📈 ANALYZE CARDIAC RHYTHM               │
+├─────────────────────────────────────────┤
+│ 🔍 Rhythm identification:               │
+│ • VF/Pulseless VT (shockable)          │
+│ • Asystole (non-shockable)             │
+│ • PEA (non-shockable)                  │
+│                                         │
+│ ⏱️ Minimize interruptions <10 seconds   │
+│                                         │
+│ ❓ Shockable rhythm?                    │
+│                                         │
+│ 🔘 YES → Deliver shock                 │
+│ 🔘 NO → Continue CPR + epinephrine     │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
 
-## REFERENCE (GUIDELINE & SOURCE)
-American Heart Association. 2020 AHA Guidelines for CPR and ECC, Adult ACLS Algorithm.  
-https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-cardiovascular-life-support
+### Card 3A – Shock Delivery (Node F → H)
+┌─────────────────────────────────────────┐
+│ ⚡ DEFIBRILLATION - VF/PULSELESS VT     │
+├─────────────────────────────────────────┤
+│ ⚙️ Shock parameters:                    │
+│ • Energy: 200J biphasic (120-200J range)│
+│ • Single shock strategy                │
+│ • Clear patient before shock           │
+│                                         │
+│ 🚀 Immediately after shock:            │
+│ • Resume CPR for 2 minutes            │
+│ • Do not check pulse/rhythm           │
+│                                         │
+│ [Next: 2-minute CPR cycle ▶]          │
+│                                         │
+│ [◀ Previous: Rhythm Analysis]          │
+└─────────────────────────────────────────┘
 
-**All steps follow current guidelines, are mapped to actionable prompts, and are optimized for rapid bedside clinical use.**
+### Card 3B – CPR + Epinephrine (Node G → H)
+┌─────────────────────────────────────────┐
+│ 💊 CPR + EPINEPHRINE (NON-SHOCKABLE)    │
+├─────────────────────────────────────────┤
+│ 💉 Epinephrine dosing:                  │
+│ • 1mg IV/IO immediately                │
+│ • Repeat every 3-5 minutes             │
+│ • Continue throughout resuscitation    │
+│                                         │
+│ 💓 Continue high-quality CPR:           │
+│ • 2-minute cycles                      │
+│ • Rotate compressor q2min              │
+│                                         │
+│ [Next: 2-minute CPR cycle ▶]          │
+│                                         │
+│ [◀ Previous: Rhythm Analysis]          │
+└─────────────────────────────────────────┘
+
+### Card 4A – 2-Minute CPR Cycle (Node H → I)
+┌─────────────────────────────────────────┐
+│ ⏱️ 2-MINUTE CPR CYCLE                   │
+├─────────────────────────────────────────┤
+│ 🔄 During CPR cycle:                    │
+│ • Maintain quality compressions        │
+│ • Establish advanced airway if needed  │
+│ • Give medications as scheduled        │
+│ • Consider reversible causes (H's & T's)│
+│                                         │
+│ 🔁 At 2-minute mark:                   │
+│ • Rotate compressor                    │
+│ • Brief pulse/rhythm check <10 seconds │
+│                                         │
+│ [Next: Rhythm reassessment ▶]          │
+│                                         │
+│ [◀ Previous: Treatment Selection]      │
+└─────────────────────────────────────────┘
+
+### Card 5A – Rhythm Reassessment (Node I → J)
+┌─────────────────────────────────────────┐
+│ 🔄 RHYTHM & PULSE CHECK                 │
+├─────────────────────────────────────────┤
+│ 📊 Brief assessment <10 seconds:        │
+│ • Check monitor rhythm                 │
+│ • Check pulse if organized rhythm      │
+│ • Look for signs of ROSC               │
+│                                         │
+│ 💊 If still in arrest:                 │
+│ • Give epinephrine q3-5min             │
+│ • Consider antiarrhythmics if VF/pVT   │
+│                                         │
+│ ❓ Current status?                      │
+│                                         │
+│ 🔘 ROSC → Post-cardiac arrest care     │
+│ 🔘 VF/pVT → Shock + consider amiodarone│
+│ 🔘 ASYSTOLE/PEA → CPR + epinephrine   │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
+
+### Card 6A – ROSC Achieved (Node K - Final)
+┌─────────────────────────────────────────┐
+│ ✅ RETURN OF SPONTANEOUS CIRCULATION    │
+├─────────────────────────────────────────┤
+│ 🎯 Immediate priorities:                │
+│ • Confirm ROSC (pulse, BP, waveform)   │
+│ • Optimize airway and breathing        │
+│ • Support circulation/BP               │
+│ • 12-lead ECG                          │
+│                                         │
+│ 📊 Target parameters:                   │
+│ • SBP >90 mmHg or MAP >65 mmHg         │
+│ • SpO₂ 92-98%                          │
+│                                         │
+│ 🏥 Post-cardiac arrest care:            │
+│ • TTM 32-36°C if comatose              │
+│ • ICU admission for monitoring         │
+│ • Neurologic assessment                │
+│ • Consider coronary angiography        │
+│                                         │
+│ ✅ POST-ROSC PROTOCOL COMPLETE         │
+│                                         │
+│ [◀ Previous: Rhythm Reassessment]      │
+└─────────────────────────────────────────┘
+
+### Card 6B – Refractory VF/pVT (Node L → N → O)
+┌─────────────────────────────────────────┐
+│ ⚡ REFRACTORY VF/PULSELESS VT           │
+├─────────────────────────────────────────┤
+│ 💉 Antiarrhythmic options:              │
+│ • Amiodarone: 300mg IV/IO (first dose) │
+│   Then 150mg for second dose           │
+│ • Lidocaine: 1-1.5mg/kg IV/IO          │
+│   (if amiodarone unavailable)          │
+│                                         │
+│ 🔄 Continue cycle:                      │
+│ • Shock → CPR 2min → reassess          │
+│ • Treat reversible causes              │
+│ • Consider vector change               │
+│                                         │
+│ [Next: Continue CPR cycles ▶]          │
+│                                         │
+│ [◀ Previous: Rhythm Reassessment]      │
+└─────────────────────────────────────────┘
+
+### Card 6C – Persistent Asystole/PEA (Node M → P)
+┌─────────────────────────────────────────┐
+│ 📉 PERSISTENT ASYSTOLE/PEA              │
+├─────────────────────────────────────────┤
+│ 💊 Continue medications:                │
+│ • Epinephrine 1mg q3-5min              │
+│ • No role for atropine                 │
+│                                         │
+│ 🔍 Aggressively treat H's & T's:       │
+│ • Hypovolemia, Hypoxia, H⁺ (acidosis) │
+│ • Hypo/hyperkalemia, Hypothermia       │
+│ • Toxins, Tamponade, Tension pneumo    │
+│ • Thrombosis (pulmonary/coronary)      │
+│                                         │
+│ 🚨 Consider:                            │
+│ • Needle thoracostomy                  │
+│ • Pericardiocentesis                   │
+│ • Fluid resuscitation                  │
+│                                         │
+│ [Next: Continue CPR cycles ▶]          │
+│                                         │
+│ [◀ Previous: Rhythm Reassessment]      │
+└─────────────────────────────────────────┘
+
+## VIRTUA VOORHEES CODE BLUE ADDENDA
+
+### **Enhanced CPR Quality Program:**
+- **Real-time CPR feedback** devices on all Code Blue carts
+- **Compression depth/rate monitoring** with audio/visual feedback
+- **Chest compression fraction target** >80% throughout resuscitation
+- **Compressor rotation** every 2 minutes with timer alerts
+
+### **Medication Protocols - Virtua Specific:**
+**Epinephrine:**
+- **Standard dose:** 1mg IV/IO push every 3-5 minutes
+- **High-dose NOT recommended** (no survival benefit)
+- **Continue until ROSC** or resuscitation terminated
+
+**Antiarrhythmics (Refractory VF/pVT):**
+- **Amiodarone preferred:** 300mg IV/IO, then 150mg
+- **Lidocaine alternative:** 1-1.5mg/kg IV/IO (if no amiodarone)
+- **Give after failed defibrillation** attempts
+
+### **Advanced Airway Management:**
+- **Bag-mask ventilation preferred initially** during active CPR
+- **Supraglottic airway** (LMA, i-gel) if bag-mask inadequate
+- **Endotracheal intubation** by experienced provider without CPR interruption
+- **Continuous waveform capnography** to confirm placement and monitor CPR quality
+
+### **H's and T's - Reversible Causes Protocol:**
+**4 H's:**
+- **Hypovolemia:** IV fluid bolus, blood products
+- **Hypoxia:** Optimize ventilation, increase FiO₂
+- **Hydrogen ions (Acidosis):** Consider sodium bicarbonate
+- **Hypo/Hyperkalemia:** Treat electrolyte abnormalities
+
+**4 T's:**
+- **Toxins:** Antidotes, decontamination
+- **Tamponade:** Emergency pericardiocentesis
+- **Tension Pneumothorax:** Needle decompression
+- **Thrombosis:** Consider thrombolytics, embolectomy
+
+### **Virtua Post-ROSC Care Protocol:**
+**Immediate (First 20 minutes):**
+- **Airway security:** Intubation if not already done
+- **Hemodynamic support:** Target SBP >90 mmHg
+- **12-lead ECG:** STEMI protocol if indicated
+- **Laboratory studies:** ABG, electrolytes, lactate
+
+**Early (First 6 hours):**
+- **Targeted Temperature Management:** 32-36°C for 24 hours if comatose
+- **ICU transfer:** Continuous monitoring and support
+- **Neurological assessment:** Pupillary response, GCS
+- **Family communication:** Prognosis discussion
+
+### **Quality Improvement Metrics:**
+- **Response time:** Code Blue team arrival <3 minutes
+- **First shock time:** <2 minutes for shockable rhythms
+- **CPR quality:** Compression fraction >80%
+- **ROSC rates:** Track by rhythm and response time
+- **Survival to discharge:** Neurologically intact survival
+
+### **Team Communication Protocol:**
+- **Closed-loop communication:** Repeat back all orders
+- **Team leader designated:** Usually senior physician/attending
+- **Role assignments:** Clear responsibilities for each team member
+- **Time keeper:** Track intervals, medications, procedures
+- **Family liaison:** Designated person for family updates
+
+### **Special Considerations:**
+**Hypothermic Patients:**
+- Continue resuscitation until core temp >32°C
+- Medications may be ineffective until rewarmed
+- Consider extracorporeal rewarming
+
+**Pregnancy (>20 weeks):**
+- Left lateral displacement of uterus
+- Consider perimortem cesarean if no ROSC in 4 minutes
+
+**COVID-19 Patients:**
+- Don appropriate PPE before entering room
+- Minimize number of providers
+- Use mechanical CPR device if available
+- HEPA filter for ventilation
+
+## REFERENCE GUIDELINES
+- **2020 AHA Guidelines for CPR and Emergency Cardiovascular Care**
+- **2023 AHA Focused Update on Adult Advanced Cardiovascular Life Support**
+- **ILCOR Consensus on Science with Treatment Recommendations**
+- **Virtua Health System Code Blue Protocol v2025**
+
+**This protocol reflects current evidence-based ACLS guidelines optimized for high-quality resuscitation care delivery at Virtua Voorhees with integrated quality improvement and post-arrest care protocols.**

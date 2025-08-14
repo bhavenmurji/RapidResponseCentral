@@ -1,299 +1,490 @@
 # Shock & ECMO Protocols with Virtua Voorhees Addenda
 
-**Guideline Used:**  
-Surviving Sepsis Campaign 2021 Guidelines, American Heart Association Scientific Statement on Cardiogenic Shock 2020, Extracorporeal Life Support Organization (ELSO) Guidelines 2022  
-**Official Sources:**  
-https://www.survivingsepsis.org/guidelines/adult-patients  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000782  
-https://www.elso.org/guidelines.aspx
+**Primary Guideline:** Surviving Sepsis Campaign 2021 Guidelines for Management of Sepsis and Septic Shock
+**Official Source:** https://www.survivingsepsis.org/guidelines/adult-patients
+**Supporting Guidelines:**
+- American Heart Association Scientific Statement on Cardiogenic Shock 2020
+- Extracorporeal Life Support Organization (ELSO) Guidelines 2022
 
-## CARD INTERFACE LAYOUT
+## ENHANCED MERMAID FLOWCHART ALGORITHM
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ SHOCK PROTOCOL ACTIVATED                                    │
-├─────────────────────────────────────────────────────────────┤
-│ 🚨 SHOCK TYPE: Cardiogenic (SCAI Stage D)                  │
-│ Time from recognition: 45 minutes                          │
-│                                                           │
-│ ┌─────────────────────────────────┐                        │
-│ │   IMMEDIATE STABILIZATION       │                        │
-│ │ ☑ IV access x2 large bore       │ [Complete]             │
-│ │ ☑ Fluid bolus 30 mL/kg started  │ [Track progress]       │
-│ │ ☑ Labs sent (lactate, CBC, BMP) │ [View results]         │
-│ │ ☑ Blood cultures x2 obtained    │ [Before antibiotics]  │
-│ │ ☐ Arterial line placement       │ [Order/Place]          │
-│ │ ☐ Central line if needed        │ [Assess need]          │
-│ │                                │                        │
-│ │ Fluid given: 1500mL/2400mL     │                        │
-│ │ ████████████░░░░ 63%           │                        │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ 📞 TRANSFER CENTER: 856-886-5111  [ACTIVATE MOBILE ECMO]   │
-│                                                           │
-│ BEDSIDE ASSESSMENT:                                        │
-│ ☑ RUSH exam (heart, IVC, lungs, abd)                      │
-│ ☑ Passive leg raise test                                   │
-│ ☐ Check for obvious bleeding                               │
-│ ☐ ECG for STEMI/arrhythmia                                 │
-│ ☐ CXR portable STAT                                        │
-│                                                           │
-│ ⚡ Early recognition + treatment = survival                │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Shock Types
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ SHOCK TYPES & PATHOPHYSIOLOGY                              │
-├─────────────────────────────────────────────────────────────┤
-│ 🔴 DISTRIBUTIVE (Low SVR, High/Normal CO):                 │
-│ • Septic: Infection + organ dysfunction, lactate >2        │
-│ • Anaphylactic: IgE-mediated, epinephrine first-line      │
-│ • Neurogenic: Spinal cord injury T6+, bradycardia         │
-│                                                           │
-│ 💙 CARDIOGENIC (Low CO, High SVR):                         │
-│ • Acute MI: Large anterior STEMI, mortality 40-50%        │
-│ • Mechanical: Acute MR, VSD, tamponade                    │
-│ • Arrhythmic: VT/VF, complete heart block                 │
-│                                                           │
-│ 🩸 HYPOVOLEMIC (Low CO, High SVR):                         │
-│ • Hemorrhagic: Trauma, GI bleeding, ruptured AAA          │
-│ • Non-hemorrhagic: Dehydration, burns, third spacing      │
-│                                                           │
-│ 🫁 OBSTRUCTIVE (Low CO, Variable SVR):                     │
-│ • Tension pneumothorax: Immediate decompression needed     │
-│ • Massive PE: RV strain, consider thrombolysis            │
-│ • Cardiac tamponade: Beck's triad, pericardiocentesis     │
-│                                                           │
-│ SCAI CARDIOGENIC SHOCK STAGES:                             │
-│ A: At risk | B: Beginning | C: Classic | D: Deteriorating │
-│ E: Extremis (arrest, profound refractory shock)           │
-│                                                           │
-│ CLINICAL PEARLS:                                          │
-│ Mixed shock common, early shock may have normal BP        │
-│ Lactate clearance guides resuscitation, ScvO2 <70% = ↓DO2 │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Physical Exam/Medications
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ PHYSICAL EXAM & MEDICATIONS                                 │
-├─────────────────────────────────────────────────────────────┤
-│ RAPID ASSESSMENT (<2 min):                                 │
-│ Vitals: MAP >65 goal, HR/rhythm, RR, temp, SpO2           │
-│ Perfusion: GCS, cap refill <3s, skin temp, UOP            │
-│ Volume: JVD, lung sounds, edema, IVC by ultrasound        │
-│                                                           │
-│ RUSH ULTRASOUND: Heart, IVC, lungs, abdomen, aorta        │
-│                                                           │
-│ 💊 VASOPRESSORS/INOTROPES:                                 │
-│ • Norepinephrine (1st line): 2-30 mcg/min, α>β effects    │
-│ • Epinephrine (2nd line): 1-20 mcg/min, β>α at low doses  │
-│ • Vasopressin (adjunct): 0.03-0.04 units/min fixed dose   │
-│ • Dobutamine (cardiogenic): 2.5-20 mcg/kg/min, pure β     │
-│ • Milrinone (cardiogenic): 0.375-0.75 mcg/kg/min, PDE-3   │
-│                                                           │
-│ 💊 FLUID RESUSCITATION:                                    │
-│ Crystalloids: LR/NS 30 mL/kg bolus, reassess each liter   │
-│ Blood products: PRBCs Hgb >7 (>10 cardiac), PLT <50K     │
-│                                                           │
-│ 💊 MOBILE ECMO PROTOCOL:                                   │
-│ Activation: Refractory shock, cardiac arrest, bridge      │
-│ Contraindications: Age >75 (rel), unwitnessed arrest      │
-│ Pre-ECMO: Heparin 50-100 units/kg, platelets, PRBCs      │
-│                                                           │
-│ 📞 VIRTUA ECMO: Transfer Center 856-886-5111              │
-│ Request: "Mobile ECMO evaluation"                          │
-│ Have ready: Demographics, diagnosis, current support       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
-
-```mermaid
+~~~mermaid
 graph TD
-    A[Recognize Shock MAP <65 or Lactate >2]
-    B[Initial Stabilization O2 IV Monitors]
-    C[Fluid Resuscitation 30 mL/kg crystalloid]
-    D{Fluid Responsive?}
-    E[Continue Fluids & Reassess]
-    F[Identify Shock Type Clinical plus POCUS]
-    G{MAP >65?}
-    H[Monitor and Treat Underlying Cause]
-    I{Shock Type?}
-    J[Start Norepinephrine Culture and Antibiotics]
-    K[Dobutamine/Milrinone Consider MCS]
-    L[Volume/Blood Find Source]
-    M[Treat Cause Immediate]
-    N{Adequate Response?}
-    O{SCAI Stage?}
-    P{Bleeding Controlled?}
-    Q[Decompress/Anticoag Based on Cause]
-    R[Add Vasopressin Consider Epinephrine]
-    S[ECMO Evaluation Early MCS]
-    T[Surgery/IR Massive Transfusion]
-    U[Continue Resuscitation]
-    V{Refractory Shock?}
-    W[Transfer Center 856-886-5111]
-    X[Consider ECMO High-dose Pressors]
-    Y[Mobile ECMO Team Activation]
-    Z[ECMO Cannulation ICU Management]
+    A["Shock Recognition<br/>MAP <65 or Lactate >2"] --> B["Initial Stabilization<br/>O2, IV Access, Monitors"]
+    
+    B --> C["Fluid Resuscitation<br/>30 mL/kg Crystalloid Bolus"]
+    
+    C --> D{"Fluid<br/>Responsive?"}
+    
+    D -->|YES| E["Continue Fluids<br/>Reassess Response"]
+    D -->|NO| F["Identify Shock Type<br/>Clinical + POCUS"]
+    
+    E --> G{"MAP ≥65<br/>Achieved?"}
+    F --> G
+    
+    G -->|YES| H["Monitor & Treat<br/>Underlying Cause"]
+    G -->|NO| I{"Shock Type<br/>Classification"}
+    
+    I -->|DISTRIBUTIVE| J["Norepinephrine<br/>Cultures + Antibiotics"]
+    I -->|CARDIOGENIC| K["Inotropes + Consider<br/>Mechanical Support"]
+    I -->|HYPOVOLEMIC| L["Blood Products<br/>Source Control"]
+    I -->|OBSTRUCTIVE| M["Immediate Intervention<br/>Decompress/Anticoag"]
+    
+    J --> N{"Adequate<br/>Response?"}
+    K --> O{"SCAI Shock<br/>Stage?"}
+    L --> P{"Bleeding<br/>Controlled?"}
+    M --> Q["Monitor Response<br/>to Intervention"]
+    
+    N -->|NO| R["Vasopressor Escalation<br/>Add Vasopressin/Epi"]
+    O -->|"STAGE C-E"| S["ECMO Evaluation<br/>MCS Consideration"]
+    P -->|NO| T["Surgical/IR Intervention<br/>Massive Transfusion"]
+    P -->|YES| U["Continue Resuscitation<br/>Monitor Response"]
+    Q --> U
+    
+    R --> V{"Refractory<br/>Shock?"}
+    S --> W["Transfer Center<br/>Mobile ECMO Activation"]
+    T --> U
+    
+    V -->|YES| W
+    V -->|NO| U
+    
+    W --> X["Mobile ECMO Team<br/>Deployment"]
+    X --> Y["ECMO Cannulation<br/>ICU Management"]
+    
+    style A fill:#ffcccc
+    style B fill:#ffe6cc
+    style J fill:#fff2cc
+    style S fill:#ccffcc
+    style W fill:#e6ccff
+    style Y fill:#ccffee
+~~~
 
-    A --> B
-    B --> C
-    C --> D
-    D -- Yes --> E
-    D -- No --> F
-    E --> G
-    G -- Yes --> H
-    G -- No --> F
-    F --> I
-    I -- Distributive --> J
-    I -- Cardiogenic --> K
-    I -- Hypovolemic --> L
-    I -- Obstructive --> M
-    J --> N
-    K --> O
-    L --> P
-    M --> Q
-    N -- No --> R
-    O -- "C-E" --> S
-    P -- No --> T
-    P -- Yes --> U
-    R --> V
-    S --> W
-    V -- Yes --> X
-    W --> Y
-    X --> Y
-    Y --> Z
-```
+## STREAMLINED DYNAMIC CARD SYSTEM
 
-## NODE-TO-DYNAMIC CARD PROMPT MAPPING (WITH INTERACTIVES)
-
-| **Step (Node)**                    | **Dynamic Card Prompt/Question**                                                                 | **Interactive Components**                                        |
-|-------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
-| Shock Recognition                   | "Signs of shock identified: hypotension, tachycardia, or elevated lactate. Begin protocol?"     | [Activate Shock Protocol], [Start Timer], [Initial Assessment]    |
-| Initial Stabilization               | "Complete initial stabilization: oxygen, IV access, monitors, and vital signs?"                 | [O2 Applied], [IV Access x2], [Monitor Connected], [VS Recorded]  |
-| Fluid Resuscitation                | "Administer 30 mL/kg crystalloid bolus rapidly. Monitor response to fluid challenge?"           | [Calculate Volume], [Fluid Tracker], [Response Assessment]        |
-| Fluid Responsiveness Assessment     | "Assess fluid responsiveness: improved BP, HR, perfusion, or urine output?"                     | [Response Yes/No], [Hemodynamic Tracker], [PLR Test]              |
-| Shock Type Identification           | "Identify shock type using clinical assessment and point-of-care ultrasound?"                   | [RUSH Exam], [Shock Type Selector], [POCUS Findings]              |
-| Distributive Shock Management       | "Distributive shock identified. Start norepinephrine and obtain cultures before antibiotics?"   | [Start Norepi], [Culture Orders], [Antibiotic Selection]          |
-| Cardiogenic Shock Assessment        | "Cardiogenic shock confirmed. Determine SCAI stage and consider mechanical support?"            | [SCAI Calculator], [Echo Orders], [MCS Evaluation]                |
-| Hypovolemic Shock Treatment         | "Hypovolemic shock identified. Continue volume resuscitation and identify bleeding source?"     | [Volume Calculator], [Bleeding Assessment], [Transfusion Protocol]|
-| Obstructive Shock Intervention      | "Obstructive shock identified. Perform immediate intervention based on specific cause?"         | [Needle Decompression], [Pericardiocentesis], [Anticoagulation]   |
-| Vasopressor Escalation              | "Inadequate response to first-line therapy. Add vasopressin or consider epinephrine?"          | [Add Vasopressin], [Epinephrine Option], [Dose Calculator]        |
-| SCAI Stage Assessment               | "Cardiogenic shock SCAI Stage C-E identified. Evaluate for ECMO or mechanical support?"        | [SCAI Staging Tool], [MCS Options], [ECMO Criteria]               |
-| Refractory Shock Management         | "Refractory shock despite optimal medical therapy. Consider ECMO evaluation?"                   | [ECMO Checklist], [Contraindication Screen], [Transfer Center]    |
-| Mobile ECMO Activation              | "Contact Transfer Center for mobile ECMO team evaluation and potential cannulation?"           | [Call 856-886-5111], [ECMO Request], [Patient Summary]            |
-| ECMO Cannulation Preparation        | "Mobile ECMO team en route. Prepare for cannulation: anticoagulation, positioning?"           | [Heparin Protocol], [Positioning], [ICU Coordination]             |
-| Bleeding Control Assessment         | "Ongoing bleeding identified in hypovolemic shock. Activate massive transfusion protocol?"     | [MTP Activation], [Surgery Consult], [IR Consultation]            |
-
-**Interactive Highlights:**  
-- Shock index calculator: real-time calculation with severity assessment
-- Vasopressor dosing calculator: weight-based with conversion tables
-- Fluid balance tracker: visual progress bars and targets
-- ECMO activation checklist: inclusion/exclusion criteria screening
-- SCAI shock staging tool: automated classification with management prompts
-
-## INTERACTIVE ELEMENTS
-
-### Shock Index Calculator
-```
+### Card 0 – Shock Recognition & Initial Stabilization (Node A → B)
 ┌─────────────────────────────────────────┐
-│        SHOCK INDEX CALCULATOR           │
+│ 🚨 SHOCK PROTOCOL ACTIVATION            │
 ├─────────────────────────────────────────┤
-│ Heart Rate: [120] bpm                   │
-│ Systolic BP: [85] mmHg                  │
+│ 🎯 Recognition criteria:                │
+│ • MAP <65 mmHg                         │
+│ • Lactate >2 mmol/L                    │
+│ • Signs of hypoperfusion               │
+│ • Altered mental status                │
 │                                         │
-│ SHOCK INDEX: 1.41                       │
-│ (HR ÷ SBP)                             │
+│ 🚀 Immediate actions (<5 minutes):      │
+│ • High-flow oxygen                     │
+│ • Large-bore IV access × 2             │
+│ • Continuous monitoring                │
+│ • Arterial line consideration          │
 │                                         │
-│ Interpretation: 🔴 SEVERE SHOCK         │
-│ • Normal: 0.5-0.7                       │
-│ • Mild shock: 0.7-1.0                   │
-│ • Moderate: 1.0-1.3                     │
-│ • Severe: >1.3                          │
+│ 📊 Essential labs:                      │
+│ • Lactate, CBC, BMP                    │
+│ • Blood cultures × 2 (before abx)      │
+│ • ABG, PT/INR, troponin               │
 │                                         │
-│ Modified SI: 2.10 (HR ÷ MAP)           │
-│                                         │
-│ [RECALCULATE] [TREND GRAPH]             │
+│ [Next: Fluid resuscitation ▶]          │
 └─────────────────────────────────────────┘
-```
 
-### Vasopressor Calculator
-```
+### Card 1A – Fluid Resuscitation (Node C → D)
 ┌─────────────────────────────────────────┐
-│      VASOPRESSOR DOSING GUIDE           │
+│ 💧 FLUID RESUSCITATION PROTOCOL         │
 ├─────────────────────────────────────────┤
-│ Patient Weight: [80] kg                 │
+│ 🎯 Initial fluid challenge:             │
+│ • 30 mL/kg crystalloid bolus           │
+│ • Balanced crystalloids preferred      │
+│ • Rapid infusion (<30 minutes)         │
 │                                         │
-│ NOREPINEPHRINE (mcg/min → mL/hr)       │
-│ Concentration: 8mg/250mL                │
+│ 📊 Fluid responsiveness markers:        │
+│ • Stroke volume variation >10%         │
+│ • Passive leg raise test positive      │
+│ • Pulse pressure variation >13%        │
 │                                         │
-│ Dose (mcg/min) | Rate (mL/hr)          │
-│ 5              | 9.4                    │
-│ 10             | 18.8                   │
-│ 15             | 28.1                   │
-│ 20             | 37.5                   │
+│ ⚠️ Stop criteria:                       │
+│ • Signs of fluid overload              │
+│ • Pulmonary edema                      │
+│ • No hemodynamic improvement           │
 │                                         │
-│ Current: [15] mcg/min = 28.1 mL/hr     │
+│ [Next: Response assessment ▶]          │
 │                                         │
-│ [CALCULATE OTHER PRESSORS]              │
-│ [CONVERSION TABLE]                      │
+│ [◀ Previous: Shock Recognition]        │
 └─────────────────────────────────────────┘
-```
 
-### ECMO Activation Checklist
-```
+### Card 2A – Shock Type Classification (Node F → I)
 ┌─────────────────────────────────────────┐
-│      ECMO ACTIVATION CHECKLIST          │
+│ 🔍 SHOCK TYPE IDENTIFICATION            │
 ├─────────────────────────────────────────┤
-│ INCLUSION CRITERIA:                     │
-│ ☑ Age <75 years                        │
-│ ☑ Refractory shock despite support     │
-│ ☑ Potentially reversible cause         │
-│ ☑ Good baseline function               │
+│ 🩺 Clinical assessment + POCUS:         │
 │                                         │
-│ EXCLUSION CRITERIA:                     │
-│ ☐ Unwitnessed arrest >10 min          │
-│ ☐ Severe neurologic injury             │
-│ ☐ Terminal illness                     │
-│ ☐ Contraindication to anticoag        │
+│ 🔴 Distributive (↓SVR, ↑/nl CO):        │
+│ • Septic: infection + organ dysfunction │
+│ • Anaphylactic: allergen exposure      │
+│ • Neurogenic: spinal injury T6+        │
 │                                         │
-│ CURRENT STATUS:                         │
-│ • MAP: 52 mmHg                         │
-│ • Pressors: Norepi 25, Vaso 0.04      │
-│ • Lactate: 6.2 (rising)               │
-│ • ScvO2: 55%                           │
+│ 💙 Cardiogenic (↓CO, ↑SVR):             │
+│ • Acute MI, mechanical complications   │
+│ • Arrhythmias, cardiomyopathy          │
 │                                         │
-│ 📞 ACTIVATE MOBILE ECMO                 │
-│ Transfer Center: 856-886-5111           │
-│ [CALL NOW] [PRE-BRIEF TEAM]            │
+│ 🩸 Hypovolemic (↓CO, ↑SVR):             │
+│ • Hemorrhagic vs non-hemorrhagic       │
+│                                         │
+│ 🫁 Obstructive (↓CO, variable SVR):     │
+│ • Tension pneumo, PE, tamponade        │
+│                                         │
+│ [Next: Type-specific management ▶]     │
+│                                         │
+│ [◀ Previous: Fluid Response]           │
 └─────────────────────────────────────────┘
-```
+
+### Card 3A – Distributive Shock Management (Node J → N)
+┌─────────────────────────────────────────┐
+│ 🔴 DISTRIBUTIVE SHOCK - SEPSIS          │
+├─────────────────────────────────────────┤
+│ 💊 Vasopressor therapy:                 │
+│ • Norepinephrine: 0.05-3 mcg/kg/min   │
+│ • Target MAP ≥65 mmHg                  │
+│ • Central line preferred               │
+│                                         │
+│ 🦠 Infection control:                   │
+│ • Blood cultures before antibiotics   │
+│ • Broad-spectrum antibiotics <1 hour  │
+│ • Source control evaluation           │
+│                                         │
+│ 📊 Monitoring parameters:               │
+│ • Lactate clearance >10% in 2 hours   │
+│ • ScvO2 >70% or SvO2 >65%             │
+│ • Urine output >0.5 mL/kg/hr          │
+│                                         │
+│ [Next: Response evaluation ▶]          │
+│                                         │
+│ [◀ Previous: Shock Classification]     │
+└─────────────────────────────────────────┘
+
+### Card 3B – Cardiogenic Shock Management (Node K → O)
+┌─────────────────────────────────────────┐
+│ 💙 CARDIOGENIC SHOCK - SCAI STAGING     │
+├─────────────────────────────────────────┤
+│ 🎯 SCAI Shock Classification:           │
+│ • Stage A: At risk                     │
+│ • Stage B: Beginning                   │
+│ • Stage C: Classic                     │
+│ • Stage D: Deteriorating               │
+│ • Stage E: Extremis                    │
+│                                         │
+│ 💊 Inotropic support:                   │
+│ • Dobutamine: 2.5-20 mcg/kg/min       │
+│ • Milrinone: 0.125-0.75 mcg/kg/min    │
+│ • Avoid excessive preload reduction    │
+│                                         │
+│ 🛠️ Mechanical support consideration:    │
+│ • IABP for Stage C shock               │
+│ • Impella for Stage D-E               │
+│ • VA-ECMO for refractory shock         │
+│                                         │
+│ [Next: SCAI stage assessment ▶]        │
+│                                         │
+│ [◀ Previous: Shock Classification]     │
+└─────────────────────────────────────────┘
+
+### Card 3C – Hypovolemic Shock Management (Node L → P)
+┌─────────────────────────────────────────┐
+│ 🩸 HYPOVOLEMIC SHOCK MANAGEMENT          │
+├─────────────────────────────────────────┤
+│ 🎯 Volume replacement:                  │
+│ • Crystalloids for non-hemorrhagic     │
+│ • Blood products for hemorrhagic       │
+│ • Aim for Hgb >7 g/dL (>10 if cardiac)│
+│                                         │
+│ 🔍 Source identification:               │
+│ • Physical examination                 │
+│ • FAST exam for trauma                 │
+│ • CT imaging as indicated              │
+│                                         │
+│ 🚨 Massive transfusion protocol:        │
+│ • Activate if >4 units in 1 hour      │
+│ • 1:1:1 ratio PRBC:FFP:platelets      │
+│ • Consider tranexamic acid             │
+│                                         │
+│ [Next: Bleeding control assessment ▶]  │
+│                                         │
+│ [◀ Previous: Shock Classification]     │
+└─────────────────────────────────────────┘
+
+### Card 3D – Obstructive Shock Management (Node M → Q)
+┌─────────────────────────────────────────┐
+│ 🫁 OBSTRUCTIVE SHOCK INTERVENTIONS       │
+├─────────────────────────────────────────┤
+│ 🎯 Cause-specific interventions:        │
+│                                         │
+│ 💨 Tension pneumothorax:                │
+│ • Immediate needle decompression       │
+│ • Chest tube placement                 │
+│                                         │
+│ 🫀 Cardiac tamponade:                   │
+│ • Emergent pericardiocentesis          │
+│ • Surgical consultation               │
+│                                         │
+│ 🫁 Massive pulmonary embolism:          │
+│ • Anticoagulation if no contraindications│
+│ • Consider thrombolysis               │
+│ • ECMO for refractory cases           │
+│                                         │
+│ [Next: Monitor intervention response ▶] │
+│                                         │
+│ [◀ Previous: Shock Classification]     │
+└─────────────────────────────────────────┘
+
+### Card 4A – Vasopressor Escalation (Node R → V)
+┌─────────────────────────────────────────┐
+│ 💉 VASOPRESSOR ESCALATION PROTOCOL      │
+├─────────────────────────────────────────┤
+│ 🔄 Escalation sequence:                 │
+│                                         │
+│ 1️⃣ Norepinephrine (first-line):        │
+│ • Start: 0.05 mcg/kg/min              │
+│ • Max: 3 mcg/kg/min                   │
+│                                         │
+│ 2️⃣ Vasopressin (add-on):               │
+│ • Fixed dose: 0.03-0.04 units/min     │
+│ • Do not titrate                      │
+│                                         │
+│ 3️⃣ Epinephrine (third-line):           │
+│ • Start: 0.05 mcg/kg/min              │
+│ • Max: 2 mcg/kg/min                   │
+│                                         │
+│ 📊 Monitoring:                          │
+│ • Arterial line mandatory             │
+│ • Lactate q2-4h                       │
+│                                         │
+│ [Next: Refractory shock assessment ▶]  │
+│                                         │
+│ [◀ Previous: Distributive Management]  │
+└─────────────────────────────────────────┘
+
+### Card 5A – ECMO Evaluation (Node S → W)
+┌─────────────────────────────────────────┐
+│ 🔬 ECMO CANDIDATE ASSESSMENT            │
+├─────────────────────────────────────────┤
+│ ✅ Inclusion criteria:                  │
+│ • Age <75 years (relative)             │
+│ • Refractory cardiogenic shock         │
+│ • Potentially reversible cause         │
+│ • Good baseline functional status      │
+│                                         │
+│ ❌ Exclusion criteria:                  │
+│ • Unwitnessed cardiac arrest >10 min   │
+│ • Irreversible end-stage disease       │
+│ • Severe cognitive dysfunction         │
+│ • Active malignancy with poor prognosis│
+│                                         │
+│ 📊 Current parameters to document:      │
+│ • SCAI shock stage                     │
+│ • Vasopressor requirements             │
+│ • Lactate trend                       │
+│ • Organ function                      │
+│                                         │
+│ [Next: Transfer center activation ▶]   │
+│                                         │
+│ [◀ Previous: Cardiogenic Management]   │
+└─────────────────────────────────────────┘
+
+### Card 6A – Mobile ECMO Activation (Node W → X)
+┌─────────────────────────────────────────┐
+│ 📞 MOBILE ECMO TEAM ACTIVATION          │
+├─────────────────────────────────────────┤
+│ 🚀 Transfer Center: 856-886-5111        │
+│ Request: "Mobile ECMO consultation"     │
+│                                         │
+│ 📋 Information to provide:               │
+│ • Patient age, weight, relevant history│
+│ • Current shock state and interventions│
+│ • Vasopressor/inotrope requirements    │
+│ • Lactate and organ function           │
+│                                         │
+│ ⏱️ Expected response times:             │
+│ • Phone consultation: <15 minutes      │
+│ • Team mobilization: <60 minutes       │
+│ • Arrival at bedside: varies by location│
+│                                         │
+│ 🛠️ Pre-arrival preparations:            │
+│ • Continue aggressive support          │
+│ • Obtain consent for ECMO              │
+│ • Prepare for cannulation              │
+│                                         │
+│ [Next: ECMO team deployment ▶]         │
+│                                         │
+│ [◀ Previous: ECMO Evaluation]          │
+└─────────────────────────────────────────┘
+
+### Card 7A – ECMO Cannulation & Management (Node Y - Final)
+┌─────────────────────────────────────────┐
+│ 🏥 ECMO CANNULATION & ICU MANAGEMENT     │
+├─────────────────────────────────────────┤
+│ 🔧 Cannulation process:                 │
+│ • Peripheral or central cannulation    │
+│ • Real-time echocardiographic guidance │
+│ • Heparin anticoagulation              │
+│                                         │
+│ 📊 ECMO parameters:                     │
+│ • Blood flow: 60-80 mL/kg/min          │
+│ • Sweep gas: 1-2 L/min initially       │
+│ • Target SpO2 88-95%                   │
+│                                         │
+│ 🏥 ICU management priorities:           │
+│ • Hemodynamic optimization             │
+│ • Ventilator lung-protective strategy  │
+│ • Anticoagulation monitoring           │
+│ • Daily weaning assessments            │
+│                                         │
+│ 🎯 Recovery goals:                      │
+│ • Myocardial recovery                  │
+│ • Weaning from vasopressors            │
+│ • Neurologic assessment                │
+│                                         │
+│ ✅ ECMO PROTOCOL ACTIVE                │
+│                                         │
+│ [◀ Previous: Mobile ECMO Activation]   │
+└─────────────────────────────────────────┘
+
+### Card 7B – Surgical Intervention (Node T - Final)
+┌─────────────────────────────────────────┐
+│ 🔪 SURGICAL/IR INTERVENTION             │
+├─────────────────────────────────────────┤
+│ 🚨 Indications for urgent intervention: │
+│ • Uncontrolled hemorrhage               │
+│ • Source control needed                │
+│ • Anatomical abnormalities             │
+│                                         │
+│ 📞 Immediate consultations:             │
+│ • General surgery                      │
+│ • Interventional radiology             │
+│ • Specialty services as needed         │
+│                                         │
+│ 🩸 Massive transfusion protocol:        │
+│ • 1:1:1 ratio maintained               │
+│ • Factor concentrates as needed        │
+│ • Tranexamic acid consideration        │
+│                                         │
+│ ✅ HEMORRHAGE CONTROL PROTOCOL ACTIVE  │
+│                                         │
+│ [◀ Previous: Hypovolemic Management]   │
+└─────────────────────────────────────────┘
+
+### Card 7C – Continued Resuscitation (Node U - Final)
+┌─────────────────────────────────────────┐
+│ 🔄 CONTINUED RESUSCITATION & MONITORING  │
+├─────────────────────────────────────────┤
+│ 📊 Ongoing monitoring parameters:       │
+│ • MAP ≥65 mmHg maintenance              │
+│ • Lactate clearance >10% q2-4h         │
+│ • Urine output ≥0.5 mL/kg/hr           │
+│ • Central venous O2 saturation          │
+│                                         │
+│ 🎯 Resuscitation goals:                 │
+│ • Hemodynamic stability               │
+│ • Organ perfusion restoration         │
+│ • Resolution of hyperlactatemia        │
+│                                         │
+│ 🔄 Reassessment intervals:              │
+│ • Vitals q15min until stable           │
+│ • Labs q2-4h initially                 │
+│ • Clinical response evaluation         │
+│                                         │
+│ ✅ RESUSCITATION PROTOCOL ACTIVE       │
+│                                         │
+│ [◀ Previous: Management Pathways]      │
+└─────────────────────────────────────────┘
 
 ## VIRTUA VOORHEES SHOCK & ECMO ADDENDA
 
-- **Mobile ECMO Program:** 24/7 activation via Transfer Center 856-886-5111 with specialized transport team
-- **Mechanical Circulatory Support:** Impella, IABP, and VA-ECMO capabilities with cardiothoracic surgery backup
-- **Shock Team Response:** Multidisciplinary team including critical care, cardiology, and pharmacy consultation
-- **Quality Metrics:** Time to vasopressor initiation, lactate clearance, 30-day survival tracking
+### **Enhanced Shock Response Program:**
+- **Rapid Response Team:** Multidisciplinary approach with critical care, cardiology, pharmacy
+- **Point-of-Care Ultrasound:** RUSH protocol integration for shock evaluation
+- **Quality Metrics:** Time to vasopressor initiation, lactate clearance, survival outcomes
+- **Mobile ECMO Program:** 24/7 availability through Transfer Center coordination
 
-## REFERENCE (GUIDELINE & SOURCE)
-Surviving Sepsis Campaign. 2021 Guidelines for Management of Sepsis and Septic Shock.  
-https://www.survivingsepsis.org/guidelines/adult-patients
+### **Shock Type-Specific Protocols:**
+**Septic Shock (Most Common):**
+- **Hour-1 Bundle:** Blood cultures, antibiotics, lactate, fluid resuscitation
+- **Norepinephrine preferred:** First-line vasopressor with central access
+- **Source control:** Aggressive evaluation and intervention
 
-**Additional References:**  
-American Heart Association Scientific Statement on Cardiogenic Shock 2020  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000782
+**Cardiogenic Shock:**
+- **SCAI Classification:** Standardized staging for management decisions
+- **Mechanical Support:** IABP, Impella, VA-ECMO available
+- **Early revascularization:** PCI or surgical intervention as indicated
 
-Extracorporeal Life Support Organization (ELSO) General Guidelines 2022  
-https://www.elso.org/guidelines.aspx
+**Advanced Hemodynamic Monitoring:**
+- **Arterial lines:** Standard for vasopressor therapy
+- **Central venous access:** Required for high-dose vasopressors
+- **Pulmonary artery catheters:** Selected cases of cardiogenic shock
+- **Lactate trending:** Serial measurements for resuscitation guidance
 
-**All steps follow current evidence-based guidelines for shock management with integrated mobile ECMO capabilities and optimized for early recognition and intervention.**
+### **ECMO Program Specifications:**
+**Mobile ECMO Capabilities:**
+- **Response Time:** <60 minutes mobilization, variable transport time
+- **Cannulation Options:** Peripheral (femoral-femoral) or central approach
+- **Transport Capability:** Ground and air medical transport compatible
+- **ICU Management:** Dedicated ECMO team with 24/7 coverage
+
+**ECMO Indications:**
+- **Cardiogenic Shock:** SCAI Stage D-E refractory to medical therapy
+- **Cardiac Arrest:** Witnessed arrest with ROSC or ongoing CPR
+- **Bridge Therapy:** To definitive intervention or recovery
+- **Post-cardiotomy:** Following cardiac surgical procedures
+
+### **Quality Improvement Integration:**
+- **Shock Recognition Time:** Goal <15 minutes from presentation
+- **Time to Vasopressors:** Goal <1 hour for distributive shock
+- **Lactate Clearance:** >10% reduction in first 2 hours
+- **ECMO Activation:** Decision within 2 hours of refractory shock
+
+### **Medication Dosing - Weight-Based Calculations:**
+```
+VASOPRESSOR DOSING TABLE:  
+┌─────────────────────────────────────────┐  
+│ Norepinephrine (mcg/kg/min): │  
+│ Start: 0.05 → Max: 3.0 │  
+│ 70kg patient: 3.5-210 mcg/min │  
+│ │  
+│ Vasopressin (fixed dose): │  
+│ 0.03-0.04 units/min (do not titrate) │  
+│ │  
+│ Epinephrine (mcg/kg/min): │  
+│ Start: 0.05 → Max: 2.0 │  
+│ 70kg patient: 3.5-140 mcg/min │  
+│ │  
+│ Dobutamine (mcg/kg/min): │  
+│ Start: 2.5 → Max: 20 │  
+│ 70kg patient: 175-1400 mcg/min │  
+└─────────────────────────────────────────┘
+```
+
+### **Contact Information & Escalation:**
+- **Transfer Center:** 856-886-5111 (Mobile ECMO activation)
+- **Critical Care Attending:** Available 24/7 for consultation
+- **Pharmacy:** Clinical pharmacist for dosing optimization
+- **Laboratory:** STAT lactate results, blood gas analysis
+
+### **Special Populations:**
+**Pregnancy:**
+- Modified hemodynamic targets
+- Left lateral positioning
+- Fetal monitoring considerations
+
+**Elderly Patients:**
+- ECMO candidacy evaluation
+- Goals of care discussions
+- Frailty assessment integration
+
+**Pediatric Considerations:**
+- Weight-based dosing protocols
+- Pediatric ECMO team availability
+- CHOP consultation if needed
+
+## REFERENCE GUIDELINES
+- **2021 Surviving Sepsis Campaign Guidelines**
+- **2020 AHA Scientific Statement on Cardiogenic Shock**
+- **2022 ELSO Guidelines for Adult ECMO**
+- **Virtua Health System Shock Protocol v2025**
+
+**This comprehensive protocol integrates current evidence-based shock management with advanced mechanical circulatory support capabilities, optimized for rapid recognition, aggressive intervention, and excellent patient outcomes at Virtua Voorhees.**

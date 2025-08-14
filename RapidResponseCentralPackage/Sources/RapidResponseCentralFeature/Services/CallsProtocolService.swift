@@ -77,7 +77,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "hf_assessment",
-                title: "Heart Failure Assessment",
+                title: "HF Assessment",
                 nodeType: .assessment,
                 critical: true,
                 content: "Assess volume status, hemodynamics, and precipitants",
@@ -85,7 +85,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "volume_assessment",
-                title: "Volume Status",
+                title: "Volume Check",
                 nodeType: .decision,
                 critical: true,
                 content: "Fluid overloaded or euvolemic?",
@@ -93,7 +93,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "diuretics",
-                title: "Diuretic Therapy",
+                title: "Diuretics",
                 nodeType: .medication,
                 critical: true,
                 content: "Furosemide 40-80mg IV, titrate based on response",
@@ -101,7 +101,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "inotropes",
-                title: "Inotropic Support",
+                title: "Inotropes",
                 nodeType: .medication,
                 critical: true,
                 content: "Consider dobutamine for cardiogenic shock",
@@ -150,8 +150,8 @@ public class CallsProtocolService: ObservableObject {
         
         return EmergencyProtocol(
             id: "acute_hf",
-            title: "Acute Decompensated HF",
-            icon: "healthicon-intravenous_drip",
+            title: "Acute Decompensated Heart Failure",
+            icon: "heart.text.square", // Heart failure management
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -162,7 +162,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "right_hf_assessment",
-                title: "Right Heart Assessment",
+                title: "Right Heart",
                 nodeType: .assessment,
                 critical: true,
                 content: "Evaluate for signs of right heart failure and pulmonary hypertension",
@@ -187,8 +187,8 @@ public class CallsProtocolService: ObservableObject {
         
         return EmergencyProtocol(
             id: "right_hf",
-            title: "Right Heart Failure",
-            icon: "healthicon-heart_rate",
+            title: "Right Heart Failure & Pulmonary Hypertension",
+            icon: "arrow.right.heart.fill", // Right heart failure
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -199,7 +199,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "htn_assessment",
-                title: "Hypertensive Emergency",
+                title: "HTN Emergency",
                 nodeType: .assessment,
                 critical: true,
                 content: "BP >180/120 with end-organ damage",
@@ -223,9 +223,9 @@ public class CallsProtocolService: ObservableObject {
         ]
         
         return EmergencyProtocol(
-            id: "htn_emergency",
-            title: "Hypertensive Emergency",
-            icon: "healthicon-blood_pressure_2",
+            id: "hypertensive_emergency",
+            title: "Hypertensive Emergencies",
+            icon: "gauge.high", // Hypertensive crisis
             category: .cardiac,
             algorithm: algorithm,
             cards: cards
@@ -238,7 +238,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "dka_diagnosis",
-                title: "DKA Diagnosis",
+                title: "DKA Check",
                 nodeType: .assessment,
                 critical: true,
                 content: "Glucose >250, ketones +, pH <7.3, anion gap >10",
@@ -246,7 +246,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "fluid_resuscitation",
-                title: "Fluid Therapy",
+                title: "Fluids",
                 nodeType: .intervention,
                 critical: true,
                 content: "NS 1-2L rapidly, then maintenance based on deficit",
@@ -254,7 +254,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "insulin_therapy",
-                title: "Insulin Protocol",
+                title: "Insulin",
                 nodeType: .medication,
                 critical: true,
                 content: "Regular insulin 0.1 units/kg/hr IV infusion",
@@ -303,9 +303,9 @@ public class CallsProtocolService: ObservableObject {
         ]
         
         return EmergencyProtocol(
-            id: "dka_protocol",
-            title: "DKA/HHS Management",
-            icon: "healthicon-diabetes_mellitus",
+            id: "dka_hhs",
+            title: "DKA/HHS",
+            icon: "drop.triangle.fill",
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -316,7 +316,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "hypoglycemia_recognition",
-                title: "Hypoglycemia Recognition",
+                title: "Hypoglycemia",
                 nodeType: .assessment,
                 critical: true,
                 content: "Glucose <70 mg/dL with symptoms",
@@ -342,7 +342,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "hypoglycemia",
             title: "Hypoglycemia",
-            icon: "healthicon-glucose_meter",
+            icon: "arrow.down.to.line", // Hypoglycemia low glucose
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -379,7 +379,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "adrenal_crisis",
             title: "Adrenal Crisis",
-            icon: "healthicon-hormone_replacement_therapy",
+            icon: "cross.vial.fill", // Adrenal crisis steroids
             category: .infectious,
             algorithm: algorithm,
             cards: cards
@@ -392,7 +392,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "pneumothorax_assessment",
-                title: "Pneumothorax Assessment",
+                title: "PTX Assessment",
                 nodeType: .assessment,
                 critical: true,
                 content: "Chest pain, dyspnea, decreased breath sounds",
@@ -400,7 +400,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "size_assessment",
-                title: "Size Assessment",
+                title: "Size Check",
                 nodeType: .decision,
                 critical: true,
                 content: "Large (>20%) or tension pneumothorax?",
@@ -408,7 +408,7 @@ public class CallsProtocolService: ObservableObject {
             ),
             AlgorithmNode(
                 id: "chest_tube",
-                title: "Chest Tube Insertion",
+                title: "Chest Tube",
                 nodeType: .intervention,
                 critical: true,
                 content: "Insert chest tube for drainage",
@@ -434,7 +434,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "pneumothorax",
             title: "Pneumothorax",
-            icon: "healthicon-lungs",
+            icon: "lungs.fill", // Pneumothorax lung collapse
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -445,7 +445,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "resp_failure_assessment",
-                title: "Respiratory Failure",
+                title: "Resp Failure",
                 nodeType: .assessment,
                 critical: true,
                 content: "Assess oxygenation and ventilation",
@@ -469,9 +469,9 @@ public class CallsProtocolService: ObservableObject {
         ]
         
         return EmergencyProtocol(
-            id: "resp_failure",
+            id: "acute_respiratory_failure",
             title: "Acute Respiratory Failure",
-            icon: "healthicon-oxygen_mask",
+            icon: "exclamationmark.triangle.fill", // Respiratory failure alert
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -482,7 +482,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "asthma_assessment",
-                title: "Asthma Exacerbation",
+                title: "Asthma Exac",
                 nodeType: .assessment,
                 critical: true,
                 content: "Assess severity and response to bronchodilators",
@@ -506,9 +506,9 @@ public class CallsProtocolService: ObservableObject {
         ]
         
         return EmergencyProtocol(
-            id: "asthma",
+            id: "asthma_copd",
             title: "Asthma & COPD Exacerbation",
-            icon: "healthicon-inhaler",
+            icon: "lungs.fill",
             category: .respiratory,
             algorithm: algorithm,
             cards: cards
@@ -521,7 +521,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "gi_bleed_assessment",
-                title: "GI Bleeding Assessment",
+                title: "GI Bleeding",
                 nodeType: .assessment,
                 critical: true,
                 content: "Upper vs lower GI bleeding, hemodynamic status",
@@ -547,7 +547,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "gi_bleeding",
             title: "GI Bleeding",
-            icon: "healthicon-stomach",
+            icon: "drop.fill", // GI bleeding
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -558,7 +558,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "bowel_obstruction",
-                title: "Bowel Obstruction",
+                title: "Bowel Obs",
                 nodeType: .assessment,
                 critical: true,
                 content: "Assess for mechanical vs functional obstruction",
@@ -584,7 +584,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "bowel_obstruction",
             title: "Bowel Obstruction",
-            icon: "healthicon-intestinal_blockage",
+            icon: "xmark.octagon.fill", // Bowel obstruction blockage
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -595,7 +595,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "antiemetic_selection",
-                title: "Antiemetic Choice",
+                title: "Antiemetic",
                 nodeType: .decision,
                 critical: false,
                 content: "Select appropriate antiemetic based on cause",
@@ -619,10 +619,10 @@ public class CallsProtocolService: ObservableObject {
         ]
         
         return EmergencyProtocol(
-            id: "antiemetic",
+            id: "antiemetic_fluids",
             title: "Antiemetic & Fluids",
-            icon: "healthicon-vomiting",
-            category: .infectious,
+            icon: "arrow.up.arrow.down.circle", // Antiemetic nausea control
+            category: .trauma,
             algorithm: algorithm,
             cards: cards
         )
@@ -634,7 +634,7 @@ public class CallsProtocolService: ObservableObject {
         let algorithm = ProtocolAlgorithm(nodes: [
             AlgorithmNode(
                 id: "pain_assessment",
-                title: "Pain Assessment",
+                title: "Pain Check",
                 nodeType: .assessment,
                 critical: false,
                 content: "Assess pain severity (0-10 scale) and characteristics",
@@ -660,7 +660,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "acute_pain",
             title: "Acute Pain Assessment",
-            icon: "healthicon-body_pain",
+            icon: "bandage.fill", // Pain management
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -697,7 +697,7 @@ public class CallsProtocolService: ObservableObject {
         return EmergencyProtocol(
             id: "opiate_conversion",
             title: "Opiate Conversion",
-            icon: "healthicon-medicines",
+            icon: "pills.circle", // Opiate conversion
             category: .trauma,
             algorithm: algorithm,
             cards: cards
@@ -733,8 +733,8 @@ public class CallsProtocolService: ObservableObject {
         
         return EmergencyProtocol(
             id: "eol_care",
-            title: "End-of-Life Care",
-            icon: "healthicon-palliative_care",
+            title: "End-of-Life Care/EoL",
+            icon: "hand.raised.fill", // End-of-life comfort care
             category: .trauma,
             algorithm: algorithm,
             cards: cards

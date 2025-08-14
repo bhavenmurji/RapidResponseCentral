@@ -37,7 +37,7 @@ struct EventLogModal: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.gray.opacity(0.2))
+                .background(Color(.systemGray5))
                 
                 // Event List
                 if session.events.isEmpty {
@@ -90,7 +90,7 @@ struct EventLogModal: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.gray.opacity(0.3))
+                            .background(Color(.systemGray4))
                             .foregroundColor(.red)
                             .cornerRadius(10)
                     }

@@ -1,225 +1,559 @@
 # RSI & Advanced Airway Protocol with Virtua Voorhees Addenda
 
-**Guideline Used:**  
-Difficult Airway Society (DAS) 2015 Guidelines for Management of Unanticipated Difficult Intubation in Adults  
-American Society of Anesthesiologists (ASA) 2022 Practice Guidelines for Management of the Difficult Airway  
-**Official Sources:**  
-https://das.uk.com/guidelines/das-intubation-guidelines  
-https://pubs.asahq.org/anesthesiology/article/136/1/31/116654/2022-American-Society-of-Anesthesiologists
+**Primary Guideline:** Difficult Airway Society (DAS) 2015 Guidelines for Management of Unanticipated Difficult Intubation in Adults
+**Official Source:** https://das.uk.com/guidelines/das-intubation-guidelines
+**Supporting Guidelines:** 
+- American Society of Anesthesiologists (ASA) 2022 Practice Guidelines for Management of the Difficult Airway
+- Emergency Medicine Airway Management Guidelines 2024
 
-## CARD INTERFACE LAYOUT
+## ENHANCED MERMAID FLOWCHART ALGORITHM
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ RAPID SEQUENCE INTUBATION                                   │
-├─────────────────────────────────────────────────────────────┤
-│ 🚨 RSI CHECKLIST - 7 P's                                   │
-│ ☑ Preparation - Equipment ready                             │
-│ ☑ Preoxygenation - 3-5 min 100% O2                         │
-│ ☐ Pretreatment - Consider medications                       │
-│ ☐ Paralysis with induction                                  │
-│ ☐ Positioning - Sniffing position                           │
-│ ☐ Placement with confirmation                               │
-│ ☐ Post-intubation management                                │
-│                                                           │
-│ Patient Weight: 80 kg    Mallampati: II                    │
-│                                                           │
-│ ┌─────────────────────────────────┐                        │
-│ │     MEDICATION CALCULATOR        │                        │
-│ │ INDUCTION:                      │ [Tap to select]        │
-│ │ • Etomidate: 24 mg (0.3 mg/kg)  │ [CALCULATE]           │
-│ │ • Ketamine: 120 mg (1.5 mg/kg)  │ [CALCULATE]           │
-│ │                                │                        │
-│ │ PARALYTIC:                      │                        │
-│ │ • Rocuronium: 96 mg (1.2 mg/kg) │ [ADMINISTER]          │
-│ │ • Sux: 120 mg (1.5 mg/kg)      │ [ADMINISTER]          │
-│ │                                │                        │
-│ │ SpO2: 98%  Timer: 03:45         │                        │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ ⚠️ DIFFICULT AIRWAY PREDICTORS: 2 identified              │
-│ Backup plan: LMA → Surgical airway ready                   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Difficult Airway
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ RSI INDICATIONS & DIFFICULT AIRWAY ASSESSMENT              │
-├─────────────────────────────────────────────────────────────┤
-│ 🚨 INDICATIONS FOR INTUBATION:                             │
-│ • Failure to protect airway (GCS ≤8)                       │
-│ • Failure to oxygenate (SpO2 <90% despite O2)              │
-│ • Failure to ventilate (PaCO2 >50, pH <7.30)               │
-│ • Expected clinical deterioration                           │
-│                                                           │
-│ LEMON Difficult Airway Assessment:                         │
-│ L - Look externally (facial trauma, obesity, beard)        │
-│ E - Evaluate 3-3-2 (mouth opening, hyomental distance)     │
-│ M - Mallampati (Class I-IV visibility assessment)          │
-│ O - Obstruction/Obesity (BMI >35, neck circumference)      │
-│ N - Neck mobility (C-spine, limited ROM)                   │
-│                                                           │
-│ CONTRAINDICATIONS:                                         │
-│ Absolute: Total upper airway obstruction                   │
-│ Relative: Severe hemodynamic instability, known allergy    │
-│                                                           │
-│ PRETREATMENT OPTIONS (3 min before):                       │
-│ • Fentanyl 3 mcg/kg: Blunts sympathetic response           │
-│ • Lidocaine 1.5 mg/kg: May decrease ICP                    │
-│ • Atropine 0.02 mg/kg: Pediatric <1 year only              │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Physical Exam/Medications
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ AIRWAY EXAMINATION & MEDICATIONS                            │
-├─────────────────────────────────────────────────────────────┤
-│ PHYSICAL ASSESSMENT:                                       │
-│ • Inter-incisor distance >3cm, TMJ mobility                │
-│ • Thyromental distance >6cm, neck circumference            │
-│ • Mallampati Class I-IV, tongue size, dental assessment    │
-│                                                           │
-│ 💊 INDUCTION AGENTS:                                        │
-│ • Etomidate 0.3 mg/kg (hemodynamically stable)             │
-│ • Ketamine 1-2 mg/kg (shock, asthma, bronchospasm)         │
-│ • Propofol 1-2 mg/kg (status epilepticus, ↑ICP)           │
-│                                                           │
-│ 💊 PARALYTIC AGENTS:                                        │
-│ • Rocuronium 1.2 mg/kg (preferred, reversible)             │
-│ • Succinylcholine 1.5 mg/kg (faster onset)                 │
-│   CI: Hyperkalemia, burns >48h, crush injury               │
-│                                                           │
-│ POST-INTUBATION SEDATION:                                  │
-│ • Propofol 5-80 mcg/kg/min infusion                        │
-│ • Fentanyl 25-200 mcg/hr infusion                          │
-│ • Midazolam 1-10 mg/hr infusion                            │
-│                                                           │
-│ VENTILATOR: TV 6-8 mL/kg IBW, PEEP 5, Rate 12-20          │
-│                                                           │
-│ CONFIRMATION: ETCO2 (gold standard), bilateral sounds      │
-│ BACKUP CONTACTS: Anesthesia ext. 5555, ENT ext. 6666       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
-
-```mermaid
+~~~mermaid
 graph TD
-    A[Decision to Intubate & Assess Airway]
-    B{Difficult Airway Predicted?}
-    C[Standard RSI Pathway]
-    D[Difficult Airway Algorithm]
-    E[Preoxygenate 3-5 min 100% O2]
-    F[Call for Help & Gather Equipment]
-    G[Position Patient Sniffing/Ramped]
-    H{Awake Intubation Indicated?}
-    I[Pretreatment If Indicated]
-    J[Topical Anesthesia & Sedation]
-    K[Video Laryngoscopy First Attempt]
-    L[Induction Agent Weight-based]
-    M[Fiberoptic/Awake Technique]
-    N[Paralytic Agent Rocuronium/Sux]
-    O{Successful Placement?}
-    P[Allow Time 45-60 seconds]
-    Q[Confirm Placement ETCO2]
-    R[Surgical Airway]
-    S[First Attempt Best Look]
-    T{Successful Intubation?}
-    U{SpO2 >90%?}
-    V[Second Attempt Different Approach]
-    W[BVM Ventilation Recover SpO2]
-    X{Second Attempt Successful?}
-    Y[Consider LMA Rescue Device]
-    Z{Adequate Ventilation?}
-    AA[Stabilize & Plan Next Steps]
-    AB[Post-Intubation Management]
-    AC[Secure ETT & Obtain CXR]
-    AD[Initiate Sedation & Set Ventilator]
-
-    A --> B
-    B -- No --> C
-    B -- Yes --> D
-    C --> E
-    D --> F
-    E --> G
-    F --> H
-    G --> I
-    H -- Yes --> J
-    H -- No --> K
-    I --> L
-    J --> M
+    A["Decision to Intubate<br/>Assess Airway Difficulty"] --> B{"Difficult Airway<br/>Predicted?"}
+    
+    B -->|NO| C["Standard RSI Pathway<br/>7 P's Protocol"]
+    B -->|YES| D["Difficult Airway Algorithm<br/>Call for Help"]
+    
+    C --> E["Preoxygenation<br/>3-5 min 100% O2"]
+    D --> F["Consider Awake<br/>Intubation"]
+    
+    E --> G["Position Patient<br/>Sniffing/Ramped"]
+    F --> H{"Awake Technique<br/>Indicated?"}
+    
+    G --> I["Pretreatment<br/>If Indicated"]
+    H -->|YES| J["Topical Anesthesia<br/>Sedation"]
+    H -->|NO| K["Video Laryngoscopy<br/>Preparation"]
+    
+    I --> L["Induction Agent<br/>Weight-Based"]
+    J --> M["Awake Fiberoptic<br/>Technique"]
     K --> L
-    L --> N
-    M --> O
-    N --> P
-    O -- Yes --> Q
-    O -- No --> R
-    P --> S
-    S --> T
-    T -- Yes --> Q
-    T -- No --> U
-    U -- Yes --> V
-    U -- No --> W
-    V --> X
-    W --> Y
-    X -- Yes --> Q
-    X -- No --> Y
-    Y --> Z
-    Z -- Yes --> AA
-    Z -- No --> R
-    Q --> AB
-    AB --> AC
-    AC --> AD
-```
+    
+    L --> N["Paralytic Agent<br/>Rocuronium/Sux"]
+    M --> O{"Successful<br/>Placement?"}
+    
+    N --> P["Wait 45-60 seconds<br/>Optimal Conditions"]
+    O -->|YES| Q["Confirm with ETCO2<br/>Secure ETT"]
+    
+    P --> R["First Attempt<br/>Best Visualization"]
+    O -->|NO| S["Surgical Airway<br/>Cannot Intubate/Ventilate"]
+    
+    R --> T{"Successful<br/>Intubation?"}
+    
+    T -->|YES| Q
+    T -->|NO| U{"SpO2 >90%<br/>Adequate Oxygenation?"}
+    
+    U -->|YES| V["Second Attempt<br/>Different Technique"]
+    U -->|NO| W["BVM Ventilation<br/>Recover Oxygenation"]
+    
+    V --> X{"Second Attempt<br/>Successful?"}
+    W --> Y["LMA Rescue Device<br/>Supraglottic Airway"]
+    
+    X -->|YES| Q
+    X -->|NO| Y
+    
+    Y --> Z{"Adequate<br/>Ventilation?"}
+    
+    Z -->|YES| AA["Stabilize Patient<br/>Plan Next Steps"]
+    Z -->|NO| S
+    
+    Q --> BB["Post-Intubation<br/>Management"]
+    AA --> BB
+    
+    BB --> CC["Sedation & Analgesia<br/>Ventilator Settings"]
+    
+    style A fill:#ffcccc
+    style C fill:#ffe6cc
+    style L fill:#fff2cc
+    style Q fill:#ccffcc
+    style S fill:#ffaaaa
+    style BB fill:#e6ccff
+~~~
 
-## NODE-TO-DYNAMIC CARD PROMPT MAPPING (WITH INTERACTIVES)
+## STREAMLINED DYNAMIC CARD SYSTEM
 
-| **Step (Node)**                    | **Dynamic Card Prompt/Question**                                                                 | **Interactive Components**                                        |
-|-------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
-| Decision to Intubate                | "Clinical indications for intubation identified. Proceed with airway management?"               | [Confirm Indication], [Assessment Checklist], [Team Notification] |
-| Difficult Airway Assessment         | "Complete LEMON assessment. Is this predicted to be a difficult airway?"                        | [LEMON Checklist], [Mallampati Score], [Risk Calculator]          |
-| Standard RSI Pathway                | "Standard RSI pathway selected. Begin 7 P's checklist preparation?"                             | [7 P's Checklist], [Equipment Check], [Team Brief]                |
-| Difficult Airway Algorithm          | "Difficult airway predicted. Call for expert help and gather additional equipment?"             | [Call Anesthesia], [Advanced Equipment], [Backup Plan]            |
-| Preoxygenation                      | "Begin preoxygenation with 100% O2 for 3-5 minutes. SpO2 target >95%?"                         | [Start Timer], [SpO2 Monitor], [Apneic O2 Setup]                  |
-| Patient Positioning                 | "Position patient in sniffing position or ramp. Optimize laryngeal view?"                       | [Position Check], [Pillow Placement], [C-spine Precautions]       |
-| Pretreatment Decision               | "Consider pretreatment medications 3 minutes before induction. Indicated?"                      | [Fentanyl Option], [Lidocaine Option], [Atropine Pediatric]       |
-| Awake Intubation Assessment         | "Awake fiberoptic intubation indicated for difficult airway management?"                        | [Awake Technique], [Topical Anesthesia], [Sedation Protocol]      |
-| Induction Agent Selection           | "Select and administer induction agent based on clinical scenario?"                             | [Etomidate Stable], [Ketamine Shock], [Propofol Seizure]          |
-| Paralytic Administration            | "Administer paralytic agent and allow adequate time for onset?"                                 | [Rocuronium Preferred], [Succinylcholine Fast], [Onset Timer]     |
-| First Intubation Attempt            | "Proceed with first intubation attempt using best visualization technique?"                     | [Video Laryngoscopy], [Direct Laryngoscopy], [Bougie Ready]       |
-| Intubation Success Assessment       | "ETT placement successful? Confirm with ETCO2 and clinical assessment?"                         | [ETCO2 Confirmation], [Bilateral Sounds], [Chest Rise]            |
-| Failed Attempt Protocol             | "First attempt unsuccessful. SpO2 adequate for second attempt?"                                 | [SpO2 Check], [BVM Ventilation], [Different Technique]            |
-| Second Attempt Strategy             | "Modify technique for second attempt: different blade, operator, or approach?"                  | [Change Operator], [Video Scope], [External Manipulation]         |
-| Rescue Device Insertion             | "Consider LMA or other rescue device for ventilation and oxygenation?"                         | [LMA Insertion], [I-gel Device], [Combitube Option]               |
-| Surgical Airway Decision            | "Cannot intubate, cannot ventilate scenario. Proceed with surgical airway?"                    | [Cricothyrotomy], [Call Surgery], [Surgical Kit Ready]            |
-| Post-Intubation Management          | "Successful intubation confirmed. Begin post-intubation sedation and ventilator setup?"        | [Sedation Protocol], [Ventilator Settings], [Tube Security]       |
+### Card 0 – Intubation Decision & Assessment (Node A → B)
+┌─────────────────────────────────────────┐
+│ 🫁 RAPID SEQUENCE INTUBATION            │
+├─────────────────────────────────────────┤
+│ 🚨 RSI Indications:                     │
+│ • Failure to protect airway (GCS ≤8)   │
+│ • Failure to oxygenate (SpO2 <90%)     │
+│ • Failure to ventilate (PaCO2 >50)     │
+│ • Expected clinical deterioration      │
+│                                         │
+│ 🔍 LEMON Assessment:                    │
+│ • Look externally (trauma, obesity)    │
+│ • Evaluate 3-3-2 rule                  │
+│ • Mallampati classification            │
+│ • Obstruction/Obesity                  │
+│ • Neck mobility                        │
+│                                         │
+│ ❓ Difficult airway predicted?          │
+│                                         │
+│ 🔘 YES → Difficult airway algorithm    │
+│ 🔘 NO → Standard RSI pathway           │
+│                                         │
+│ [Next: Based on Selection ▶]            │
+└─────────────────────────────────────────┘
 
-**Interactive Highlights:**  
-- Real-time medication calculator: weight-based dosing with safety checks
-- RSI timer: tracks preoxygenation and attempt intervals
-- LEMON assessment: interactive difficult airway prediction tool
-- Equipment checklist: tap to confirm availability and function
-- Failed airway protocol: emergency action prompts and contact information
+### Card 1A – Standard RSI Protocol (Node C → E)
+┌─────────────────────────────────────────┐
+│ 📋 STANDARD RSI - 7 P's PROTOCOL        │
+├─────────────────────────────────────────┤
+│ ✅ Preparation:                         │
+│ • Equipment check completed            │
+│ • Team roles assigned                  │
+│ • Backup plan established              │
+│                                         │
+│ 🫁 Preoxygenation:                      │
+│ • 100% O2 for 3-5 minutes             │
+│ • Target SpO2 >95%                     │
+│ • Apneic oxygenation ready             │
+│                                         │
+│ 💊 Pretreatment (if indicated):         │
+│ • Fentanyl 3 mcg/kg (sympathetic)     │
+│ • Lidocaine 1.5 mg/kg (↑ICP)          │
+│                                         │
+│ [Next: Patient positioning ▶]          │
+│                                         │
+│ [◀ Previous: Initial Assessment]       │
+└─────────────────────────────────────────┘
+
+### Card 1B – Difficult Airway Algorithm (Node D → F)
+┌─────────────────────────────────────────┐
+│ ⚠️ DIFFICULT AIRWAY PROTOCOL            │
+├─────────────────────────────────────────┤
+│ 📞 Call for help immediately:           │
+│ • Anesthesia: ext. 5555                │
+│ • ENT backup: ext. 6666                │
+│ • Extra nursing support                │
+│                                         │
+│ 🛠️ Additional equipment:                │
+│ • Video laryngoscope ready             │
+│ • Fiberoptic bronchoscope              │
+│ • Surgical airway kit                  │
+│ • Multiple rescue devices              │
+│                                         │
+│ 🎯 Strategy decision:                   │
+│ • Awake vs asleep technique            │
+│ • Topical anesthesia preparation       │
+│                                         │
+│ [Next: Awake intubation assessment ▶]  │
+│                                         │
+│ [◀ Previous: Initial Assessment]       │
+└─────────────────────────────────────────┘
+
+### Card 2A – Patient Positioning (Node G → I)
+┌─────────────────────────────────────────┐
+│ 🛏️ PATIENT POSITIONING                  │
+├─────────────────────────────────────────┤
+│ 🎯 Optimal positioning:                 │
+│ • Sniffing position (standard)         │
+│ • Ramp position (obese patients)       │
+│ • C-spine precautions if indicated     │
+│                                         │
+│ 📏 Position verification:               │
+│ • Ear-to-sternal notch alignment       │
+│ • Improve laryngeal view               │
+│ • External manipulation ready          │
+│                                         │
+│ [Next: Pretreatment consideration ▶]   │
+│                                         │
+│ [◀ Previous: RSI Protocol]             │
+└─────────────────────────────────────────┘
+
+### Card 2B – Awake Intubation Assessment (Node H)
+┌─────────────────────────────────────────┐
+│ 🧠 AWAKE INTUBATION DECISION            │
+├─────────────────────────────────────────┤
+│ 🎯 Indications for awake technique:     │
+│ • Severe airway distortion             │
+│ • Limited mouth opening <2cm           │
+│ • Suspected airway obstruction         │
+│ • C-spine instability with difficulty  │
+│                                         │
+│ 💊 Preparation requirements:            │
+│ • Topical anesthesia (lidocaine)       │
+│ • Conscious sedation (dexmedetomidine) │
+│ • Antisialagogue (glycopyrrolate)      │
+│                                         │
+│ ❓ Proceed with awake technique?        │
+│                                         │
+│ 🔘 YES → Topical anesthesia prep       │
+│ 🔘 NO → Standard induction sequence    │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
+
+### Card 3A – Pretreatment (Node I → L)
+┌─────────────────────────────────────────┐
+│ 💊 PRETREATMENT MEDICATIONS             │
+├─────────────────────────────────────────┤
+│ ⏱️ Give 3 minutes before induction:     │
+│                                         │
+│ 🫀 Fentanyl 3 mcg/kg:                   │
+│ • Blunts sympathetic response          │
+│ • Reduces BP/HR surge                  │
+│                                         │
+│ 🧠 Lidocaine 1.5 mg/kg:                 │
+│ • May decrease ICP                     │
+│ • Controversial benefit                │
+│                                         │
+│ 👶 Atropine 0.02 mg/kg:                 │
+│ • Pediatric patients <1 year only      │
+│ • Prevents bradycardia                 │
+│                                         │
+│ [Next: Induction agent selection ▶]    │
+│                                         │
+│ [◀ Previous: Patient Positioning]      │
+└─────────────────────────────────────────┘
+
+### Card 3B – Topical Anesthesia (Node J → M)
+┌─────────────────────────────────────────┐
+│ 🩺 AWAKE INTUBATION PREPARATION         │
+├─────────────────────────────────────────┤
+│ 💊 Topical anesthesia:                  │
+│ • Lidocaine 4% spray/nebulizer         │
+│ • Benzocaine 20% spray (avoid)         │
+│ • Cocaine 4% (if available)            │
+│                                         │
+│ 😴 Sedation options:                    │
+│ • Dexmedetomidine 0.5-1 mcg/kg        │
+│ • Remifentanil 0.05-0.1 mcg/kg/min    │
+│ • Ketamine 0.25-0.5 mg/kg             │
+│                                         │
+│ 🧬 Antisialagogue:                      │
+│ • Glycopyrrolate 0.2 mg IV             │
+│                                         │
+│ [Next: Awake fiberoptic technique ▶]   │
+│                                         │
+│ [◀ Previous: Awake Assessment]         │
+└─────────────────────────────────────────┘
+
+### Card 4A – Induction Agent (Node L → N)
+┌─────────────────────────────────────────┐
+│ 💉 INDUCTION AGENT SELECTION            │
+├─────────────────────────────────────────┤
+│ 🎯 Agent selection by scenario:         │
+│                                         │
+│ 💓 Etomidate 0.3 mg/kg:                 │
+│ • Hemodynamically stable patients      │
+│ • Maintains BP and cardiac output      │
+│                                         │
+│ 🫁 Ketamine 1-2 mg/kg:                  │
+│ • Shock, hypotension                   │
+│ • Asthma, bronchospasm                 │
+│                                         │
+│ 🧠 Propofol 1-2 mg/kg:                  │
+│ • Status epilepticus                   │
+│ • Increased ICP                        │
+│                                         │
+│ [Next: Paralytic administration ▶]     │
+│                                         │
+│ [◀ Previous: Pretreatment]             │
+└─────────────────────────────────────────┘
+
+### Card 4B – Awake Fiberoptic (Node M → O)
+┌─────────────────────────────────────────┐
+│ 🔬 AWAKE FIBEROPTIC INTUBATION          │
+├─────────────────────────────────────────┤
+│ 🛠️ Equipment setup:                     │
+│ • Flexible fiberoptic bronchoscope     │
+│ • ETT loaded over scope                │
+│ • Suction ready                       │
+│                                         │
+│ 📋 Technique steps:                     │
+│ • Patient sitting upright             │
+│ • Nasal or oral approach               │
+│ • Visualize vocal cords                │
+│ • Pass ETT over scope                  │
+│                                         │
+│ ⚠️ Failure plan:                        │
+│ • Surgical airway immediately ready   │
+│ • Cannot ventilate = emergency cric    │
+│                                         │
+│ [Next: Placement confirmation ▶]       │
+│                                         │
+│ [◀ Previous: Topical Anesthesia]       │
+└─────────────────────────────────────────┘
+
+### Card 5A – Paralytic Administration (Node N → P)
+┌─────────────────────────────────────────┐
+│ 💪 PARALYTIC AGENT ADMINISTRATION       │
+├─────────────────────────────────────────┤
+│ 🎯 Agent selection:                     │
+│                                         │
+│ ⚡ Rocuronium 1.2 mg/kg (preferred):    │
+│ • Reversible with sugammadex           │
+│ • No contraindications                 │
+│ • Onset 45-60 seconds                  │
+│                                         │
+│ ⚡ Succinylcholine 1.5 mg/kg:           │
+│ • Faster onset (30-45 seconds)        │
+│ • Contraindications: hyperkalemia,     │
+│   burns >48h, crush injury             │
+│                                         │
+│ ⏱️ Wait for optimal conditions:         │
+│ • Allow full paralysis onset          │
+│ • No spontaneous movement              │
+│                                         │
+│ [Next: First intubation attempt ▶]     │
+│                                         │
+│ [◀ Previous: Induction Agent]          │
+└─────────────────────────────────────────┘
+
+### Card 6A – First Intubation Attempt (Node R → T)
+┌─────────────────────────────────────────┐
+│ 🎯 FIRST INTUBATION ATTEMPT             │
+├─────────────────────────────────────────┤
+│ 📺 Video laryngoscopy preferred:        │
+│ • Better visualization                 │
+│ • Teaching opportunity                 │
+│ • Record for quality review            │
+│                                         │
+│ 🔧 Optimization techniques:             │
+│ • External laryngeal manipulation      │
+│ • Bougie if poor view                  │
+│ • Sellick maneuver (controversial)     │
+│                                         │
+│ ⏱️ Time limits:                         │
+│ • Maximum 30 seconds per attempt       │
+│ • Stop if SpO2 drops                   │
+│                                         │
+│ [Next: Success assessment ▶]           │
+│                                         │
+│ [◀ Previous: Paralytic Administration] │
+└─────────────────────────────────────────┘
+
+### Card 7A – Placement Confirmation (Node Q → BB)
+┌─────────────────────────────────────────┐
+│ ✅ INTUBATION CONFIRMATION              │
+├─────────────────────────────────────────┤
+│ 🥇 Gold standard confirmation:          │
+│ • Continuous ETCO2 waveform            │
+│ • Should be present immediately        │
+│                                         │
+│ 🩺 Secondary confirmation:              │
+│ • Bilateral breath sounds              │
+│ • Symmetric chest rise                 │
+│ • Fogging of ETT                       │
+│                                         │
+│ 🔒 Secure ETT:                          │
+│ • Note depth at lip/teeth (21-23cm)   │
+│ • Secure with tape/device              │
+│ • C-spine collar if indicated          │
+│                                         │
+│ [Next: Post-intubation management ▶]   │
+│                                         │
+│ [◀ Previous: Successful Attempt]       │
+└─────────────────────────────────────────┘
+
+### Card 7B – Failed Attempt Protocol (Node U)
+┌─────────────────────────────────────────┐
+│ ⚠️ FAILED INTUBATION PROTOCOL           │
+├─────────────────────────────────────────┤
+│ 📊 Assess patient status:               │
+│ • Check SpO2 and vital signs           │
+│ • Evaluate ventilation ability         │
+│                                         │
+│ ❓ SpO2 >90% and stable?                │
+│                                         │
+│ 🔘 YES → Second attempt strategy:       │
+│   • Different operator                 │
+│   • Different technique               │
+│   • Video laryngoscopy if not used    │
+│                                         │
+│ 🔘 NO → Rescue ventilation:            │
+│   • Bag-mask ventilation              │
+│   • Consider LMA rescue device        │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
+
+### Card 8A – Second Attempt Strategy (Node V → X)
+┌─────────────────────────────────────────┐
+│ 🔄 SECOND INTUBATION ATTEMPT            │
+├─────────────────────────────────────────┤
+│ 🛠️ Modify technique:                    │
+│ • Change to video laryngoscopy         │
+│ • Different blade size/type            │
+│ • External manipulation                │
+│ • Bougie-first technique               │
+│                                         │
+│ 👨‍⚕️ Consider operator change:            │
+│ • Most experienced available           │
+│ • Fresh perspective                    │
+│                                         │
+│ ⏱️ Time and safety limits:              │
+│ • Maximum 30 seconds                   │
+│ • Stop if deterioration               │
+│                                         │
+│ [Next: Second attempt result ▶]        │
+│                                         │
+│ [◀ Previous: Failed Attempt]           │
+└─────────────────────────────────────────┘
+
+### Card 8B – Rescue Ventilation (Node W → Y)
+┌─────────────────────────────────────────┐
+│ 🆘 RESCUE VENTILATION PROTOCOL          │
+├─────────────────────────────────────────┤
+│ 🫁 Bag-mask ventilation:                │
+│ • Two-person technique preferred       │
+│ • Optimize mask seal                   │
+│ • Jaw thrust maneuver                  │
+│                                         │
+│ 📈 If BVM inadequate:                   │
+│ • LMA or i-gel insertion               │
+│ • Supraglottic airway rescue          │
+│                                         │
+│ ⚠️ Cannot ventilate scenario:           │
+│ • Prepare for surgical airway         │
+│ • Call for help immediately           │
+│                                         │
+│ [Next: LMA rescue device ▶]           │
+│                                         │
+│ [◀ Previous: Failed Attempt]           │
+└─────────────────────────────────────────┘
+
+### Card 9A – LMA Rescue (Node Y → Z)
+┌─────────────────────────────────────────┐
+│ 🛟 LMA RESCUE DEVICE                    │
+├─────────────────────────────────────────┤
+│ 🎯 Device options:                      │
+│ • LMA Supreme (recommended)            │
+│ • i-gel supraglottic airway           │
+│ • LMA ProSeal                         │
+│                                         │
+│ 📋 Insertion technique:                 │
+│ • Deflate cuff completely             │
+│ • Insert blindly along hard palate    │
+│ • Inflate cuff when seated             │
+│                                         │
+│ ✅ Success indicators:                  │
+│ • ETCO2 waveform present               │
+│ • Adequate chest rise                 │
+│ • Acceptable ventilation              │
+│                                         │
+│ [Next: Adequacy assessment ▶]         │
+│                                         │
+│ [◀ Previous: Rescue Ventilation]       │
+└─────────────────────────────────────────┘
+
+### Card 9B – Surgical Airway (Node S - Final)
+┌─────────────────────────────────────────┐
+│ 🔪 EMERGENCY SURGICAL AIRWAY            │
+├─────────────────────────────────────────┤
+│ 🚨 Cannot intubate, cannot ventilate:   │
+│ • Last resort intervention             │
+│ • Time critical - minutes matter      │
+│                                         │
+│ 🔧 Cricothyrotomy procedure:            │
+│ • Palpate cricothyroid membrane        │
+│ • Scalpel-bougie-tube technique        │
+│ • Size 6.0 cuffed ETT or Shiley       │
+│                                         │
+│ 📞 Call for surgical backup:            │
+│ • ENT: ext. 6666                       │
+│ • General Surgery if unavailable      │
+│                                         │
+│ ✅ SURGICAL AIRWAY ESTABLISHED         │
+│                                         │
+│ [◀ Previous: LMA Rescue Failed]        │
+└─────────────────────────────────────────┘
+
+### Card 10 – Post-Intubation Management (Node BB → CC)
+┌─────────────────────────────────────────┐
+│ 🏥 POST-INTUBATION MANAGEMENT           │
+├─────────────────────────────────────────┤
+│ 💊 Sedation and analgesia:              │
+│ • Propofol 5-80 mcg/kg/min             │
+│ • Fentanyl 25-200 mcg/hr               │
+│ • Midazolam 1-10 mg/hr                 │
+│                                         │
+│ 🫁 Ventilator settings:                 │
+│ • Tidal volume: 6-8 mL/kg IBW          │
+│ • PEEP: 5 cmH2O                        │
+│ • Rate: 12-20 based on pH/CO2          │
+│ • FiO2: Titrate to SpO2 92-98%         │
+│                                         │
+│ 📸 Confirm placement:                   │
+│ • Chest X-ray                          │
+│ • ETT position verification            │
+│                                         │
+│ ✅ POST-INTUBATION PROTOCOL COMPLETE   │
+│                                         │
+│ [◀ Previous: Placement Confirmation]   │
+└─────────────────────────────────────────┘
 
 ## VIRTUA VOORHEES AIRWAY MANAGEMENT ADDENDA
 
-- **Expert Backup:** Anesthesia team available 24/7 via ext. 5555 for difficult airway consultation
-- **Surgical Support:** ENT/General Surgery backup via ext. 6666 for emergency surgical airways
-- **Equipment Standards:** Video laryngoscopy first-line, fiberoptic bronchoscope available in ED
-- **Quality Metrics:** First-pass success rates, time to successful intubation, complication tracking
+### **Enhanced Airway Program:**
+- **Expert Backup:** Anesthesia team available 24/7 via ext. 5555
+- **Surgical Support:** ENT/General Surgery backup via ext. 6666
+- **Equipment Standards:** Video laryngoscopy first-line approach
+- **Training Program:** Monthly difficult airway simulation sessions
 
-## REFERENCE (GUIDELINE & SOURCE)
-Difficult Airway Society. 2015 Guidelines for Management of Unanticipated Difficult Intubation in Adults.  
-https://das.uk.com/guidelines/das-intubation-guidelines
+### **Medication Protocols - Virtua Specific:**
+**Weight-Based Dosing Calculator:**
+- **Etomidate:** 0.3 mg/kg (hemodynamically stable patients)
+- **Ketamine:** 1-2 mg/kg (shock, asthma, bronchospasm)
+- **Propofol:** 1-2 mg/kg (status epilepticus, increased ICP)
+- **Rocuronium:** 1.2 mg/kg (preferred, reversible with sugammadex)
+- **Succinylcholine:** 1.5 mg/kg (faster onset, multiple contraindications)
 
-**Additional Reference:**  
-American Society of Anesthesiologists. 2022 Practice Guidelines for Management of the Difficult Airway.  
-https://pubs.asahq.org/anesthesiology/article/136/1/31/116654/2022-American-Society-of-Anesthesiologists
+**Post-Intubation Sedation:**
+- **Propofol infusion:** 5-80 mcg/kg/min titrated to sedation goal
+- **Fentanyl infusion:** 25-200 mcg/hr for analgesia
+- **Midazolam alternative:** 1-10 mg/hr if propofol contraindicated
 
-**All steps follow current DAS and ASA guidelines for airway management with integrated backup protocols and optimized for emergency department rapid sequence intubation.**
+### **Equipment Checklist - Always Available:**
+- **Primary:** Video laryngoscope (preferred first choice)
+- **Backup:** Direct laryngoscope with multiple blade sizes
+- **Rescue devices:** LMA Supreme, i-gel, Combitube
+- **Surgical:** Cricothyrotomy kit readily accessible
+- **Confirmation:** Continuous waveform capnography mandatory
+
+### **Quality Improvement Metrics:**
+- **First-pass success rate:** Target >85% for emergency department
+- **Complications tracking:** Esophageal intubation, aspiration, dental trauma
+- **Time to successful intubation:** Goal <5 minutes from decision
+- **Video review program:** Monthly analysis of difficult cases
+
+### **Difficult Airway Predictors (LEMON Assessment):**
+**Look externally:**
+- Facial trauma, burns, obesity, beard
+- Previous surgical scars, radiation changes
+
+**Evaluate 3-3-2 rule:**
+- 3 fingers mouth opening (>3cm)
+- 3 fingers hyomental distance (>6cm)  
+- 2 fingers thyromental distance (>4cm)
+
+**Mallampati classification:**
+- Class I: Soft palate, uvula, pillars visible
+- Class II: Soft palate, uvula visible
+- Class III: Soft palate, base of uvula visible
+- Class IV: Only hard palate visible
+
+**Obstruction/Obesity:**
+- BMI >35, neck circumference >60cm (males), >55cm (females)
+- Sleep apnea, snoring history
+
+**Neck mobility:**
+- Limited range of motion, C-spine injury
+- Previous cervical surgery or arthritis
+
+### **Emergency Contacts & Escalation:**
+- **Anesthesia consult:** ext. 5555 (available 24/7)
+- **ENT emergency:** ext. 6666 (surgical airway backup)
+- **Critical care medicine:** For post-intubation management
+- **Respiratory therapy:** Ventilator setup and optimization
+
+## REFERENCE GUIDELINES
+- **2015 Difficult Airway Society Guidelines**
+- **2022 American Society of Anesthesiologists Practice Guidelines**
+- **Emergency Medicine Airway Management Consensus Guidelines**
+- **Virtua Health System Airway Protocol v2025**
+
+**This protocol reflects current evidence-based airway management guidelines optimized for emergency rapid sequence intubation with comprehensive backup plans and post-intubation care at Virtua Voorhees.**

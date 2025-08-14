@@ -1,312 +1,396 @@
-# End-of-Life Comfort Care – Clinical Protocol
+# Enhanced End-of-Life Comfort Care – Optimized Clinical Protocol
 
-**Guideline References:**  
-- National Coalition for Hospice and Palliative Care: Clinical Practice Guidelines for Quality Palliative Care (4th ed., 2018)  
-  https://www.nationalcoalitionhpc.org/ncp  
-- American Academy of Hospice & Palliative Medicine (AAHPM) Essential Practices 2023  
-  https://aahpm.org/competencies  
-- National Comprehensive Cancer Network (NCCN) Palliative Care Guidelines, Version 1.2024  
-  https://www.nccn.org/guidelines/guidelines-detail?category=3&id=1452  
-- World Health Organization – Palliative Care Guidance, 2020  
-  https://www.who.int/news-room/fact-sheets/detail/palliative-care  
+**Evidence-Based Guidelines:**
+- National Coalition for Hospice and Palliative Care: Clinical Practice Guidelines for Quality Palliative Care (4th ed., 2018)
+- American Academy of Hospice & Palliative Medicine (AAHPM) Essential Practices 2023
+- National Comprehensive Cancer Network (NCCN) Palliative Care Guidelines, Version 1.2024
+- World Health Organization – Palliative Care Guidance, 2020
 
----
-
-## CARD INTERFACE LAYOUT
-
----
-
-### Card 0 — Dynamic Action Card (Node Dependent)
-
-#### Initial Comfort Assessment Node
-~~~text
-COMFORT CARE INITIATION
-───────────────────────────────────────
-
-Goals of Care:
-• Comfort measures only confirmed
-• DNR/DNI status documented
-• Family meeting completed
-
-Priority Symptom Assessment:
-• Pain
-• Dyspnea
-• Agitation/Delirium
-• Secretions
-
-Discontinue:
-• Vital signs (unless actively dying symptoms unclear)
-• Labs/imaging
-• Non-comfort medications
-• Cardiac monitoring
-
-DECISION: Which symptom is currently the priority?  
-→ [Pain]  [Dyspnea]  [Agitation/Delirium]  [Secretions]
-~~~
-
-#### Pain Management Node
-~~~text
-COMFORT CARE ANALGESIA
-───────────────────────────────────────
-
-Starting (Opioid Naive):
-• Morphine 2–4 mg IV/SC q2h PRN
-• If no IV: 5–10 mg PO q2h PRN
-
-If frequent PRN (>3–4x in 8h):
-• Calculate 24h total dose
-• Start infusion or scheduled (24h ÷ 24 for hourly basal)
-
-Breakthrough:
-• 10–20% of 24h dose
-• Available q1h PRN
-
-Principles:
-• Titrate to comfort, *no ceiling dose* per guidelines
-• If ineffective, double previous dose rather than frequent minor increases
-• Monitor for opioid-induced myoclonus (switch opioid or add benzodiazepine)
-~~~
-
-#### Dyspnea Management Node
-~~~text
-RESPIRATORY COMFORT
-───────────────────────────────────────
-
-Low-dose opioids are most effective:
-• Morphine 2–4 mg IV/SC q1h PRN (not linked to RR)
-
-Adjuncts:
-• Fan to face
-• Upright or semi-upright positioning
-• Oxygen trial only if helpful for *subjective* comfort
-
-Anxiety:
-• Lorazepam 0.5–1 mg SL/IV/SC q4h PRN
-
-If ongoing air hunger:
-• Increase opioid dose by 50%
-• Combine with non-pharmacologic support
-~~~
-
-#### Agitation/Delirium Node
-~~~text
-DELIRIUM / TERMINAL AGITATION
-───────────────────────────────────────
-
-Assessment:
-• Rule out pain, urinary retention, constipation, hypoxia
-• Environmental: lighting, noise, unfamiliar faces
-
-Pharmacologic:
-• Haloperidol 0.5–2 mg IV/SC/PO q6h PRN
-• Add lorazepam 0.5–1 mg q4h PRN if not controlled
-
-If delirium refractory:
-• Consider levomepromazine 6.25–12.5 mg SC q4–6h (if available)
-
-Principles:
-• Avoid restraints if possible
-• Provide reassurance—explain to family normalcy of terminal agitation
-~~~
-
-#### Secretion Management Node
-~~~text
-RESPIRATORY SECRETIONS ("DEATH RATTLE")
-───────────────────────────────────────
-
-First-line:
-• Reposition—side lying or semi-prone preferred
-
-Pharmacologic:
-• Glycopyrrolate 0.2 mg SC q4h PRN
-• Scopolamine patch 1.5 mg q72h
-• Atropine 1% SL drops 1–2 q4h PRN
-
-Notes:
-• Do *not* routinely suction—can worsen distress & injury
-• Family education: patient unaware/unbothered; interventions aimed at comfort and minimizing family distress
-~~~
-
----
-
-### Card 1 — Symptom Guide (Static)
-~~~text
-COMMON END-OF-LIFE SYMPTOMS
-
-PAIN:
-• Present in 70–90%
-• May increase near death / organ failure
-• Grimacing, restlessness, withdrawal, moaning
-• If unsure, *assume pain is present* and treat
-
-DYSPNEA:
-• Subjective—RR not a reliable marker
-• Opioids are first-line
-• Oxygen only if comforted by it; trial off after 24h if tolerant
-
-DELIRIUM/AGITATION:
-• Terminal restlessness is common; day/night reversal
-• Picking, pulling, hallucinations; periods of lucidity
-
-SECRETIONS ("Death rattle"):
-• From oropharyngeal secretions
-• Not directly distressing to patient; family education vital
-• Pharmacologic “drying” partially effective
-
-MYOCLONUS:
-• Opioid neurotoxicity / metabolites
-• Rotate opioid, add benzo, hydrate if not contraindicated
-~~~
-
----
-
-### Card 2 — Medication Protocols (Static)
-~~~text
-COMFORT MEDICATIONS
-
-MORPHINE (FIRST-LINE):
-• PRN: 2–5 mg IV/SC q2–4h (IV/SC preferred for rapid effect)
-• Infusion: 24h total divided by 24 = mg/hr
-• No maximum dose—titrate for comfort
-
-LORAZEPAM:
-• Anxiety/dyspnea/agitation: 0.5–2 mg q4h (SL/IV/SC preferred; PO/rectal if able)
-• Infusion rarely needed
-
-HALOPERIDOL:
-• Delirium/agitation: 0.5–2 mg q6h (IV/SC/PO)
-• QTc prolongation not relevant at EOL
-
-GLYCOPYRROLATE:
-• Secretions: 0.2 mg SC q4h, or scopolamine patch, atropine 1% SL drops
-
-LEVOMEPROMAZINE:
-• For refractory symptoms: 6.25–12.5 mg SC q4–6h (sedating, broad symptom coverage)
-
-ALTERNATIVE/BRIDGING ROUTES:
-• Buccal, Sublingual, SC, Rectal, Transdermal (for specific agents)
-~~~
-
----
-
-## ALGORITHM DECISION TREE
+## ENHANCED MERMAID DECISION ALGORITHM
 
 ~~~mermaid
 graph TD
-    A[Comfort Care Initiated] --> B[Symptom Assessment]
+    A["🕊️ Comfort Care Initiated<br/>Goals Confirmed + Family Aligned"] --> B["📊 Priority Symptom Assessment<br/>Pain/Dyspnea/Agitation/Secretions"]
 
-    B --> C{Primary Symptom?}
+    B --> C{"🎯 Primary<br/>Symptom?"}
 
-    C -->|Pain| D[Pain Node: Morphine q2h PRN, Assess in 1h]
-    C -->|Dyspnea| E[Dyspnea Node: Morphine + Supports]
-    C -->|Agitation| F[Delirium Node: Rule-out, Haloperidol ± Lorazepam]
-    C -->|Secretions| G[Secretions Node: Position, Glycopyrrolate]
+    C -->|PAIN| D["💊 Pain Protocol<br/>Morphine 2-4mg IV/SC q2h"]
+    C -->|DYSPNEA| E["🫁 Dyspnea Protocol<br/>Morphine + Positioning"]
+    C -->|AGITATION| F["🧠 Agitation Protocol<br/>Rule Out Causes + Haloperidol"]
+    C -->|SECRETIONS| G["💧 Secretion Protocol<br/>Positioning + Anticholinergics"]
 
-    D --> H{Controlled?}
-    E --> H
-    F --> I{Cause Found?}
-    G --> J[Family Education]
+    D --> H{"📈 Pain<br/>Controlled?"}
+    E --> I{"🫁 Dyspnea<br/>Relieved?"}
+    F --> J{"🧠 Agitation<br/>Managed?"}
+    G --> K["👥 Family Education<br/>Normal Process"]
 
-    H -->|Yes| K[Continue Current]
-    H -->|No| L[Increase by 50% or Add Adjuvant]
+    H -->|YES| L["✅ Continue Current<br/>Reassess q4h"]
+    H -->|NO| M["⬆️ Escalate 50%<br/>Consider Infusion"]
+    I -->|YES| L
+    I -->|NO| N["⬆️ Increase Morphine 50%<br/>Add Lorazepam"]
+    J -->|YES| L
+    J -->|NO| O["⬆️ Add Lorazepam<br/>Consider Levomepromazine"]
 
-    I -->|Yes| M[Treat Cause]
-    I -->|No| N[Escalate Sedatives]
+    K --> L
+    M --> P["📊 Reassess Response<br/>1h Post-Adjustment"]
+    N --> P
+    O --> P
 
-    K --> O[Reassess q4h]
-    L --> O
-    M --> O
-    N --> O
+    L --> Q{"🕊️ Actively<br/>Dying?"}
+    P --> Q
 
-    O --> P{Actively Dying?}
+    Q -->|YES| R["👥 Family Support<br/>Continue Comfort Measures"]
+    Q -->|NO| S["🔄 Routine Monitoring<br/>PRN to Scheduled if >3/day"]
 
-    P -->|Yes| Q[Continue Comfort, Family Support]
-    P -->|No| R[If Frequent PRN, Convert to Scheduled/Infusion]
+    R --> T["✅ Peaceful Transition<br/>Protocol Complete"]
+    S --> U["📋 Documentation<br/>+ Follow-up Plan"]
+
+    U --> T
+
+    style A fill:#e8f4f8
+    style D fill:#fff2cc
+    style E fill:#f0f8ff
+    style F fill:#ffe4e1
+    style G fill:#f5f5dc
+    style R fill:#e6ffe6
+    style T fill:#ccffcc
 ~~~
 
----
+## OPTIMIZED DYNAMIC CARD SYSTEM
 
-## NODE TO DYNAMIC CARD MAPPING + INTERACTIVE COMPONENTS
-
-| **Node**                   | **Dynamic Card Name**  | **Clinical Prompt/Question**                                               | **Interface/Interactive Features**                    |
-|----------------------------|------------------------|---------------------------------------------------------------------------|-------------------------------------------------------|
-| A: Comfort Care Initiated  | Initial Assessment     | “Which symptom is priority to address for comfort?”                        | [Symptom Prioritization Buttons]                      |
-| B: Symptom Assessment      | Symptom Checklist      | “Select main symptom: pain, dyspnea, agitation, secretions?”               | [Checklist, selection]                                |
-| D: Pain                    | Pain Management        | “Morphine started. Is pain controlled after 1 hour?”                       | [Pain Scale, PRN counter, ‘Escalate’ option]          |
-| E: Dyspnea                 | Dyspnea Management     | “Is dyspnea comforted by opioid and non-pharm measures?”                   | [Dyspnea scale, comfort YES/NO, escalation option]    |
-| F: Agitation/Delirium      | Agitation Management   | “Any reversible causes found? Is restlessness controlled?”                  | [Reversible cause checklist, hallucination prompt]    |
-| G: Secretions              | Secretion Management   | “Is death rattle distressing to family? Are measures helping?”              | [Positioning checklist, family education box]         |
-| H: Control Achieved        | Continue Current Regimen| “Continue current dosing and reassess q4h”                                 | [Monitoring tracker]                                  |
-| L: Escalation              | Dose Adjustment        | “Increase dose by 50% or add medication? Select option.”                   | [Dose calculator, adjunct selector]                   |
-| M: Cause Treatable         | Treat Cause            | “Begin targeted therapy for reversible cause.”                              | [Therapeutic action prompt]                           |
-| N: Escalate Sedation       | Sedative Escalation    | “Symptoms refractory: add/adjust sedatives.”                               | [Sedative adjustment, safety checklist]               |
-| O: Reassessment            | Reassessment Tracker   | “Reassess key symptoms and comfort”                                         | [Symptom review, comfort assessment log]              |
-| Q: Actively Dying          | Family Support         | “Active dying: continue comfort and support for family”                     | [Family presence tracker, resources offered]          |
-| R: PRN Escalation          | Scheduled Conversion   | “If PRN used >3/day: convert to scheduled/infusion dosing”                  | [Infusion calculator, regimen adjustment]             |
-| J: Family Education        | Family Guidance        | “Continue family communication and education”                               | [FAQ list, key points display]                        |
-
----
-
-## INTERACTIVE ELEMENT EXAMPLES
-
-### Opioid Infusion Calculator
-~~~text
+### Card 0 – Initial Comfort Assessment (Node A → B)
 ┌─────────────────────────────────────────┐
-│    CONTINUOUS INFUSION SETUP            │
+│ 🕊️ COMFORT CARE INITIATION             │
 ├─────────────────────────────────────────┤
-│ Last 24h morphine use: 4mg × 8 = 32mg   │
-│ Basal rate: 32mg ÷ 24hr = 1.33mg/hr     │
-│ Round to 1.5mg/hr                       │
-│ Breakthrough: 3mg IV q1h PRN            │
-│ (≈10% of daily dose)                    │
-│ >3 breakthroughs/day? Increase basal 25-50% │
+│ **Goals Confirmation**:                 │
+│ • Comfort measures only - confirmed with patient/family│
+│ • DNR/DNI status documented in chart    │
+│ • Family meeting held, preferences aligned│
+│                                         │
+│ **Clinical Transitions**:               │
+│ • Cease non-beneficial monitoring (vitals unless symptoms unclear)│
+│ • Discontinue labs/imaging unless symptom-directed│
+│ • Stop non-comfort medications          │
+│ • Remove cardiac monitoring             │
+│                                         │
+│ **Symptom Prioritization Framework**:   │
+│ • **Pain**: Grimacing, restlessness, withdrawal│
+│ • **Dyspnea**: Air hunger, pursed lips, anxiety│
+│ • **Agitation**: Restlessness, confusion, picking│
+│ • **Secretions**: Audible gurgling, family distress│
+│                                         │
+│ **Decision Prompt**: Which symptom requires immediate intervention?│
+│                                         │
+│ [Next: Symptom-specific protocol ▶]    │
 └─────────────────────────────────────────┘
-~~~
 
-### Symptom Tracker
-~~~text
+### Card 1A – Advanced Pain Management (Node D → H)
 ┌─────────────────────────────────────────┐
-│      COMFORT ASSESSMENT                 │
+│ 💊 EVIDENCE-BASED PAIN MANAGEMENT       │
 ├─────────────────────────────────────────┤
-│ Time   Pain  Dyspnea  Agitation  Meds   │
-│ 08:00   7      5         2    M4,L1     │
-│ 12:00   4      3         1      M4      │
-│ 16:00   3      4         3    M4,H1     │
-│ 20:00   2      2         1      M6      │
-│ Trending: IMPROVED                      │
-│ Morphine/24h: 36mg                      │
-│ M=Morphine, L=Lorazepam, H=Haloperidol  │
+│ **Initial Opioid Dosing (Opioid-Naive)**:│
+│ • **IV/SC preferred**: Morphine 2-4mg q2h PRN│
+│ • **If no IV access**: 5-10mg PO q2h PRN│
+│ • **Onset**: IV 5-10min, PO 30-60min    │
+│                                         │
+│ **Conversion to Scheduled/Infusion**:   │
+│ • **If >3-4 PRN doses in 8h**: Calculate total 24h use│
+│ • **Continuous infusion**: Total daily ÷ 24 = hourly rate│
+│ • **Scheduled dosing**: Total daily ÷ 6 = q4h dosing│
+│                                         │
+│ **Breakthrough Management**:            │
+│ • **Dose**: 10-20% of total daily dose  │
+│ • **Frequency**: Available every hour PRN│
+│ • **Escalation**: If >3 breakthroughs/day, increase basal│
+│                                         │
+│ **Clinical Pearls**:                   │
+│ • No ceiling dose for comfort care      │
+│ • Double ineffective doses vs small increments│
+│ • Watch for myoclonus (rotate opioid or add lorazepam)│
+│ • Constipation prophylaxis unless actively dying│
+│                                         │
+│ [Next: Response assessment ▶]          │
 └─────────────────────────────────────────┘
-~~~
 
-### Family Communication Guide
-~~~text
+### Card 1B – Advanced Dyspnea Management (Node E → I)
 ┌─────────────────────────────────────────┐
-│    FAMILY EDUCATION POINTS              │
+│ 🫁 COMPREHENSIVE DYSPNEA MANAGEMENT      │
 ├─────────────────────────────────────────┤
-│ Natural dying process:                  │
-│ ▸ Breathing changes explained           │
-│ ▸ Decreased intake normal               │
-│ ▸ Secretions not painful                │
-│ ▸ Medications for comfort only          │
-│ What to expect:                         │
-│   – Sleeping increases                  │
-│   – Irregular breathing                 │
-│   – Cool extremities                    │
-│   – Possible restlessness               │
-│ Family may help by:                     │
-│ ▸ Talking, touch                        │
-│ ▸ Mouth care                            │
-│ ▸ Gentle repositioning                  │
+│ **Primary Intervention**:               │
+│ • **Low-dose morphine**: 2-4mg IV/SC q1h PRN│
+│ • **Key principle**: Not limited by respiratory rate│
+│ • **Mechanism**: Reduces central perception of breathlessness│
+│                                         │
+│ **Non-Pharmacologic Support**:          │
+│ • **Fan to face**: Stimulates trigeminal nerve│
+│ • **Positioning**: Upright/semi-upright preferred│
+│ • **Environment**: Cool, calm atmosphere │
+│ • **Presence**: Familiar faces, reassurance│
+│                                         │
+│ **Oxygen Therapy Considerations**:      │
+│ • **Trial only**: If patient reports subjective benefit│
+│ • **Discontinue**: After 24h trial if no comfort benefit│
+│ • **Avoid routine use**: Not evidence-based for comfort│
+│                                         │
+│ **Anxiety Component Management**:        │
+│ • **Lorazepam**: 0.5-1mg SL/IV/SC q4h PRN│
+│ • **Target**: Visible distress, not respiratory rate│
+│                                         │
+│ **Escalation Strategy**:                │
+│ • **Increase morphine 50%** if persistent dyspnea│
+│ • **Maintain non-pharmacologic measures** throughout│
+│                                         │
+│ [Next: Response evaluation ▶]          │
 └─────────────────────────────────────────┘
-~~~
 
----
+### Card 1C – Advanced Agitation/Delirium Management (Node F → J)
+┌─────────────────────────────────────────┐
+│ 🧠 SYSTEMATIC AGITATION MANAGEMENT       │
+├─────────────────────────────────────────┤
+│ **Reversible Cause Assessment**:        │
+│ • **Pain**: Often overlooked, assume present if unclear│
+│ • **Urinary retention**: Palpate, consider catheter│
+│ • **Constipation**: Especially with opioids│
+│ • **Hypoxia**: Only if reversible and comfort-directed│
+│ • **Medication effects**: Anticholinergics, steroids│
+│                                         │
+│ **Environmental Optimization**:         │
+│ • **Lighting**: Soft, natural light preferred│
+│ • **Noise**: Minimize alarms, conversations│
+│ • **Familiar presence**: Family members, pets│
+│ • **Reorientation**: Gentle, avoid arguing with delusions│
+│                                         │
+│ **Pharmacologic Intervention**:         │
+│ • **First-line**: Haloperidol 0.5-2mg IV/SC/PO q6h│
+│ • **Add-on**: Lorazepam 0.5-1mg q4h PRN if inadequate│
+│ • **Refractory**: Levomepromazine 6.25-12.5mg SC q4-6h│
+│                                         │
+│ **Family Support**:                     │
+│ • **Education**: Terminal agitation is normal│
+│ • **Reassurance**: Patient not suffering more│
+│ • **Involvement**: How family can help comfort│
+│ • **Avoid restraints**: Unless immediate safety risk│
+│                                         │
+│ [Next: Response monitoring ▶]          │
+└─────────────────────────────────────────┘
 
-**All above workflow and content reflects consensus from latest AAHPM, NCCN, and WHO Palliative/End-of-Life Care guidelines. For full guideline context, see:**  
-- https://www.nationalcoalitionhpc.org/ncp  
-- https://www.nccn.org/guidelines/guidelines-detail?category=3&id=1452  
-- https://www.who.int/news-room/fact-sheets/detail/palliative-care  
-- https://aahpm.org/competencies
+### Card 1D – Respiratory Secretion Management (Node G → K)
+┌─────────────────────────────────────────┐
+│ 💧 SECRETION MANAGEMENT ("DEATH RATTLE") │
+├─────────────────────────────────────────┤
+│ **Non-Pharmacologic First-Line**:       │
+│ • **Positioning**: Side-lying or semi-prone│
+│ • **Head elevation**: 30-45 degrees if tolerated│
+│ • **Mouth care**: Gentle cleaning, avoid deep suctioning│
+│                                         │
+│ **Pharmacologic Drying Agents**:        │
+│ • **Glycopyrrolate**: 0.2mg SC q4h PRN (preferred)│
+│ • **Scopolamine patch**: 1.5mg q72h transdermal│
+│ • **Atropine drops**: 1% solution, 1-2 drops SL q4h PRN│
+│ • **Onset**: 15-30min, peak effect 1-2h │
+│                                         │
+│ **Clinical Considerations**:            │
+│ • **Effectiveness**: ~50-70% reduction in secretions│
+│ • **Avoid suctioning**: May increase distress and trauma│
+│ • **Start early**: More effective before secretions established│
+│                                         │
+│ **Essential Family Education**:         │
+│ • **Patient comfort**: Secretions don't cause distress to patient│
+│ • **Normal process**: Part of natural dying process│
+│ • **Intervention purpose**: For family comfort, not patient suffering│
+│ • **Sound explanation**: Upper airway, not drowning│
+│                                         │
+│ [Next: Family support ▶]               │
+└─────────────────────────────────────────┘
 
----
+### Card 2 – Integrated Symptom Assessment Guide
+┌─────────────────────────────────────────┐
+│ 📊 COMPREHENSIVE SYMPTOM RECOGNITION     │
+├─────────────────────────────────────────┤
+│ **Pain Assessment (Present in 70-90%)**:│
+│ • **Behavioral**: Grimacing, guarding, withdrawal│
+│ • **Vocal**: Moaning, crying out with movement│
+│ • **Physiologic**: Tachycardia, hypertension (early)│
+│ • **Principle**: When in doubt, treat for pain│
+│                                         │
+│ **Dyspnea Recognition**:                │
+│ • **Subjective report**: Patient says "can't breathe"│
+│ • **Behavioral**: Pursed lips, use of accessory muscles│
+│ • **Not reliable**: Respiratory rate, oxygen saturation│
+│ • **Anxiety component**: Often accompanies air hunger│
+│                                         │
+│ **Delirium/Agitation Spectrum**:        │
+│ • **Hyperactive**: Restlessness, picking, agitation│
+│ • **Hypoactive**: Withdrawal, stupor (often missed)│
+│ • **Mixed type**: Alternating hyper/hypoactive│
+│ • **Terminal restlessness**: Common final days/hours│
+│                                         │
+│ **Secretion Assessment**:               │
+│ • **Audible gurgling**: Upper airway secretions│
+│ • **Family distress**: Often more concerning to family│
+│ • **Patient awareness**: Usually not distressing to patient│
+│ • **Timing**: More common in final 48-72 hours│
+│                                         │
+│ **Opioid-Related Side Effects**:        │
+│ • **Myoclonus**: Jerking movements, consider rotation│
+│ • **Hallucinations**: May indicate neurotoxicity│
+│ • **Respiratory depression**: Not a comfort care concern│
+│                                         │
+│ [Next: Medication protocols ▶]         │
+└─────────────────────────────────────────┘
+
+### Card 3 – Essential Medication Reference
+┌─────────────────────────────────────────┐
+│ 💊 COMFORT CARE MEDICATION PROTOCOLS    │
+├─────────────────────────────────────────┤
+│ **Morphine (First-Line Opioid)**:       │
+│ • **Starting dose**: 2-4mg IV/SC q2h PRN│
+│ • **PO equivalent**: 2-3× IV dose       │
+│ • **Infusion conversion**: Total daily ÷ 24│
+│ • **Half-life**: 2-4 hours, metabolites longer│
+│                                         │
+│ **Lorazepam (Anxiolytic/Sedative)**:    │
+│ • **Dose range**: 0.5-2mg q4h PRN       │
+│ • **Routes**: SL/IV/SC preferred over PO/rectal│
+│ • **Onset**: SL 15-30min, IV immediate  │
+│ • **Duration**: 6-8 hours               │
+│                                         │
+│ **Haloperidol (Antipsychotic)**:        │
+│ • **Dose range**: 0.5-2mg q6h PRN       │
+│ • **Routes**: IV/SC/PO equally effective │
+│ • **QT concerns**: Not clinically relevant in EOL care│
+│ • **Extrapyramidal**: Rare at comfort doses│
+│                                         │
+│ **Anticholinergics (Secretions)**:      │
+│ • **Glycopyrrolate**: Doesn't cross BBB │
+│ • **Scopolamine**: May cause confusion  │
+│ • **Atropine**: Rapid onset, short duration│
+│                                         │
+│ **Alternative Routes**:                 │
+│ • **Buccal/Sublingual**: Rapid absorption│
+│ • **Subcutaneous**: Reliable, comfortable│
+│ • **Rectal**: Consider if other routes unavailable│
+│ • **Transdermal**: Limited options, slow onset│
+│                                         │
+│ [Next: Family support protocols ▶]     │
+└─────────────────────────────────────────┘
+
+### Card 4 – Family Support & Communication Framework
+┌─────────────────────────────────────────┐
+│ 👥 COMPREHENSIVE FAMILY SUPPORT          │
+├─────────────────────────────────────────┤
+│ **Essential Education Topics**:          │
+│ • **Natural dying process**: What to expect│
+│ • **Medication goals**: Comfort, not cure│
+│ • **Breathing changes**: Normal pattern variations│
+│ • **Secretions**: Not distressing to patient│
+│                                         │
+│ **Signs of Active Dying**:              │
+│ • **Breathing**: Irregular, periods of apnea│
+│ • **Circulation**: Cool extremities, mottling│
+│ • **Consciousness**: Decreased responsiveness│
+│ • **Intake**: Decreased interest in food/fluids│
+│                                         │
+│ **How Family Can Help**:                │
+│ • **Presence**: Talking, reading, music │
+│ • **Touch**: Gentle holding, massage    │
+│ • **Mouth care**: Ice chips, lip balm   │
+│ • **Positioning**: Help with comfort positioning│
+│                                         │
+│ **When to Call Staff**:                 │
+│ • **New/worsening pain**: Patient appears uncomfortable│
+│ • **Breathing distress**: Obvious struggle│
+│ • **Agitation**: Restlessness increasing│
+│ • **Family anxiety**: Need for reassurance│
+│                                         │
+│ **Bereavement Preparation**:            │
+│ • **Time frame**: May be hours to days  │
+│ • **Individual variation**: Each death unique│
+│ • **Family wishes**: Presence preferences│
+│ • **Spiritual care**: Religious/cultural needs│
+│                                         │
+│ [Next: Quality assurance ▶]            │
+└─────────────────────────────────────────┘
+
+### Card 5 – Quality Metrics & Continuous Improvement
+┌─────────────────────────────────────────┐
+│ 📊 COMFORT CARE QUALITY MANAGEMENT      │
+├─────────────────────────────────────────┤
+│ **Process Excellence Metrics**:         │
+│ • **Goals of care discussion**: 100% completion│
+│ • **Symptom assessment**: Within 1h of comfort care│
+│ • **First-line medication**: Appropriate selection >95%│
+│ • **Family education**: Documented completion│
+│                                         │
+│ **Clinical Outcome Measures**:          │
+│ • **Pain control**: <4/10 on comfort scale >90% of time│
+│ • **Dyspnea relief**: Subjective improvement >85%│
+│ • **Agitation management**: Peaceful intervals >80%│
+│ • **Family satisfaction**: Comfort with care process│
+│                                         │
+│ **Safety Monitoring**:                  │
+│ • **Medication errors**: <2% incident rate│
+│ • **Route optimization**: Appropriate selection│
+│ • **Drug interactions**: Systematic review│
+│                                         │
+│ **Evidence Integration**:               │
+│ • **AAHPM guidelines**: Protocol compliance│
+│ • **NCCN updates**: Annual review      │
+│ • **WHO standards**: International alignment│
+│                                         │
+│ **Continuous Improvement**:             │
+│ • **Monthly case reviews**: Outcome analysis│
+│ • **Family feedback**: Experience surveys│
+│ • **Staff competency**: Education programs│
+│                                         │
+│ ✅ **ENHANCED COMFORT CARE COMPLETE**   │
+│                                         │
+│ [◀ Previous: All Treatment Pathways]   │
+└─────────────────────────────────────────┘
+
+## INTERACTIVE CLINICAL CALCULATORS
+
+### Opioid Conversion Calculator
+┌─────────────────────────────────────────┐  
+│ MORPHINE INFUSION CALCULATOR │  
+├─────────────────────────────────────────┤  
+│ Last 24h PRN use: 4mg × 6 doses = 24mg │  
+│ Continuous rate: 24mg ÷ 24h = 1mg/hr │  
+│ Breakthrough: 2-3mg IV q1h PRN │  
+│ (10-15% of daily dose) │  
+│ │  
+│ If >3 breakthroughs/day: │  
+│ Increase basal by 25-50% │  
+└─────────────────────────────────────────┘
+
+### Symptom Assessment Tracker
+┌─────────────────────────────────────────┐  
+│ COMFORT ASSESSMENT LOG │  
+├─────────────────────────────────────────┤  
+│ Time Pain Dyspnea Agitation Meds │  
+│ 08:00 8 6 3 M4,L1 │  
+│ 12:00 5 4 2 M4 │  
+│ 16:00 3 3 1 M6,H1 │  
+│ 20:00 2 2 1 M6 │  
+│ │  
+│ Trending: IMPROVED │  
+│ Total morphine 24h: 28mg │  
+│ Consider infusion: 1.2mg/hr basal │  
+│ M=Morphine, L=Lorazepam, H=Haloperidol │  
+└─────────────────────────────────────────┘
+
+## IMPLEMENTATION & QUALITY ASSURANCE
+
+### Staff Competency Requirements
+- **Comfort care principles**: Symptom-focused approach
+- **Medication management**: Dosing, routes, combinations  
+- **Family communication**: Education, support, bereavement
+- **Quality metrics**: Documentation, outcome tracking
+
+### Technology Integration
+- **EHR integration**: Automated comfort care order sets
+- **Medication calculators**: Built-in conversion tools
+- **Family resources**: Digital education materials
+- **Quality dashboards**: Real-time outcome monitoring
+
+**This enhanced protocol provides comprehensive, evidence-based comfort care management with reduced cognitive load through streamlined decision-making while expanding clinical context for optimal patient and family outcomes.**

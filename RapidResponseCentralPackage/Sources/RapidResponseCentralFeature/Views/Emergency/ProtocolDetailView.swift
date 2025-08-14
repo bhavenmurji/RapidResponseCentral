@@ -3,7 +3,7 @@ import SwiftUI
 import UIKit
 #endif
 
-// MARK: - Professional Medical Protocol Detail View
+// MARK: - Professional Medical Protocol Detail View with 45/50/5 Layout
 public struct ProtocolDetailView: View {
     let proto: EmergencyProtocol
     @State private var selectedNodeId: String?
@@ -11,7 +11,15 @@ public struct ProtocolDetailView: View {
     @State private var currentCardIndex = 0
     @StateObject private var session: ProtocolSession
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.activeProtocolSession) private var activeSession
     @State private var showingEventLog = false
+    @State private var showEndProtocolAlert = false
+    @State private var elapsedTime: TimeInterval = 0
+    @State private var timer: Timer?
+    @State private var isTimerPaused = false
+    @State private var lapCount = 0
+    @State private var lastLapTime: TimeInterval = 0
+    // Removed expandedSections - cards now update dynamically
     
     public init(protocol proto: EmergencyProtocol) {
         self.proto = proto
@@ -20,47 +28,216 @@ public struct ProtocolDetailView: View {
             protocolTitle: proto.title,
             location: nil
         ))
+        // Pre-select the first node immediately
+        let firstNode = proto.algorithm.nodes.first
+        self._selectedNodeId = State(initialValue: firstNode?.id)
+        self._selectedNode = State(initialValue: firstNode)
     }
     
     public var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                // Timer Banner - Fixed Height
-                ProtocolTimerBanner(session: session)
-                    .frame(height: 60)
-                    .background(.regularMaterial)
-                    .shadow(color: Color.black.opacity(0.08), radius: 1, y: 1)
-                
-                // Main Content Area - Proper 45/50/5 Vertical Split
+                // TOP 38%: Ultra-Efficient Clinical Cards with proper spacing
                 VStack(spacing: 0) {
-                    // TOP (45%): Protocol Information Cards
-                    cardsPanel
-                        .frame(height: (geometry.size.height - 60) * 0.45)
+                    // Add proper top padding to avoid navigation bar overlap
+                    Color.clear
+                        .frame(height: 8) // Reduced from 20 to 8 for better space usage
                     
-                    // Horizontal Divider
-                    Rectangle()
-                        .fill(Color(.systemGray5))
-                        .frame(height: 1)
+                    // Protocol header with timer
+                    HStack(spacing: 12) {
+                        Text(proto.title)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.primary)
+                            .lineLimit(1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Spacer()
+                        
+                        // Enhanced timer display with controls
+                        if session.isActive {
+                            HStack(spacing: 6) {
+                                Image(systemName: "timer")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.blue)
+                                
+                                Text(formattedTime)
+                                    .font(.system(size: 14, design: .monospaced))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.primary)
+                                    .fixedSize() // This ensures the text stays on one line
+                                
+                                // Timer controls
+                                HStack(spacing: 4) {
+                                    // Rewind 10s
+                                    Button(action: { adjustTime(-10) }) {
+                                        Image(systemName: "gobackward.10")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.primary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    // Play/Pause
+                                    Button(action: toggleTimer) {
+                                        Image(systemName: isTimerPaused ? "play.fill" : "pause.fill")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.primary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    // Fast Forward 10s
+                                    Button(action: { adjustTime(10) }) {
+                                        Image(systemName: "goforward.10")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.primary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    // Lap button
+                                    Button(action: addLapMarker) {
+                                        HStack(spacing: 2) {
+                                            Image(systemName: "timer")
+                                                .font(.system(size: 10))
+                                            if lapCount > 0 {
+                                                Text("\(lapCount)")
+                                                    .font(.system(size: 9, weight: .medium))
+                                            }
+                                        }
+                                        .foregroundColor(.orange)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                
+                                Divider()
+                                    .frame(height: 20)
+                                
+                                // End Protocol button - red square with X
+                                Button(action: { showEndProtocolAlert = true }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .fill(Color.red)
+                                            .frame(width: 32, height: 32)
+                                        
+                                        Image(systemName: "xmark")
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundColor(.white)
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("End protocol")
+                                .accessibilityHint("Double tap to end the current protocol")
+                                .accessibilityAddTraits(.isButton)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .fill(Color(.systemGray6))
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color(.systemBackground))
+                    .overlay(
+                        Rectangle()
+                            .fill(Color(.systemGray5))
+                            .frame(height: 1),
+                        alignment: .bottom
+                    )
                     
-                    // MIDDLE (50%): Flowchart View
-                    flowchartPanel
-                        .frame(height: (geometry.size.height - 60) * 0.50)
+                    // Dynamic cards - NO SCROLLING - all must fit on screen
+                    NodeSpecificCards(
+                        allCards: proto.cards,
+                        selectedNode: selectedNode,
+                        currentNodeIndex: getCurrentStepNumber() - 1,
+                        totalNodes: proto.algorithm.nodes.count,
+                        onNodeSelect: { nodeId in
+                            if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+                                handleNodeSelection(node)
+                            }
+                        },
+                        onPrevious: navigateToPreviousNode,
+                        onNext: navigateToNextNode
+                    )
+                    .padding(.bottom, 4) // Minimal padding
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.horizontal, 8) // Small horizontal padding
+                    .background(Color(.systemBackground))
+            }
+            .frame(height: geometry.size.height * 0.35)  // Reduced to 35% to prevent card overlap with back button
+            .layoutPriority(1)
+            
+            // Divider
+            Rectangle()
+                .fill(Color(.systemGray4))
+                .frame(height: 1)
+            
+            // MIDDLE 45%: Compact Flowchart
+            VStack(spacing: 0) {
+                // Minimal header
+                HStack {
+                    Text("PROTOCOL FLOW")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.secondary)
                     
-                    // Horizontal Divider
-                    Rectangle()
-                        .fill(Color(.systemGray5))
-                        .frame(height: 1)
-                    
-                    // BOTTOM (5%): Protocol Flow Navigation
-                    protocolFlowPanel
-                        .frame(height: (geometry.size.height - 60) * 0.05)
-                        .background(Color(.systemGray6))
+                    if let selectedNode {
+                        Spacer()
+                        HStack(spacing: 3) {
+                            Image(systemName: selectedNode.critical ? "exclamationmark.triangle.fill" : "circle.fill")
+                            Text(selectedNode.critical ? "CRITICAL" : "ACTIVE")
+                        }
+                        .font(.caption2)
+                        .foregroundColor(selectedNode.critical ? .red : .blue)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 1)
+                        .background(
+                            Capsule()
+                                .fill((selectedNode.critical ? Color.red : Color.blue).opacity(0.1))
+                        )
+                    }
                 }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 2)
+                .frame(maxHeight: 30)
+                .background(Color(.systemGray6))
+                
+                // Snap-to-node flowchart with branching
+                SnapFlowchartView(
+                    algorithm: proto.algorithm,
+                    selectedNodeId: $selectedNodeId,
+                    onNodeSelect: { nodeId in
+                        if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+                            handleNodeSelection(node)
+                        }
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemBackground))
+            }
+            .frame(height: geometry.size.height * 0.55)  // Increased to 55% for better flowchart visibility
+            .layoutPriority(0.8)
+            
+            // Divider
+            Rectangle()
+                .fill(Color(.systemGray4))
+                .frame(height: 1)
+            
+            // BOTTOM 10%: Horizontal Protocol Flow Navigation
+            ProtocolFlowNavigationPanel(
+                nodes: proto.algorithm.nodes,
+                selectedNodeId: $selectedNodeId,
+                onNodeSelect: { nodeId in
+                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
+                        handleNodeSelection(node)
+                    }
+                }
+            )
+            .frame(height: geometry.size.height * 0.10)  // Use percentage for consistent layout
             }
         }
-        #if os(iOS)
+        .ignoresSafeArea(.container, edges: .bottom)
         .navigationBarTitleDisplayMode(.inline)
-        #endif
+        .padding(.top, 1) // Small additional padding to ensure no overlap
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
@@ -73,203 +250,164 @@ public struct ProtocolDetailView: View {
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                HStack(spacing: 16) {
+                HStack(spacing: 12) {
                     Button(action: { showingEventLog.toggle() }) {
                         Image(systemName: "list.bullet.clipboard")
                             .foregroundColor(.blue)
                     }
                     
-                    Button("End Protocol") {
-                        dismiss()
+                    if !session.isActive {
+                        Button(action: { 
+                            session.start()
+                            startTimer()
+                            // Set as active session in ContentView
+                        }) {
+                            Label("Start", systemImage: "play.fill")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.green)
+                        }
                     }
-                    .foregroundColor(.red)
-                    .fontWeight(.medium)
                 }
             }
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            // Select first node on appear
-            if selectedNodeId == nil, let firstNode = proto.algorithm.nodes.first {
+            // Start protocol session when view appears
+            ProtocolSessionManager.shared.startSession(
+                protocolId: proto.id,
+                protocolTitle: proto.title,
+                location: nil
+            )
+            
+            // Start timer if session is already active
+            if session.isActive {
+                startTimer()
+            }
+            
+            // Force selection of first node and trigger immediate update
+            if let firstNode = proto.algorithm.nodes.first {
+                // Set initial selection immediately
                 selectedNodeId = firstNode.id
                 selectedNode = firstNode
+                
+                // Then trigger the handle function after a brief delay for UI to settle
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    handleNodeSelection(firstNode)
+                }
             }
         }
         .sheet(isPresented: $showingEventLog) {
             EventLogModal(session: session)
         }
+        .alert("End Protocol?", isPresented: $showEndProtocolAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("End Protocol", role: .destructive) {
+                session.endSession()
+                stopTimer()
+                dismiss()
+            }
+        } message: {
+            Text("Are you sure you want to end this protocol?")
+        }
+        .onDisappear {
+            stopTimer()
+        }
     }
     
-    // MARK: - Panel Components
+    // MARK: - Flowchart Node Component
     
-    // Flowchart Panel (Middle 50%)
-    private var flowchartPanel: some View {
-        VStack(spacing: 0) {
-            // Compact Panel Header for Middle Section
-            HStack {
-                Text("Protocol Algorithm")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-                Spacer()
-                if let selectedNode {
-                    HStack(spacing: 4) {
-                        Image(systemName: selectedNode.critical ? "exclamationmark.triangle.fill" : "info.circle.fill")
-                        Text(selectedNode.critical ? "Critical" : "Active")
+    private func flowchartNode(_ node: AlgorithmNode) -> some View {
+        VStack(spacing: 6) {
+            HStack(spacing: 8) {
+                // Node type icon
+                nodeIcon(for: node)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(node.title)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.primary)
+                        .lineLimit(2)
+                    
+                    if !node.content.isEmpty {
+                        Text(node.content)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                            .lineLimit(3)
                     }
-                    .font(.caption2)
-                    .foregroundColor(selectedNode.critical ? .red : .blue)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 3)
-                    .background(
-                        Capsule()
-                            .fill((selectedNode.critical ? Color.red : Color.blue).opacity(0.1))
-                    )
+                }
+                
+                Spacer()
+                
+                if node.critical {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.red)
                 }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(Color(.systemBackground))
-            
-            Rectangle()
-                .fill(Color(.systemGray5))
-                .frame(height: 1)
-            
-            // Flowchart Content
-            FigmaOmnichartView(
-                algorithm: proto.algorithm,
-                selectedNodeId: $selectedNodeId,
-                onNodeSelect: { nodeId in
-                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
-                        handleNodeSelection(node)
-                    }
-                }
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(selectedNodeId == node.id ? nodeTypeColor(node.nodeType).opacity(0.1) : Color(.systemGray6))
             )
-            .background(Color(.systemBackground))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(
+                        selectedNodeId == node.id ? nodeTypeColor(node.nodeType) : Color(.systemGray4),
+                        lineWidth: selectedNodeId == node.id ? 2 : 1
+                    )
+            )
+            .shadow(
+                color: selectedNodeId == node.id ? nodeTypeColor(node.nodeType).opacity(0.2) : Color.black.opacity(0.05),
+                radius: selectedNodeId == node.id ? 4 : 1,
+                x: 0,
+                y: 1
+            )
         }
     }
     
-    // Information Cards Panel (Top 45%)
-    private var cardsPanel: some View {
-        VStack(spacing: 0) {
-            // Prominent Panel Header for Top Section
-            HStack {
-                Text("Protocol Information")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                Spacer()
-                if !proto.cards.isEmpty {
-                    Text("\(currentCardIndex + 1) of \(proto.cards.count)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(
-                            Capsule()
-                                .fill(Color(.systemGray6))
-                        )
+    private func nodeIcon(for node: AlgorithmNode) -> some View {
+        ZStack {
+            Group {
+                switch node.nodeType {
+                case .decision:
+                    Diamond()
+                        .fill(nodeTypeColor(node.nodeType).opacity(0.2))
+                case .assessment, .intervention, .medication, .action:
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(nodeTypeColor(node.nodeType).opacity(0.2))
+                case .endpoint:
+                    Circle()
+                        .fill(nodeTypeColor(node.nodeType).opacity(0.2))
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(Color(.systemBackground))
+            .frame(width: 24, height: 24)
             
-            Rectangle()
-                .fill(Color(.systemGray5))
-                .frame(height: 1)
-            
-            // Cards Content
-            if !proto.cards.isEmpty {
-                TabView(selection: $currentCardIndex) {
-                    ForEach(Array(proto.cards.enumerated()), id: \.offset) { index, card in
-                        ScrollView {
-                            MedicalProtocolCard(
-                                card: card,
-                                selectedNode: selectedNodeId.flatMap { id in
-                                    proto.algorithm.nodes.first { $0.id == id }
-                                },
-                                algorithm: proto.algorithm,
-                                onNodeSelect: { nodeId in
-                                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
-                                        handleNodeSelection(node)
-                                    }
-                                }
-                            )
-                            .padding(16)
-                        }
-                        .background(Color(.systemBackground))
-                        .tag(index)
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
-            } else {
-                VStack {
-                    Spacer()
-                    Image(systemName: "doc.text")
-                        .font(.system(size: 48))
-                        .foregroundColor(.secondary)
-                    Text("No information cards available")
-                        .font(.headline)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                }
-                .background(Color(.systemBackground))
-            }
-        }
-    }
-    
-    // Minimal Protocol Flow Panel (Bottom 5%)
-    private var protocolFlowPanel: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("Protocol Flow")
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
-                Spacer()
-                if let selectedNode {
-                    Text("Current: \(selectedNode.title)")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .padding(.horizontal, 12)
-            .padding(.top, 4)
-            
-            CompactFlowchartView(
-                algorithm: proto.algorithm,
-                selectedNodeId: $selectedNodeId,
-                onNodeSelect: { nodeId in
-                    if let node = proto.algorithm.nodes.first(where: { $0.id == nodeId }) {
-                        handleNodeSelection(node)
-                    }
-                }
-            )
-            .padding(.horizontal, 4)
-            .padding(.bottom, 2)
+            Image(systemName: nodeTypeIcon(node.nodeType))
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(nodeTypeColor(node.nodeType))
         }
     }
     
     // MARK: - Node Selection Handler
     
     private func handleNodeSelection(_ node: AlgorithmNode) {
-        selectedNodeId = node.id
-        selectedNode = node
-        
-        // Update card index based on node selection with smooth animation
-        withAnimation(.easeInOut(duration: 0.3)) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            selectedNodeId = node.id
+            selectedNode = node
+            
+            // Update card index based on node selection
             switch node.nodeType {
             case .assessment:
-                currentCardIndex = min(1, proto.cards.count - 1) // Assessment card if available
+                currentCardIndex = proto.cards.firstIndex { $0.type == .assessment } ?? 0
             case .intervention, .medication, .action:
-                currentCardIndex = min(2, proto.cards.count - 1) // Actions card if available
+                currentCardIndex = proto.cards.firstIndex { $0.type == .actions } ?? 0
             case .decision, .endpoint:
-                currentCardIndex = 0 // Dynamic content card
+                currentCardIndex = proto.cards.firstIndex { $0.type == .dynamic } ?? 0
             }
         }
         
-        // Log the node transition for analytics
+        // Log the node transition
         let currentTime = Date().timeIntervalSince(session.startTime)
         let event = EventLogEntry(
             relativeTime: currentTime,
@@ -278,145 +416,34 @@ public struct ProtocolDetailView: View {
         )
         session.addEvent(event)
     }
-}
-
-// MARK: - Medical Protocol Card Component
-
-struct MedicalProtocolCard: View {
-    let card: ProtocolCard
-    let selectedNode: AlgorithmNode?
-    let algorithm: ProtocolAlgorithm
-    let onNodeSelect: (String) -> Void
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Professional Card Header
-            cardHeader
-            
-            // Current Node Context (if available)
-            if let selectedNode {
-                currentNodeContext(selectedNode)
-            }
-            
-            // Card Sections
-            ForEach(card.sections) { section in
-                cardSection(section)
-            }
-        }
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.secondarySystemBackground))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(.systemGray5), lineWidth: 1)
-        )
+    private func navigateToPreviousNode() {
+        guard let currentNode = selectedNode,
+              let currentIndex = proto.algorithm.nodes.firstIndex(where: { $0.id == currentNode.id }),
+              currentIndex > 0 else { return }
+        
+        let previousNode = proto.algorithm.nodes[currentIndex - 1]
+        handleNodeSelection(previousNode)
     }
     
-    private var cardHeader: some View {
-        HStack(spacing: 12) {
-            // Card Type Icon
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(colorForCardType(card.type).opacity(0.15))
-                    .frame(width: 40, height: 40)
-                
-                Image(systemName: iconForCardType(card.type))
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(colorForCardType(card.type))
-            }
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(card.title)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-                
-                Text(cardTypeDescription(card.type))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-        }
-    }
-    
-    private func currentNodeContext(_ node: AlgorithmNode) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("CURRENT STEP")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.secondary)
-                Spacer()
-                if node.critical {
-                    Label("Critical", systemImage: "exclamationmark.triangle.fill")
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .labelStyle(.titleAndIcon)
-                }
-            }
-            
-            HStack(spacing: 12) {
-                Image(systemName: nodeTypeIcon(node.nodeType))
-                    .font(.title3)
-                    .foregroundColor(nodeTypeColor(node.nodeType))
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(node.title)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    if !node.content.isEmpty {
-                        Text(node.content)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                Spacer()
-            }
-        }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.tertiarySystemBackground))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(node.critical ? Color.red.opacity(0.3) : Color.blue.opacity(0.3), lineWidth: 1)
-        )
-    }
-    
-    private func cardSection(_ section: CardSection) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if !section.title.isEmpty {
-                Text(section.title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-            }
-            
-            VStack(alignment: .leading, spacing: 6) {
-                ForEach(section.items, id: \.self) { item in
-                    HStack(alignment: .top, spacing: 8) {
-                        Text("•")
-                            .font(.subheadline)
-                            .foregroundColor(colorForCardType(card.type))
-                            .fontWeight(.bold)
-                        
-                        Text(item)
-                            .font(.subheadline)
-                            .foregroundColor(.primary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
-        }
+    private func navigateToNextNode() {
+        guard let currentNode = selectedNode,
+              let currentIndex = proto.algorithm.nodes.firstIndex(where: { $0.id == currentNode.id }),
+              currentIndex < proto.algorithm.nodes.count - 1 else { return }
+        
+        let nextNode = proto.algorithm.nodes[currentIndex + 1]
+        handleNodeSelection(nextNode)
     }
     
     // MARK: - Helper Functions
+    
+    private func getCurrentStepNumber() -> Int {
+        guard let selectedId = selectedNodeId,
+              let index = proto.algorithm.nodes.firstIndex(where: { $0.id == selectedId }) else {
+            return 1
+        }
+        return index + 1
+    }
     
     private func iconForCardType(_ type: CardType) -> String {
         switch type {
@@ -440,14 +467,18 @@ struct MedicalProtocolCard: View {
         }
     }
     
-    private func cardTypeDescription(_ type: CardType) -> String {
+    private func nodeTypeColor(_ type: NodeType) -> Color {
         switch type {
-        case .dynamic:
-            return "Context-aware information"
+        case .decision:
+            return .blue
         case .assessment:
-            return "Clinical assessment guide"
-        case .actions:
-            return "Required interventions"
+            return .orange
+        case .intervention, .action:
+            return .green
+        case .medication:
+            return .purple
+        case .endpoint:
+            return .gray
         }
     }
     
@@ -468,62 +499,240 @@ struct MedicalProtocolCard: View {
         }
     }
     
-    private func nodeTypeColor(_ type: NodeType) -> Color {
-        switch type {
-        case .decision:
-            return .blue
-        case .assessment:
-            return .orange
-        case .intervention, .action:
-            return .green
-        case .medication:
-            return .purple
-        case .endpoint:
-            return .gray
+    // MARK: - Timer Helpers
+    
+    private var formattedTime: String {
+        let minutes = Int(elapsedTime) / 60
+        let seconds = Int(elapsedTime) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    private func startTimer() {
+        guard timer == nil else { return }
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            Task { @MainActor in
+                if !isTimerPaused {
+                    elapsedTime += 1
+                }
+            }
+        }
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+        elapsedTime = 0
+        isTimerPaused = false
+        lapCount = 0
+        lastLapTime = 0
+    }
+    
+    private func toggleTimer() {
+        isTimerPaused.toggle()
+        let event = EventLogEntry(
+            relativeTime: elapsedTime,
+            type: .customNote,
+            description: isTimerPaused ? "Timer paused" : "Timer resumed"
+        )
+        session.addEvent(event)
+    }
+    
+    private func adjustTime(_ seconds: TimeInterval) {
+        elapsedTime = max(0, elapsedTime + seconds)
+        let event = EventLogEntry(
+            relativeTime: elapsedTime,
+            type: .customNote,
+            description: seconds > 0 ? "Time forward \(Int(seconds))s" : "Time back \(Int(-seconds))s"
+        )
+        session.addEvent(event)
+    }
+    
+    private func addLapMarker() {
+        lapCount += 1
+        let splitTime = elapsedTime - lastLapTime
+        lastLapTime = elapsedTime
+        
+        let event = EventLogEntry(
+            relativeTime: elapsedTime,
+            type: .lapMarker,
+            description: "Lap \(lapCount) - Split: \(formatTime(splitTime))",
+            additionalNotes: "Total time: \(formattedTime)"
+        )
+        session.addEvent(event)
+    }
+    
+    private func formatTime(_ time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    private func compactCardSection(_ section: CardSection) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            if !section.title.isEmpty {
+                Text(section.title)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(.primary)
+            }
+            
+            ForEach(section.items, id: \.self) { item in
+                HStack(alignment: .top, spacing: 3) {
+                    Text("•")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.blue)
+                    
+                    Text(item)
+                        .font(.system(size: 9))
+                        .foregroundColor(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(2)
+                }
+            }
         }
     }
 }
 
+// MARK: - Protocol Flow Navigation Panel
+struct ProtocolFlowNavigationPanel: View {
+    let nodes: [AlgorithmNode]
+    @Binding var selectedNodeId: String?
+    let onNodeSelect: (String) -> Void
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(Array(nodes.enumerated()), id: \.element.id) { index, node in
+                    Button(action: { onNodeSelect(node.id) }) {
+                        VStack(spacing: 6) {
+                            // Node indicator with number
+                            ZStack {
+                                Circle()
+                                    .fill(selectedNodeId == node.id ? Color.blue : Color.gray.opacity(0.2))
+                                    .frame(width: 24, height: 24)
+                                
+                                Text("\(index + 1)")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .foregroundColor(selectedNodeId == node.id ? .white : .secondary)
+                            }
+                            
+                            Text(node.title)
+                                .font(.system(size: 11, weight: selectedNodeId == node.id ? .medium : .regular))
+                                .foregroundColor(selectedNodeId == node.id ? .primary : .secondary)
+                                .lineLimit(2)
+                                .multilineTextAlignment(.center)
+                                .frame(width: 70)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+        .frame(maxHeight: .infinity)
+        .background(Color(.systemGray6))
+    }
+}
 
+// MARK: - Diamond Shape for Decision Nodes
+struct Diamond: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        
+        path.move(to: CGPoint(x: center.x, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: center.y))
+        path.addLine(to: CGPoint(x: center.x, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: center.y))
+        path.closeSubpath()
+        
+        return path
+    }
+}
 
 #Preview {
-    if #available(iOS 16.0, macOS 13.0, *) {
-        NavigationStack {
-            ProtocolDetailView(
-                protocol: EmergencyProtocol(
-                    id: "code-blue",
-                    title: "Code Blue",
-                    icon: "heart.fill",
-                    category: .cardiac,
-                    algorithm: ProtocolAlgorithm(
-                        nodes: [
-                            AlgorithmNode(
-                                id: "start",
-                                title: "Unresponsive Patient",
-                                nodeType: .assessment,
-                                critical: true,
-                                content: "Check pulse and breathing",
-                                connections: ["cpr", "shock"]
+    NavigationStack {
+        ProtocolDetailView(
+            protocol: EmergencyProtocol(
+                id: "code-blue",
+                title: "Code Blue - Cardiac Arrest",
+                icon: "heart.fill",
+                category: .cardiac,
+                algorithm: ProtocolAlgorithm(
+                    nodes: [
+                        AlgorithmNode(
+                            id: "start",
+                            title: "Unresponsive Patient",
+                            nodeType: .assessment,
+                            critical: true,
+                            content: "Check pulse and breathing",
+                            connections: ["cpr"]
+                        ),
+                        AlgorithmNode(
+                            id: "cpr",
+                            title: "Start CPR",
+                            nodeType: .intervention,
+                            critical: true,
+                            content: "30:2 compressions to ventilations",
+                            connections: ["rhythm"]
+                        ),
+                        AlgorithmNode(
+                            id: "rhythm",
+                            title: "Check Rhythm",
+                            nodeType: .decision,
+                            critical: false,
+                            content: "VF/VT or Asystole/PEA?",
+                            connections: ["shock", "continue"]
+                        ),
+                        AlgorithmNode(
+                            id: "shock",
+                            title: "Defibrillate",
+                            nodeType: .intervention,
+                            critical: true,
+                            content: "200J biphasic",
+                            connections: ["continue"]
+                        ),
+                        AlgorithmNode(
+                            id: "continue",
+                            title: "Continue Protocol",
+                            nodeType: .endpoint,
+                            critical: false,
+                            content: "Resume CPR for 2 minutes",
+                            connections: []
+                        )
+                    ]
+                ),
+                cards: [
+                    ProtocolCard(
+                        id: "dynamic",
+                        type: .dynamic,
+                        title: "Current Step",
+                        sections: [
+                            CardSection(
+                                title: "Immediate Actions",
+                                items: ["Check responsiveness", "Call for help", "Get AED", "Position patient"]
+                            ),
+                            CardSection(
+                                title: "Medications",
+                                items: ["Epinephrine 1mg IV/IO q3-5min", "Amiodarone 300mg IV/IO"]
                             )
                         ]
                     ),
-                    cards: [
-                        ProtocolCard(
-                            id: "dynamic",
-                            type: .dynamic,
-                            title: "Current Step",
-                            sections: [
-                                CardSection(
-                                    title: "Actions",
-                                    items: ["Check responsiveness", "Call for help", "Get AED"]
-                                )
-                            ]
-                        )
-                    ]
-                )
+                    ProtocolCard(
+                        id: "assessment",
+                        type: .assessment,
+                        title: "Clinical Assessment",
+                        sections: [
+                            CardSection(
+                                title: "Reversible Causes",
+                                items: ["Hypoxia", "Hypovolemia", "Hyperkalemia", "Hypothermia", "Toxins", "Thrombosis"]
+                            )
+                        ]
+                    )
+                ]
             )
-        }
-    } else {
-        Text("Preview requires iOS 16+")
+        )
     }
 }

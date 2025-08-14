@@ -47,7 +47,7 @@ struct VisualAidView: View {
                 } placeholder: {
                     ZStack {
                         Rectangle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(Color(.systemGray5))
                         
                         VStack(spacing: 8) {
                             Image(systemName: "photo")
@@ -71,7 +71,7 @@ struct VisualAidView: View {
                 minHeight: sizing.minHeight,
                 maxHeight: sizing.maxHeight
             )
-            .background(Color.gray.opacity(0.2))
+            .background(Color(.systemGray5))
             .cornerRadius(12)
             .onTapGesture {
                 if visualAid.interactionType == .tap {
@@ -197,7 +197,7 @@ struct AnnotationDetailView: View {
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(Color.gray.opacity(0.2))
+                .fill(Color(.systemGray5))
         )
     }
 }

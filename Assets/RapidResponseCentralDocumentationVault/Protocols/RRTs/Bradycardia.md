@@ -1,317 +1,454 @@
 # Bradycardia – RRT Protocol with Virtua Voorhees Addenda
 
-**Guideline Used:**  
-American Heart Association/American College of Cardiology (AHA/ACC) 2020 Advanced Cardiovascular Life Support (ACLS) Guidelines, 2018 AHA/ACC/HRS Guideline on the Evaluation and Management of Patients with Bradycardia  
-**Official Sources:**  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000916  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000628
+**Primary Guideline:** American Heart Association (AHA) Advanced Cardiovascular Life Support (ACLS) 2020 Guidelines (Current through 2025)
+**Official Source:** https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-cardiovascular-life-support
+**Supporting Guidelines:**
+- 2018 AHA/ACC/HRS Guideline on the Evaluation and Management of Patients with Bradycardia
+- 2025 ACLS Algorithm Updates
 
-## CARD INTERFACE LAYOUT
+## ENHANCED MERMAID FLOWCHART ALGORITHM
 
-### Card 0 – Dynamic Action Card (Node Dependent)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ BRADYCARDIA RRT ACTIVATED                                   │
-├─────────────────────────────────────────────────────────────┤
-│ ⏱️ TIME OF ONSET: 45 minutes ago                           │
-│ Duration: Progressive over hours | Symptomatic: Yes         │
-│                                                           │
-│ ┌─────────────────────────────────┐                        │
-│ │     IMMEDIATE ACTIONS           │                        │
-│ │ ☑ 12-lead ECG obtained          │ [3rd degree AV block]  │
-│ │ ☑ Continuous telemetry          │ [Monitoring active]    │
-│ │ ☑ IV access x2                 │ [18G bilateral]        │
-│ │ ☑ Transcutaneous pads applied   │ [Anterior-posterior]   │
-│ │ ☐ Atropine 1mg ready           │ [Drawn up]             │
-│ │ ☐ Dopamine infusion prepared    │ [Rate support]         │
-│ │ ☐ Transvenous pacing kit        │ [On standby]           │
-│ │                                │                        │
-│ │ Current Rhythm: Complete Heart Block│                     │
-│ │ Atrial Rate: 75 | Ventricular: 38   │                    │
-│ └─────────────────────────────────┘                        │
-│                                                           │
-│ VITALS: HR 38 regular, BP 92/58, RR 18, SpO2 96% RA       │
-│                                                           │
-│ SYMPTOMATIC FEATURES:                                      │
-│ ☑ Dizziness/lightheadedness  ☑ Fatigue/weakness           │
-│ ☐ Syncope/near-syncope       ☐ Chest pain                 │
-│ ☐ Shortness of breath        ☐ Altered mental status      │
-│                                                           │
-│ 🚨 HIGH-RISK BLOCK → Prepare for pacing                   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 1 – Static Assessment/Differential
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ BRADYCARDIA DIFFERENTIAL & CAUSES                           │
-├─────────────────────────────────────────────────────────────┤
-│ 🔵 SINUS BRADYCARDIA:                                       │
-│ • Physiologic: Athletic conditioning, sleep, vagal stimulation│
-│ • Pathologic: Sick sinus syndrome, hypothyroidism, ↑ICP    │
-│                                                           │
-│ 🔵 ATRIOVENTRICULAR BLOCKS:                                │
-│ • 1st degree: PR >200ms, usually benign, monitor           │
-│ • 2nd degree Type I (Wenckebach): Progressive PR lengthening│
-│ • 2nd degree Type II: Fixed PR with sudden dropped beats   │
-│ • 3rd degree (Complete): AV dissociation, escape rhythm    │
-│                                                           │
-│ UNDERLYING CAUSES:                                         │
-│ • Medications: Beta-blockers, CCBs, digoxin, amiodarone   │
-│ • Metabolic: Hyperkalemia, hypothyroidism, hypothermia     │
-│ • Cardiac: Inferior MI, conduction disease, post-cardiac surgery│
-│ • Other: Vasovagal response, ↑ICP, sleep apnea            │
-│                                                           │
-│ SYMPTOMATIC CRITERIA (Any present = treat):                │
-│ • Acute altered mental status                              │
-│ • Ischemic chest discomfort                                │
-│ • Acute heart failure                                      │
-│ • Hypotension with signs of shock                          │
-│ • Syncope or near-syncope                                  │
-│                                                           │
-│ HIGH-RISK FEATURES (Require pacing):                       │
-│ • 2nd degree Type II or 3rd degree AV block               │
-│ • Wide QRS escape rhythm                                   │
-│ • Pauses >3 seconds                                        │
-│ • Symptomatic despite atropine                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Card 2 – Static Physical Exam/Medications
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ PHYSICAL EXAM & MEDICATIONS                                 │
-├─────────────────────────────────────────────────────────────┤
-│ HEMODYNAMIC ASSESSMENT:                                    │
-│ • BP: Check for hypotension and pulse pressure             │
-│ • Perfusion: Mental status, skin temp, capillary refill   │
-│ • Volume: JVD assessment, cannon A waves in complete block │
-│ • Cardiac: Variable S1 intensity in AV dissociation       │
-│                                                           │
-│ 💊 FIRST-LINE PHARMACOLOGIC THERAPY:                       │
-│ • Atropine: 1mg IV push, may repeat q3-5min (max 3mg total)│
-│   - Blocks vagal tone, ↑SA node firing rate               │
-│   - Ineffective in heart transplant patients              │
-│   - Limited effect in 3rd degree AV block                 │
-│                                                           │
-│ 💊 CHRONOTROPIC INFUSIONS:                                 │
-│ • Dopamine: 5-20 mcg/kg/min IV (preferred)                │
-│   - Beta effects predominate at lower doses               │
-│   - Monitor for tachyarrhythmias                          │
-│ • Epinephrine: 2-10 mcg/min IV infusion                   │
-│   - Potent chronotrope, monitor for ischemia              │
-│ • Isoproterenol: 2-10 mcg/min IV (avoid in ischemia)     │
-│   - Pure beta agonist, avoid if CAD                       │
-│                                                           │
-│ 💊 TRANSCUTANEOUS PACING:                                  │
-│ • Indications: Symptomatic bradycardia, failed meds       │
-│ • Technique: Anterior-posterior pad placement              │
-│ • Settings: Start 30mA, increase by 10mA until capture    │
-│ • Rate: 80 ppm for adults                                 │
-│ • Sedation: Fentanyl 25-50mcg, midazolam 1-2mg           │
-│                                                           │
-│ TRANSVENOUS PACING (Cardiology consult):                  │
-│ • Indications: 2nd degree Type II, 3rd degree block       │
-│ • Temporary bridge to permanent pacemaker                  │
-│ • Transfer Center: 856-886-5111                           │
-│                                                           │
-│ MEDICATION ALERTS: Atropine paradox in 2nd degree Type II,│
-│ avoid in suspected digitalis toxicity, check electrolytes  │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## FLOWCHART (Bottom Panel – Mermaid Algorithm)
-
-```mermaid
+~~~mermaid
 graph TD
-    A[Bradycardia Recognition 12-lead ECG]
-    B{Symptomatic?}
-    C[Monitor and Treat Underlying Cause]
-    D{Type of Bradycardia?}
-    E[Atropine 1mg IV May Repeat q3-5min]
-    F[Transcutaneous Pacing Setup]
-    G{Response to Atropine?}
-    H[Continue Monitoring]
-    I[Dopamine 5-20 mcg/kg/min or Epinephrine 2-10 mcg/min]
-    J[Apply Transcutaneous Pacing]
-    K{Effective Pacing?}
-    L[Cardiology Consult for Transvenous Pacing]
-    M[Adjust Settings Provide Sedation]
-    N[Permanent Pacemaker Evaluation]
-    O[Continue Supportive Care]
-
-    A --> B
-    B -- No --> C
-    B -- Yes --> D
-    D -- "Sinus Brady/1st Degree" --> E
-    D -- "2nd Type II/3rd Degree" --> F
-    E --> G
-    F --> J
-    G -- Yes --> H
-    G -- No --> I
-    I --> J
-    J --> K
-    K -- No --> L
-    K -- Yes --> M
-    L --> N
-    M --> L
+    A["Bradycardia Recognition<br/>HR <60 bpm + Symptoms"] --> B{"Patient<br/>Symptomatic?"}
+    
+    B -->|NO| C["Monitor & Observe<br/>Treat Underlying Causes"]
+    B -->|YES| D["Initial Stabilization<br/>O2, IV, Monitor, 12-lead ECG"]
+    
+    D --> E{"Bradycardia<br/>Type?"}
+    
+    E -->|"Sinus Brady/1st Degree"| F["Atropine 1mg IV<br/>Repeat q3-5min (max 3mg)"]
+    E -->|"2nd Degree Type II/3rd Degree"| G["Transcutaneous Pacing<br/>Immediate Setup"]
+    
+    F --> H{"Adequate<br/>Response?"}
+    
+    H -->|YES| I["Continue Monitoring<br/>Treat Underlying Cause"]
+    H -->|NO| J["Chronotropic Support<br/>Dopamine 5-20 mcg/kg/min"]
+    
+    J --> K["Transcutaneous Pacing<br/>If Not Already Done"]
+    G --> K
+    
+    K --> L{"Pacing<br/>Effective?"}
+    
+    L -->|YES| M["Optimize Settings<br/>Provide Sedation"]
+    L -->|NO| N["Transvenous Pacing<br/>Cardiology Consult"]
+    
+    M --> O["Permanent Pacemaker<br/>Evaluation"]
     N --> O
-    H --> O
-```
+    
+    O --> P["Disposition<br/>ICU/Telemetry"]
+    C --> P
+    I --> P
+    
+    style A fill:#ffcccc
+    style D fill:#ffe6cc
+    style F fill:#fff2cc
+    style G fill:#ccffcc
+    style K fill:#e6ccff
+    style P fill:#ccffee
+~~~
 
-## NODE-TO-DYNAMIC CARD PROMPT MAPPING (WITH INTERACTIVES)
+## STREAMLINED DYNAMIC CARD SYSTEM
 
-| **Step (Node)**                    | **Dynamic Card Prompt/Question**                                                                 | **Interactive Components**                                        |
-|-------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
-| Bradycardia Recognition             | "Bradycardia identified on monitor/ECG (<60 bpm). Obtain 12-lead ECG and assess symptoms?"      | [ECG Acquisition], [HR Monitor], [Rhythm Analysis]                |
-| Symptomatic Assessment              | "Evaluate for symptoms related to bradycardia requiring immediate intervention?"                 | [Symptom Checklist], [Mental Status], [Perfusion Assessment]      |
-| Asymptomatic Monitoring             | "Patient asymptomatic with bradycardia. Monitor and identify/treat underlying causes?"          | [Cause Investigation], [Monitoring Protocol], [Med Review]        |
-| Bradycardia Type Classification     | "Symptomatic bradycardia present. Classify type: sinus, AV block, or other conduction issue?"   | [ECG Analysis], [Block Classification], [Risk Stratification]     |
-| Atropine Administration             | "Sinus bradycardia or 1st degree block. Administer atropine 1mg IV push?"                      | [Atropine Protocol], [Dose Tracking], [Response Monitor]         |
-| High-Risk Block Management          | "2nd degree Type II or 3rd degree block identified. Prepare transcutaneous pacing?"            | [Pacing Setup], [Pad Placement], [Emergency Pacing]              |
-| Atropine Response Evaluation        | "Atropine administered. Adequate response with HR improvement and symptom resolution?"          | [HR Trending], [Symptom Assessment], [Duration Monitor]          |
-| Chronotropic Infusion Initiation    | "Inadequate response to atropine. Begin dopamine or epinephrine infusion?"                     | [Infusion Calculator], [Drug Selection], [Titration Protocol]    |
-| Transcutaneous Pacing Application   | "Apply transcutaneous pacing pads and initiate electrical pacing?"                             | [Pacing Setup], [Threshold Testing], [Capture Confirmation]      |
-| Pacing Effectiveness Assessment     | "Transcutaneous pacing initiated. Effective electrical and mechanical capture achieved?"        | [Capture Assessment], [Pacing Parameters], [Patient Comfort]     |
-| Pacing Optimization                 | "Adjust pacing settings and provide sedation for patient comfort?"                             | [Settings Adjustment], [Sedation Protocol], [Comfort Score]      |
-| Transvenous Pacing Consultation     | "Transcutaneous pacing established. Contact cardiology for transvenous pacing evaluation?"     | [Cardiology Consult], [Transfer Planning], [Temporary Bridge]    |
-| Permanent Pacemaker Evaluation      | "Temporary pacing in place. Evaluate need for permanent pacemaker implantation?"               | [Pacemaker Criteria], [EP Consultation], [Admission Planning]    |
-| Continued Monitoring                | "Bradycardia stabilized with appropriate intervention. Continue monitoring and supportive care?"| [Telemetry Monitoring], [Parameter Tracking], [Disposition]      |
-
-**Interactive Highlights:**  
-- Pacing threshold calculator: automated testing with capture confirmation
-- Atropine dosing tracker: cumulative dose monitoring with maximum limits
-- Chronotropic infusion calculator: weight-based dosing with hemodynamic monitoring
-- AV block classifier: ECG analysis tool with risk stratification
-- Transcutaneous pacing comfort scale: pain assessment with sedation recommendations
-
-## INTERACTIVE ELEMENTS
-
-### Transcutaneous Pacing Setup
-```
+### Card 0 – Bradycardia Recognition & Assessment (Node A → B)
 ┌─────────────────────────────────────────┐
-│    TRANSCUTANEOUS PACING CONTROLLER     │
+│ 🚨 BRADYCARDIA RRT ACTIVATION            │
 ├─────────────────────────────────────────┤
-│ CURRENT SETTINGS:                       │
-│ Rate: 80 ppm [▲▼]                       │
-│ Output: 70 mA [▲▼]                      │
-│ Mode: Demand (synchronous)               │
-│ Sensitivity: 2 mV                       │
+│ 📊 Recognition criteria:                │
+│ • Heart rate <60 bpm (typically <50)   │
+│ • Associated symptoms present           │
+│ • Hemodynamic compromise               │
 │                                         │
-│ CAPTURE ASSESSMENT:                     │
-│ ☑ Electrical: Pacing spikes visible    │
-│ ☑ Mechanical: Palpable pulse           │
-│ ☑ Hemodynamic: BP improved             │
+│ 🩺 Immediate assessment:                │
+│ • Mental status changes                │
+│ • Hypotension/signs of shock           │
+│ • Ischemic chest discomfort            │
+│ • Acute heart failure symptoms         │
+│ • Syncope or near-syncope              │
 │                                         │
-│ THRESHOLD TESTING:                      │
-│ Threshold: 55 mA                        │
-│ Safety margin: 1.5x = 82 mA            │
-│ Current output: 70 mA (adequate)        │
+│ ⏱️ Time of onset: Document precisely    │
+│ Duration: Note progression pattern      │
 │                                         │
-│ PATIENT COMFORT:                        │
-│ Pain score: 7/10                        │
-│ Sedation given:                         │
-│ • Fentanyl 50mcg IV                     │
-│ • Midazolam 2mg IV                      │
-│ Current comfort: 4/10 (improved)        │
+│ ❓ Patient symptomatic?                 │
 │                                         │
-│ [TEST THRESHOLD] [ADJUST] [SEDATE]      │
+│ 🔘 YES → Immediate intervention        │
+│ 🔘 NO → Monitor and observe            │
+│                                         │
+│ [Next: Based on Selection ▶]            │
 └─────────────────────────────────────────┘
-```
 
-### AV Block Classification Tool
-```
+### Card 1A – Initial Stabilization (Node D → E)
 ┌─────────────────────────────────────────┐
-│      AV BLOCK CLASSIFICATION AID        │
+│ 🔧 INITIAL STABILIZATION PROTOCOL       │
 ├─────────────────────────────────────────┤
-│ ECG Analysis:                           │
+│ 🚀 Immediate actions:                   │
+│ • High-flow oxygen if hypoxic          │
+│ • Large-bore IV access × 2             │
+│ • Continuous cardiac monitoring        │
+│ • 12-lead ECG (don't delay therapy)    │
 │                                         │
-│ 1. PR INTERVAL:                         │
-│    ○ Normal (120-200ms)                 │
-│    ○ Prolonged but constant (>200ms)    │
-│    ○ Progressive lengthening            │
-│    ● Variable/no relationship           │
+│ 📊 Essential monitoring:                │
+│ • Blood pressure, pulse oximetry       │
+│ • Continuous ECG rhythm strip          │
+│ • Consider arterial line if unstable   │
 │                                         │
-│ 2. P-QRS RELATIONSHIP:                  │
-│    ○ 1:1 conduction                     │
-│    ○ Progressive until dropped QRS      │
-│    ○ Fixed ratio with dropped QRS       │
-│    ● Complete dissociation              │
+│ 🔍 Investigate underlying causes:       │
+│ • H's & T's assessment                 │
+│ • Medication review                    │
+│ • Electrolyte abnormalities           │
 │                                         │
-│ 3. QRS WIDTH:                           │
-│    ○ Narrow (<120ms)                    │
-│    ● Wide (≥120ms)                     │
+│ [Next: Bradycardia classification ▶]   │
 │                                         │
-│ 4. ESCAPE RHYTHM:                       │
-│    ● Present (ventricular)              │
-│    Rate: 38 bpm                         │
-│                                         │
-│ DIAGNOSIS: 3rd Degree (Complete) AV Block│
-│ Risk Level: 🔴 HIGH                     │
-│                                         │
-│ RECOMMENDATION:                         │
-│ • Immediate transcutaneous pacing       │
-│ • Cardiology consultation              │
-│ • Transvenous pacing evaluation         │
-│                                         │
-│ [CONFIRM DIAGNOSIS] [PACING PROTOCOL]    │
+│ [◀ Previous: Recognition]              │
 └─────────────────────────────────────────┘
-```
 
-### Chronotropic Support Calculator
-```
+### Card 1B – Monitor & Observe (Node C - Final)
 ┌─────────────────────────────────────────┐
-│    CHRONOTROPIC INFUSION CALCULATOR     │
+│ 👁️ ASYMPTOMATIC MONITORING              │
 ├─────────────────────────────────────────┤
-│ Patient Weight: [75] kg                 │
-│ Current HR: 42 bpm                      │
-│ Target HR: >60 bpm                      │
+│ 📈 Continuous surveillance:             │
+│ • Telemetry monitoring                 │
+│ • Vital signs q15min initially         │
+│ • Watch for symptom development        │
 │                                         │
-│ DOPAMINE (Preferred):                   │
-│ Starting dose: 5 mcg/kg/min             │
-│ = 375 mcg/min = 22.5 mL/hr             │
-│ (400mg/250mL concentration)             │
+│ 🔍 Underlying cause evaluation:         │
+│ • Medication-induced bradycardia       │
+│ • Metabolic causes (hypothyroidism)    │
+│ • Cardiac pathology assessment         │
 │                                         │
-│ Current dose: 10 mcg/kg/min             │
-│ = 750 mcg/min = 45 mL/hr               │
-│ Response: HR 42→54 (↑12 bpm)           │
+│ ⚠️ Escalation triggers:                 │
+│ • Development of symptoms              │
+│ • HR <40 bpm                          │
+│ • Pauses >3 seconds                    │
 │                                         │
-│ EPINEPHRINE (Alternative):              │
-│ Starting dose: 2 mcg/min                │
-│ = 2 mL/hr (1mg/250mL)                  │
-│ Maximum: 10 mcg/min                     │
+│ ✅ MONITORING PROTOCOL ACTIVE          │
 │                                         │
-│ MONITORING PARAMETERS:                  │
-│ • HR trend: ↑ Improving                 │
-│ • BP: 92/58→98/62 mmHg                 │
-│ • Ectopy: None observed                 │
-│ • Ischemia: No chest pain              │
-│                                         │
-│ Recommendation: ↑ Dopamine to 15 mcg/kg/min│
-│                                         │
-│ [CALCULATE] [TITRATE] [MONITOR]         │
+│ [◀ Previous: Recognition]              │
 └─────────────────────────────────────────┘
-```
 
-## VIRTUA VOORHEES BRADYCARDIA MANAGEMENT ADDENDA
+### Card 2A – Bradycardia Classification (Node E)
+┌─────────────────────────────────────────┐
+│ 🔍 BRADYCARDIA TYPE CLASSIFICATION      │
+├─────────────────────────────────────────┤
+│ 📊 ECG analysis:                        │
+│                                         │
+│ 🔵 Sinus bradycardia:                   │
+│ • Normal P-QRS relationship            │
+│ • PR interval normal/prolonged         │
+│                                         │
+│ 🟡 First-degree AV block:               │
+│ • PR interval >200ms, constant         │
+│ • 1:1 P-QRS conduction                 │
+│                                         │
+│ 🟠 Second-degree AV block:              │
+│ • Type I (Wenckebach): Progressive PR  │
+│ • Type II: Fixed PR, dropped QRS       │
+│                                         │
+│ 🔴 Third-degree AV block:               │
+│ • Complete AV dissociation             │
+│ • Independent P and QRS rates          │
+│                                         │
+│ ❓ Block type classification?           │
+│                                         │
+│ 🔘 SINUS/1ST DEGREE → Atropine trial   │
+│ 🔘 HIGH-GRADE BLOCK → Immediate pacing │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
 
-- **Cardiology Consultation:** 24/7 access via Transfer Center 856-886-5111 for high-grade blocks and pacing decisions
-- **Electrophysiology Services:** Temporary and permanent pacemaker placement with interventional cardiology backup
-- **Critical Care Integration:** ICU monitoring for patients requiring transcutaneous pacing or chronotropic support
-- **Quality Metrics:** Time to atropine administration, pacing success rates, appropriate cardiology consultation rates
+### Card 3A – Atropine Administration (Node F → H)
+┌─────────────────────────────────────────┐
+│ 💉 ATROPINE ADMINISTRATION              │
+├─────────────────────────────────────────┤
+│ 💊 Updated 2025 dosing protocol:        │
+│ • First dose: 1mg IV bolus              │
+│ • Repeat: 1mg q3-5min                   │
+│ • Maximum total: 3mg                    │
+│                                         │
+│ ⚙️ Mechanism of action:                  │
+│ • Blocks vagal tone                     │
+│ • Increases SA node firing rate         │
+│ • Improves AV conduction                │
+│                                         │
+│ ⚠️ Limitations:                         │
+│ • Less effective in 3rd degree block   │
+│ • Ineffective in heart transplant      │
+│ • May worsen Type II block (rare)       │
+│                                         │
+│ 📊 Monitor response:                     │
+│ • HR improvement >60 bpm               │
+│ • BP stabilization                     │
+│ • Symptom resolution                   │
+│                                         │
+│ [Next: Response assessment ▶]          │
+│                                         │
+│ [◀ Previous: Classification]           │
+└─────────────────────────────────────────┘
 
-## REFERENCE (GUIDELINE & SOURCE)
-American Heart Association/American College of Cardiology. 2020 ACLS Guidelines.  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000916
+### Card 3B – Immediate Pacing Setup (Node G → K)
+┌─────────────────────────────────────────┐
+│ ⚡ TRANSCUTANEOUS PACING SETUP          │
+├─────────────────────────────────────────┤
+│ 🚨 High-risk indications:               │
+│ • 2nd degree Type II AV block           │
+│ • 3rd degree (complete) AV block        │
+│ • Wide QRS escape rhythm                │
+│ • Pauses >3 seconds                     │
+│                                         │
+│ 🔧 Pacing pad placement:                │
+│ • Anterior-posterior preferred         │
+│ • Anterior-lateral alternative         │
+│ • Clean/dry skin, clip hair if needed  │
+│                                         │
+│ ⚙️ Initial settings:                    │
+│ • Rate: 80 ppm                         │
+│ • Output: Start 30mA, increase by 10mA │
+│ • Mode: Demand (synchronous)            │
+│                                         │
+│ [Next: Pacing effectiveness ▶]         │
+│                                         │
+│ [◀ Previous: Classification]           │
+└─────────────────────────────────────────┘
 
-**Additional References:**  
-2018 AHA/ACC/HRS Guideline on the Evaluation and Management of Patients with Bradycardia  
-https://www.ahajournals.org/doi/10.1161/CIR.0000000000000628
+### Card 4A – Chronotropic Support (Node J → K)
+┌─────────────────────────────────────────┐
+│ 💊 CHRONOTROPIC INFUSION THERAPY        │
+├─────────────────────────────────────────┤
+│ 🎯 Updated 2025 dosing:                 │
+│                                         │
+│ 💉 Dopamine (preferred):                │
+│ • Dose: 5-20 mcg/kg/min IV infusion     │
+│ • Start: 5 mcg/kg/min                   │
+│ • Titrate to effect                     │
+│                                         │
+│ 💉 Epinephrine (alternative):           │
+│ • Dose: 2-10 mcg/min IV infusion        │
+│ • Start: 2 mcg/min                      │
+│ • Potent chronotropic effect           │
+│                                         │
+│ 📊 Monitoring parameters:               │
+│ • HR response (target >60 bpm)         │
+│ • BP improvement                       │
+│ • Watch for arrhythmias                │
+│                                         │
+│ [Next: Transcutaneous pacing ▶]        │
+│                                         │
+│ [◀ Previous: Atropine Response]        │
+└─────────────────────────────────────────┘
 
-2017 HRS Expert Consensus Statement on Cardiovascular Implantable Electronic Devices  
-https://www.hrsonline.org/clinical-guidance/device-based-therapy
+### Card 5A – Pacing Effectiveness (Node L)
+┌─────────────────────────────────────────┐
+│ 📊 PACING EFFECTIVENESS ASSESSMENT      │
+├─────────────────────────────────────────┤
+│ ✅ Success indicators:                  │
+│ • Electrical capture (pacing spikes    │
+│   followed by QRS)                     │
+│ • Mechanical capture (palpable pulse)  │
+│ • Hemodynamic improvement              │
+│                                         │
+│ 🔧 Troubleshooting failed pacing:      │
+│ • Increase output (max 200mA)          │
+│ • Reposition pads                      │
+│ • Check connections                     │
+│ • Consider lead displacement           │
+│                                         │
+│ 😌 Patient comfort measures:            │
+│ • Sedation: Fentanyl 25-50mcg         │
+│ • Anxiolysis: Midazolam 1-2mg          │
+│ • Explain procedure to patient         │
+│                                         │
+│ ❓ Pacing effective?                    │
+│                                         │
+│ 🔘 YES → Optimize settings & sedate    │
+│ 🔘 NO → Transvenous pacing needed     │
+│                                         │
+│ [◀ Previous] [Next: Based on Selection ▶]│
+└─────────────────────────────────────────┘
 
-**All steps follow current AHA/ACC ACLS guidelines for bradycardia management with integrated pacing protocols and optimized for rapid identification of high-risk conduction blocks requiring immediate intervention.**
+### Card 6A – Pacing Optimization (Node M → O)
+┌─────────────────────────────────────────┐
+│ 🔧 PACING OPTIMIZATION                  │
+├─────────────────────────────────────────┤
+│ ⚙️ Settings optimization:               │
+│ • Threshold testing q4-6h               │
+│ • Set output 2× threshold              │
+│ • Rate: 60-80 ppm (patient comfort)    │
+│                                         │
+│ 💊 Sedation protocol:                   │
+│ • Assess pain level (0-10 scale)       │
+│ • Titrate analgesics as needed         │
+│ • Monitor respiratory status           │
+│                                         │
+│ 📊 Continuous monitoring:               │
+│ • Capture confirmation                 │
+│ • Hemodynamic stability                │
+│ • Skin integrity at pad sites          │
+│                                         │
+│ [Next: Permanent pacemaker eval ▶]     │
+│                                         │
+│ [◀ Previous: Pacing Effectiveness]     │
+└─────────────────────────────────────────┘
+
+### Card 6B – Transvenous Pacing (Node N → O)
+┌─────────────────────────────────────────┐
+│ 🏥 TRANSVENOUS PACING CONSULTATION      │
+├─────────────────────────────────────────┤
+│ 📞 Cardiology consultation:             │
+│ • Transfer Center: 856-886-5111        │
+│ • Electrophysiology if available       │
+│ • Prepare for procedure                │
+│                                         │
+│ 🎯 Indications for transvenous:         │
+│ • Failed transcutaneous pacing         │
+│ • High-grade AV blocks                 │
+│ • Bridge to permanent device           │
+│ • Extended pacing requirement          │
+│                                         │
+│ 🛠️ Procedure preparation:               │
+│ • Central venous access                │
+│ • Fluoroscopy availability             │
+│ • Pacing catheter system               │
+│                                         │
+│ [Next: Permanent pacemaker eval ▶]     │
+│                                         │
+│ [◀ Previous: Pacing Effectiveness]     │
+└─────────────────────────────────────────┘
+
+### Card 7 – Permanent Pacemaker Evaluation (Node O → P)
+┌─────────────────────────────────────────┐
+│ 🔋 PERMANENT PACEMAKER EVALUATION       │
+├─────────────────────────────────────────┤
+│ 📋 Pacemaker indications:               │
+│ • Symptomatic bradycardia              │
+│ • High-grade AV blocks                 │
+│ • Sinus node dysfunction               │
+│ • Chronotropic incompetence            │
+│                                         │
+│ 🏥 Evaluation process:                  │
+│ • Electrophysiology consultation       │
+│ • Echo to assess LV function           │
+│ • Consider CRT if indicated            │
+│                                         │
+│ ⏱️ Timing considerations:               │
+│ • Urgent: Complete heart block         │
+│ • Semi-urgent: Type II AV block        │
+│ • Elective: Symptomatic sinus brady    │
+│                                         │
+│ 📚 Patient education:                   │
+│ • Device function explanation          │
+│ • Activity restrictions                │
+│ • Follow-up requirements               │
+│                                         │
+│ [Next: Disposition planning ▶]         │
+│                                         │
+│ [◀ Previous: Pacing Management]        │
+└─────────────────────────────────────────┘
+
+### Card 8 – Disposition Planning (Node P - Final)
+┌─────────────────────────────────────────┐
+│ 🏥 DISPOSITION & FOLLOW-UP              │
+├─────────────────────────────────────────┤
+│ 📍 Disposition options:                 │
+│                                         │
+│ 🔴 ICU admission:                       │
+│ • Unstable bradycardia                 │
+│ • Active pacing requirements           │
+│ • Hemodynamic instability              │
+│                                         │
+│ 🟡 Telemetry unit:                      │
+│ • Stable bradycardia                   │
+│ • Pacemaker evaluation pending         │
+│ • Medication titration needed          │
+│                                         │
+│ 🟢 Medical floor:                       │
+│ • Asymptomatic bradycardia             │
+│ • Stable after intervention            │
+│ • Low-risk rhythms                     │
+│                                         │
+│ 📋 Follow-up coordination:              │
+│ • Cardiology: 1-2 weeks                │
+│ • Primary care: 1 week                 │
+│ • Device clinic if pacemaker           │
+│                                         │
+│ ✅ DISPOSITION PROTOCOL COMPLETE       │
+│                                         │
+│ [◀ Previous: Pacemaker Evaluation]     │
+└─────────────────────────────────────────┘
+
+## VIRTUA VOORHEES BRADYCARDIA ADDENDA
+
+### **Enhanced RRT Response:**
+- **Rapid Response Team:** Immediate bedside assessment within 15 minutes
+- **Equipment Availability:** Transcutaneous pacing pads on all RRT carts
+- **Pharmacy Support:** Pre-mixed atropine and dopamine infusions available
+- **Quality Metrics:** Door-to-atropine time, pacing success rates, patient outcomes
+
+### **Updated 2025 ACLS Guidelines Integration:**
+**Atropine Dosing Changes:**
+- **First dose:** Increased from 0.5mg to 1mg IV bolus
+- **Repeat dosing:** 1mg every 3-5 minutes (not 0.5mg)
+- **Maximum total:** 3mg (unchanged)
+
+**Dopamine Infusion Updates:**
+- **Dosing range:** 5-20 mcg/kg/min (updated from 2-20 mcg/kg/min)
+- **Starting dose:** 5 mcg/kg/min for chronotropic effect
+- **Maximum:** 20 mcg/kg/min with careful monitoring
+
+### **Advanced Monitoring Capabilities:**
+- **Continuous telemetry:** Real-time rhythm analysis
+- **POCUS integration:** IVC assessment for volume status
+- **Arterial line placement:** For unstable patients requiring vasopressors
+- **Central venous access:** When transvenous pacing anticipated
+
+### **Cardiology Integration:**
+**24/7 Availability:**
+- **Interventional cardiology:** For emergency pacemaker placement
+- **Electrophysiology:** Specialized arrhythmia management
+- **Transfer Center:** 856-886-5111 for consultation and transfer
+
+**Pacemaker Program:**
+- **Temporary pacing:** Available in ED and ICU
+- **Permanent device placement:** Within 24-48 hours for appropriate candidates
+- **Device clinic:** Follow-up and optimization
+
+### **H's and T's Assessment for Bradycardia:**
+**Hypoxia:** Airway management, supplemental oxygen
+**Hydrogen ions (Acidosis):** ABG analysis, bicarbonate if severe
+**Hypovolemia:** Fluid resuscitation, bleeding assessment
+**Hypo/Hyperkalemia:** Electrolyte correction protocols
+**Hypothermia:** Rewarming strategies
+**Toxins:** Antidote administration (calcium, glucagon)
+**Tamponade:** Echocardiogram, pericardiocentesis
+**Tension pneumothorax:** Chest decompression
+**Thrombosis:** PE/MI evaluation and treatment
+**Tablets (drugs):** Beta-blockers, calcium channel blockers, digoxin
+
+### **Special Population Considerations:**
+**Elderly Patients:**
+- Higher baseline bradycardia tolerance
+- Medication-induced causes common
+- Careful sedation dosing for pacing
+
+**Post-Cardiac Surgery:**
+- Temporary epicardial wires available
+- Electrolyte management critical
+- Early EP consultation
+
+**Heart Transplant Recipients:**
+- Atropine ineffective (denervated heart)
+- Direct chronotropic agents preferred
+- Specialized cardiology consultation
+
+### **Quality Improvement Metrics:**
+- **Recognition time:** <5 minutes from RRT activation
+- **Atropine administration:** <15 minutes from assessment
+- **Pacing setup:** <30 minutes for high-risk blocks
+- **Cardiology consultation:** <60 minutes for complex cases
+
+## REFERENCE GUIDELINES
+- **2020 AHA Guidelines for CPR and Emergency Cardiovascular Care**
+- **2018 AHA/ACC/HRS Guideline on Bradycardia and Cardiac Conduction Delay**
+- **2025 ACLS Algorithm Updates**
+- **Virtua Health System Bradycardia Protocol v2025**
+
+**This protocol reflects current evidence-based ACLS guidelines with 2025 updates, optimized for rapid recognition and appropriate intervention of symptomatic bradycardia in the Virtua Voorhees RRT setting.**

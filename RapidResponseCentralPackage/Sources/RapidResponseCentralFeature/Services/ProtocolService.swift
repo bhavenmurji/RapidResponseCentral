@@ -10,6 +10,7 @@ final class ProtocolService: ObservableObject {
     @Published private(set) var rrtProtocols: [EmergencyProtocol] = []
     @Published private(set) var callsProtocols: [EmergencyProtocol] = []
     @Published private(set) var labsProtocols: [EmergencyProtocol] = []
+    @Published private(set) var calculatorsProtocols: [EmergencyProtocol] = []
     @Published private(set) var isLoading = false
     @Published private(set) var loadingProgress: Double = 0.0
     @Published private(set) var error: Error?
@@ -20,6 +21,7 @@ final class ProtocolService: ObservableObject {
     private let rrtProtocolService = RRTProtocolService()
     private let callsProtocolService = CallsProtocolService()
     private let labsProtocolService = LabsProtocolService()
+    private let calculatorsProtocolService = CalculatorsProtocolService()
     
     // Performance monitoring
     private let performanceLogger = Logger(subsystem: "com.rapidresponsecentral.performance", category: "ProtocolService")
@@ -60,6 +62,10 @@ final class ProtocolService: ObservableObject {
             if labsProtocols.isEmpty {
                 labsProtocols = await loadLabsProtocols()
             }
+        case .calc:
+            if calculatorsProtocols.isEmpty {
+                calculatorsProtocols = await loadCalculatorsProtocols()
+            }
         default:
             break
         }
@@ -91,6 +97,7 @@ final class ProtocolService: ObservableObject {
                 group.addTask { ("rrt", await self.loadRRTProtocols()) }
                 group.addTask { ("calls", await self.loadCallsProtocols()) }
                 group.addTask { ("labs", await self.loadLabsProtocols()) }
+                group.addTask { ("calculators", await self.loadCalculatorsProtocols()) }
                 
                 // Collect results as they complete (not waiting for all)
                 for await (type, protocols) in group {
@@ -99,15 +106,16 @@ final class ProtocolService: ObservableObject {
                     case "rrt": self.rrtProtocols = protocols
                     case "calls": self.callsProtocols = protocols
                     case "labs": self.labsProtocols = protocols
+                    case "calculators": self.calculatorsProtocols = protocols
                     default: break
                     }
                     // Update progress incrementally
-                    self.loadingProgress += 0.25
+                    self.loadingProgress += 0.20
                 }
             }
             
             let duration = CACurrentMediaTime() - startTime
-            let totalProtocols = protocols.count + rrtProtocols.count + callsProtocols.count + labsProtocols.count
+            let totalProtocols = protocols.count + rrtProtocols.count + callsProtocols.count + labsProtocols.count + calculatorsProtocols.count + calculatorsProtocols.count
             
             signposter.endInterval("ConcurrentProtocolLoading", signpostState)
             performanceLogger.info("✅ All protocols loaded concurrently: \(totalProtocols) protocols in \(String(format: "%.3f", duration))s")
@@ -164,13 +172,23 @@ final class ProtocolService: ObservableObject {
     }
     
     private func loadLabsProtocols() async -> [EmergencyProtocol] {
-        await updateProgress(1.0)
+        await updateProgress(0.80)
         performanceLogger.info("🧪 Loading labs protocols...")
         // Wait a moment for the service to initialize its protocols
         while labsProtocolService.protocols.isEmpty && labsProtocolService.isLoading {
             try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
         }
         return labsProtocolService.protocols
+    }
+    
+    private func loadCalculatorsProtocols() async -> [EmergencyProtocol] {
+        await updateProgress(1.0)
+        performanceLogger.info("🧮 Loading calculators protocols...")
+        // Wait a moment for the service to initialize its protocols
+        while calculatorsProtocolService.protocols.isEmpty && calculatorsProtocolService.isLoading {
+            try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+        }
+        return calculatorsProtocolService.protocols
     }
     
     @MainActor
@@ -186,7 +204,7 @@ final class ProtocolService: ObservableObject {
         labsProtocols = labsProtocolService.protocols
         
         let duration = CACurrentMediaTime() - startTime
-        let totalProtocols = protocols.count + rrtProtocols.count + callsProtocols.count + labsProtocols.count
+        let totalProtocols = protocols.count + rrtProtocols.count + callsProtocols.count + labsProtocols.count + calculatorsProtocols.count
         
         performanceLogger.info("✅ Sequential loading completed: \(totalProtocols) protocols in \(String(format: "%.3f", duration))s")
         
@@ -204,7 +222,8 @@ final class ProtocolService: ObservableObject {
             ("EmergencyProtocolService", protocols),
             ("RRTProtocolService", rrtProtocols),
             ("CallsProtocolService", callsProtocols),
-            ("LabsProtocolService", labsProtocols)
+            ("LabsProtocolService", labsProtocols),
+            ("CalculatorsProtocolService", calculatorsProtocols)
         ]
         
         var allMetrics: [LoadingMetrics] = []
@@ -269,7 +288,10 @@ final class ProtocolService: ObservableObject {
         if let foundProtocol = callsProtocols.first(where: { $0.id == id }) {
             return foundProtocol
         }
-        return labsProtocols.first { $0.id == id }
+        if let foundProtocol = labsProtocols.first(where: { $0.id == id }) {
+            return foundProtocol
+        }
+        return calculatorsProtocols.first { $0.id == id }
     }
     
     func getProtocol(by title: String) -> EmergencyProtocol? {
@@ -283,7 +305,10 @@ final class ProtocolService: ObservableObject {
         if let foundProtocol = callsProtocols.first(where: { $0.title == title }) {
             return foundProtocol
         }
-        return labsProtocols.first { $0.title == title }
+        if let foundProtocol = labsProtocols.first(where: { $0.title == title }) {
+            return foundProtocol
+        }
+        return calculatorsProtocols.first { $0.title == title }
     }
     
     func getRRTProtocol(for id: String) -> EmergencyProtocol? {
@@ -299,7 +324,7 @@ final class ProtocolService: ObservableObject {
     }
     
     func getAllProtocols() -> [EmergencyProtocol] {
-        return protocols + rrtProtocols + callsProtocols + labsProtocols
+        return protocols + rrtProtocols + callsProtocols + labsProtocols + calculatorsProtocols
     }
     
     func getProtocolsByCategory(_ category: ProtocolCategory) -> [EmergencyProtocol] {
