@@ -14,8 +14,6 @@ Rapid Response Central provides instant access to emergency medical protocols, r
 - **Code STEMI** - ST-Elevation MI management
 - **RSI & Advanced Airway** - Rapid Sequence Intubation protocols
 - **Shock & ECMO** - Shock management and ECMO protocols
-- **Anaphylaxis** - Severe allergic reaction management
-- **Emergency Support** - Quick access to critical phone numbers and resources
 
 ### 🏥 Rapid Response Team (RRT) Protocols
 - Sepsis management
